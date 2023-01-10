@@ -15,8 +15,8 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(name = "role_seq", sequenceName = "role_seq", allocationSize = 1)
+    @SequenceGenerator(name = "role_seq",sequenceName = "role_seq",allocationSize = 1)
+    @GeneratedValue(generator = "role_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
@@ -25,6 +25,6 @@ public class Role {
             cascade = {DETACH, MERGE, REFRESH})
     private List<User> users;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY,mappedBy = "roleId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},mappedBy = "roleId")
     private List<UserWorkspaceRole>user_workSpace_roles;
 }

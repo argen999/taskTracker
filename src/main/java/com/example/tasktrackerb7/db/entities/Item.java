@@ -22,6 +22,6 @@ public class Item {
 
     private boolean isDone = false;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Checklist checklist;
 }

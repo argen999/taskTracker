@@ -8,24 +8,24 @@ import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "user_workSpace_roles")
+@Table(name = "userWorkSpaceRoles")
 @Getter
 @Setter
 @NoArgsConstructor
 public class UserWorkspaceRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_workSpace_role_seq")
-    @SequenceGenerator(name = "user_workSpace_role_seq", sequenceName = "user_workSpace_role_seq", allocationSize = 1)
+    @SequenceGenerator(name = "userWorkSpaceRole_seq",sequenceName = "userWorkSpaceRole_seq",allocationSize = 1)
+    @GeneratedValue(generator = "userWorkSpaceRole_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
 
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private User userId;
 
-   @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+   @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
    private WorkSpace workSpace_id;
 
-   @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+   @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
    private Role roleId;
 }

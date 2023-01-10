@@ -25,10 +25,10 @@ public class Comment {
 
     private LocalDate dateOfStart;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<User> users;
 
 
-  @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = LAZY)
+  @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
   private Card cards;
 }

@@ -22,10 +22,10 @@ public class Column {
 
     private String name;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Board board;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = EAGER, mappedBy = "column")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "column")
     private List<Card> cards;
 
 

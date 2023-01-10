@@ -27,22 +27,22 @@ public class Card {
 
     private String description;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Column column;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = EAGER)
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private Estimation estimation;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = EAGER, mappedBy = "cards")
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},  mappedBy = "cards")
     private List<User> users;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Checklist> checklists;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = EAGER, mappedBy = "cards")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "cards")
     private List<Comment> comments;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Attachment> attachments;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})

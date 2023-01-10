@@ -16,8 +16,8 @@ import static jakarta.persistence.FetchType.LAZY;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
+    @SequenceGenerator(name = "user_seq",sequenceName = "user_seq",allocationSize = 1)
+    @GeneratedValue(generator = "user_seq",strategy = GenerationType.SEQUENCE)
     private Long userId;
 
     private String name;
@@ -27,7 +27,7 @@ public class User {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private AuthInfo authInfo;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Notification> notification;
 
 
@@ -39,15 +39,15 @@ public class User {
     private List<Role> roles;
 
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},fetch = LAZY)
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Card> cards;
 
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},fetch = LAZY,mappedBy = "userId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},mappedBy = "userId")
     private List<UserWorkspaceRole> user_workSpace_roles;
 
 
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Favourite> favourites;
 }

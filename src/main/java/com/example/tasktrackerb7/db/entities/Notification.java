@@ -16,8 +16,8 @@ import static jakarta.persistence.FetchType.EAGER;
 public class Notification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_seq")
-    @SequenceGenerator(name = "notification_seq", sequenceName = "notification_seq", allocationSize = 1)
+    @SequenceGenerator(name = "notification_seq",sequenceName = "notification_seq",allocationSize = 1)
+    @GeneratedValue(generator = "notification_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;
@@ -26,18 +26,18 @@ public class Notification {
 
     private LocalDate dateOfWrite;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User fromUser;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User userId;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Board board;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Column column;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Card card;
 }

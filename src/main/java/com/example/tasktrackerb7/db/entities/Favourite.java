@@ -23,7 +23,7 @@ public class Favourite {
 
     private Board board;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User userId;
 
 }
