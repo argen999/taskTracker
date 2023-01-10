@@ -1,4 +1,5 @@
 package com.example.tasktrackerb7.entities;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
