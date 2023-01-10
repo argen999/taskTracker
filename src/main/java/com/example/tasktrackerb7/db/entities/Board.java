@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.entities;
+package com.example.tasktrackerb7.db.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,10 +27,10 @@ public class Board {
 
     private String background;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private WorkSpace workspace;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = EAGER, mappedBy = "board")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "board")
     private List<Column> columns;
 
     private boolean archive;

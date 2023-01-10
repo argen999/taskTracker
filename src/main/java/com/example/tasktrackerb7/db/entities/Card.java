@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.entities;
+package com.example.tasktrackerb7.db.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -45,6 +45,6 @@ public class Card {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
     private List<Attachment> attachments;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Label> labels;
 }

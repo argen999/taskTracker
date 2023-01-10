@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.entities;
+package com.example.tasktrackerb7.db.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class WorkSpace {
     private boolean isFavourite;
 
    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY,mappedBy = "workSpace_id")
-   private List<User_Workspace_Role> members;
+   private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY, mappedBy = "workspace")
     private List<Board> boards;

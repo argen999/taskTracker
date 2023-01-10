@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.entities;
+package com.example.tasktrackerb7.db.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User_Workspace_Role {
+public class UserWorkspaceRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_workSpace_role_seq")

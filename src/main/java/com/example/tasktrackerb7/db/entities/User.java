@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.entities;
+package com.example.tasktrackerb7.db.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -44,7 +44,7 @@ public class User {
 
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},fetch = LAZY,mappedBy = "userId")
-    private List<User_Workspace_Role> user_workSpace_roles;
+    private List<UserWorkspaceRole> user_workSpace_roles;
 
 
 
