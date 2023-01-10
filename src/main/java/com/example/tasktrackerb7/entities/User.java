@@ -6,7 +6,6 @@ import lombok.Setter;
 import java.util.List;
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
-
 @Entity
 @Table(name = "users")
 @Getter

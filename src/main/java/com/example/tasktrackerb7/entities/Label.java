@@ -1,12 +1,9 @@
 package com.example.tasktrackerb7.entities;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.awt.*;
-
 @Entity
 @Getter
 @Setter
