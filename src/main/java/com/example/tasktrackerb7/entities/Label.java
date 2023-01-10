@@ -13,11 +13,12 @@ import java.awt.*;
 @NoArgsConstructor
 public class Label {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "label_generator")
-    @SequenceGenerator(name = "label_sequence", sequenceName = "label_sequence", allocationSize = 1)
+    @SequenceGenerator(name = "label_seq",sequenceName = "label_seq",allocationSize = 1)
+    @GeneratedValue(generator = "label_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String text;
-    @Enumerated(EnumType.STRING)
+
     private Color color;
 
 }

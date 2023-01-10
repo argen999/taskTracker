@@ -13,17 +13,20 @@ import static jakarta.persistence.FetchType.LAZY;
 @Setter
 @NoArgsConstructor
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
-    @SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
     private Long userId;
+
     private String name;
+
     private String surname;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private AuthInfo authInfo;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY, mappedBy = "user")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
     private List<Notification> notification;
 
 
@@ -40,10 +43,10 @@ public class User {
 
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},fetch = LAZY,mappedBy = "userId")
-    private List<User_WorkSpace_Role> user_workSpace_roles;
+    private List<User_Workspace_Role> user_workSpace_roles;
 
 
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY, mappedBy = "user")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
     private List<Favourite> favourites;
 }

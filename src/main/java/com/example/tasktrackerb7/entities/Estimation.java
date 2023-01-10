@@ -14,12 +14,15 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class Estimation {
+
     @Id
     @SequenceGenerator(name = "estimation_seq",sequenceName = "estimation_seq",allocationSize = 1)
     @GeneratedValue(generator = "estimation_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateOfStart;
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateOfFinish;
 }

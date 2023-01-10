@@ -13,12 +13,16 @@ import static jakarta.persistence.FetchType.EAGER;
 @Getter@Setter
 @NoArgsConstructor
 public class Item {
+
     @Id
     @SequenceGenerator(name = "item_seq",sequenceName = "item_seq",allocationSize = 1)
     @GeneratedValue(generator = "item_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
+
     private String text;
+
     private boolean isDone = false;
+
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
     private Checklist checklist;
 }

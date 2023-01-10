@@ -14,12 +14,16 @@ import static jakarta.persistence.FetchType.EAGER;
 @Setter
 @NoArgsConstructor
 public class Favourite {
+
     @Id
     @SequenceGenerator(name = "favourite_seq",sequenceName = "favourite_seq",allocationSize = 1)
     @GeneratedValue(generator = "favourite_seq",strategy = GenerationType.SEQUENCE)
     private Long id;
-//    private WorkSpace workSpace;
-//    private Board board;
+
+    private WorkSpace workSpace;
+
+    private Board board;
+
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = EAGER)
     private User userId;
 

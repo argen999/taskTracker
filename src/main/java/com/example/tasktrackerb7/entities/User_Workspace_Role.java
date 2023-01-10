@@ -15,11 +15,13 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User_WorkSpace_Role {
+public class User_Workspace_Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_workSpace_role_generator")
-    @SequenceGenerator(name = "user_workSpace_role_sequence", sequenceName = "user_workSpace_role_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_workSpace_role_seq")
+    @SequenceGenerator(name = "user_workSpace_role_seq", sequenceName = "user_workSpace_role_seq", allocationSize = 1)
     private Long id;
+
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
     private User userId;
@@ -28,5 +30,5 @@ public class User_WorkSpace_Role {
    private WorkSpace workSpace_id;
 
    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY)
-   private Role role_id;
+   private Role roleId;
 }

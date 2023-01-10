@@ -13,20 +13,27 @@ import static jakarta.persistence.FetchType.LAZY;
 @Setter
 @NoArgsConstructor
 public class WorkSpace {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "workspace_generator")
-    @SequenceGenerator(name = "workspace_sequence", sequenceName = "workspace_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "workspace_seq")
+    @SequenceGenerator(name = "workspace_seq", sequenceName = "workspace_seq", allocationSize = 1)
     private Long workSpace_id;
+
     private String name;
+
     private boolean isFavourite;
 
    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY,mappedBy = "workSpace_id")
-   private List<User_WorkSpace_Role> members;
+   private List<User_Workspace_Role> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY, mappedBy = "workspace")
     private List<Board> boards;
+
     private boolean archive;
-//    private User creator;
-//    private Favourite favourite;
+
+    private User creator;
+
+    private Favourite favourite;
+
 }
 

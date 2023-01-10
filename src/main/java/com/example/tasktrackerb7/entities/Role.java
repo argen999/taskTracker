@@ -17,13 +17,16 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
     @SequenceGenerator(name = "role_seq", sequenceName = "role_seq", allocationSize = 1)
-    private Long role_id;
+    private Long id;
+
     private String name;
+
     @ManyToMany(targetEntity = User.class, mappedBy = "roles",
             cascade = {DETACH, MERGE, REFRESH})
     private List<User> users;
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY,mappedBy = "role_id")
-    private List<User_WorkSpace_Role>user_workSpace_roles;
+
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = LAZY,mappedBy = "roleId")
+    private List<User_Workspace_Role>user_workSpace_roles;
 }
