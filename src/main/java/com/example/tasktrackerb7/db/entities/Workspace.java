@@ -1,14 +1,14 @@
 package com.example.tasktrackerb7.db.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.CascadeType.REFRESH;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
 
 @Entity
 @Table(name = "workspaces")
@@ -26,7 +26,7 @@ public class Workspace {
 
     private boolean isFavourite;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workSpace_id")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
     private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
@@ -34,8 +34,10 @@ public class Workspace {
 
     private boolean archive;
 
+    @Transient
     private User creator;
 
+    @Transient
     private Favourite favourite;
 
 }

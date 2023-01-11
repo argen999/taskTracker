@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

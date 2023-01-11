@@ -1,11 +1,11 @@
 package com.example.tasktrackerb7.db.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import static jakarta.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "favourites")
@@ -19,8 +19,10 @@ public class Favourite {
     @GeneratedValue(generator = "favourite_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Transient
     private Workspace workspace;
 
+    @Transient
     private Board board;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
