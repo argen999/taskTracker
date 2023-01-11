@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDate;
 import java.util.List;
+
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -17,8 +19,8 @@ import static jakarta.persistence.FetchType.LAZY;
 public class Comment {
 
     @Id
-    @SequenceGenerator(name = "comment_seq",sequenceName = "comment_seq",allocationSize = 1)
-    @GeneratedValue(generator = "comment_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "comment_seq", sequenceName = "comment_seq", allocationSize = 1)
+    @GeneratedValue(generator = "comment_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;
@@ -29,6 +31,6 @@ public class Comment {
     private List<User> users;
 
 
-  @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
-  private Card cards;
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Card cards;
 }

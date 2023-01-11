@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.time.LocalDate;
+
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "notifications")
@@ -16,8 +17,8 @@ import static jakarta.persistence.FetchType.EAGER;
 public class Notification {
 
     @Id
-    @SequenceGenerator(name = "notification_seq",sequenceName = "notification_seq",allocationSize = 1)
-    @GeneratedValue(generator = "notification_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "notification_seq", sequenceName = "notification_seq", allocationSize = 1)
+    @GeneratedValue(generator = "notification_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;

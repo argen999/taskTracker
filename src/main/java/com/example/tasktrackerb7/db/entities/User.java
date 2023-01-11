@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
+
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "users")
@@ -16,9 +17,9 @@ import static jakarta.persistence.FetchType.LAZY;
 public class User {
 
     @Id
-    @SequenceGenerator(name = "user_seq",sequenceName = "user_seq",allocationSize = 1)
-    @GeneratedValue(generator = "user_seq",strategy = GenerationType.SEQUENCE)
-    private Long userId;
+    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
+    @GeneratedValue(generator = "user_seq", strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     private String name;
 
@@ -29,7 +30,6 @@ public class User {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Notification> notification;
-
 
 
     @ManyToMany(targetEntity = Role.class, cascade = ALL)
@@ -43,9 +43,8 @@ public class User {
     private List<Card> cards;
 
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},mappedBy = "userId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "userId")
     private List<UserWorkspaceRole> user_workSpace_roles;
-
 
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})

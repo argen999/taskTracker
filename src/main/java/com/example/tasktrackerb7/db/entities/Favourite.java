@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
 @Table(name = "favourites")
@@ -15,11 +15,11 @@ import static jakarta.persistence.FetchType.EAGER;
 public class Favourite {
 
     @Id
-    @SequenceGenerator(name = "favourite_seq",sequenceName = "favourite_seq",allocationSize = 1)
-    @GeneratedValue(generator = "favourite_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "favourite_seq", sequenceName = "favourite_seq", allocationSize = 1)
+    @GeneratedValue(generator = "favourite_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private WorkSpace workSpace;
+    private Workspace workspace;
 
     private Board board;
 

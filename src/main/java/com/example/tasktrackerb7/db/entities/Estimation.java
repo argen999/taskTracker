@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 @Entity
@@ -15,8 +16,8 @@ import java.time.LocalDate;
 public class Estimation {
 
     @Id
-    @SequenceGenerator(name = "estimation_seq",sequenceName = "estimation_seq",allocationSize = 1)
-    @GeneratedValue(generator = "estimation_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "estimation_seq", sequenceName = "estimation_seq", allocationSize = 1)
+    @GeneratedValue(generator = "estimation_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

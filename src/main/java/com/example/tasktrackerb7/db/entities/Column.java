@@ -4,9 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
+
 import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.EAGER;
+
 
 @Entity
 @Table(name = "columns")
@@ -16,8 +18,8 @@ import static jakarta.persistence.FetchType.EAGER;
 public class Column {
 
     @Id
-    @SequenceGenerator(name = "column_seq",sequenceName = "column_seq",allocationSize = 1)
-    @GeneratedValue(generator = "column_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "column_seq", sequenceName = "column_seq", allocationSize = 1)
+    @GeneratedValue(generator = "column_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
