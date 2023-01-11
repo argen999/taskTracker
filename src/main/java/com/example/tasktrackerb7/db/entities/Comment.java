@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,8 +8,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "comments")

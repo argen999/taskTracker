@@ -1,14 +1,14 @@
 package com.example.tasktrackerb7.db.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-import static jakarta.persistence.CascadeType.*;
-import static jakarta.persistence.CascadeType.REMOVE;
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REMOVE;
 
 @Entity
 @Table(name = "boards")
@@ -34,5 +34,6 @@ public class Board {
 
     private boolean archive;
 
+    @Transient
     private Favourite favourite;
 }
