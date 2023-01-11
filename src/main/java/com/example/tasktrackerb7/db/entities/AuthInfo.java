@@ -13,8 +13,8 @@ import lombok.Setter;
 public class AuthInfo {
 
     @Id
-    @SequenceGenerator(name = "authInfo_seq",sequenceName = "authInfo_seq",allocationSize = 1)
-    @GeneratedValue(generator = "authInfo_seq",strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "authInfo_seq", sequenceName = "authInfo_seq", allocationSize = 1)
+    @GeneratedValue(generator = "authInfo_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String email;
