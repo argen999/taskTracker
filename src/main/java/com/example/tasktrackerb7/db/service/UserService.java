@@ -10,7 +10,6 @@ import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
-import com.example.tasktrackerb7.dto.response.RegisterResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
@@ -35,7 +34,7 @@ public class UserService implements UserDetailsService {
     private final AuthInfoRepository authInfoRepository;
 
 
-    public RegisterResponse register(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
         User user = new User();
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadCredentialsException(String.format("a user with this email already exists", request.getEmail()));
@@ -54,11 +53,13 @@ public class UserService implements UserDetailsService {
 
             userRepository.save(user);
 
-            return new RegisterResponse(user.getId(),
+            String jwt = jwtTokenUtil.generateToken(user.getAuthInfo().getEmail());
+            return new AuthResponse(user.getId(),
                     user.getName(),
                     user.getSurname(),
                     user.getAuthInfo().getEmail(),
-                    role);
+                    role,
+                    jwt);
         }
     }
 
