@@ -15,10 +15,10 @@ public class RegisterRequest {
     @NotBlank
     private String name;
 
-    @NotNull
-    @NotBlank
     private String surname;
 
+    @NotNull
+    @NotBlank
     @Email
     private String email;
 

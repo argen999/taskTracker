@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -30,28 +31,22 @@ public class WebAppSecurity {
     @Bean
     AuthenticationProvider authenticationProvider(UserRepository userRepo) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService((email) -> userRepo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("user with email = " + email + " not found!")));
+        provider.setUserDetailsService((email) -> userRepo.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("user with email = " + email + " not found!")));
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtTokenFilter filter) throws Exception {
-        httpSecurity.cors().and().csrf().disable()
-                .authorizeHttpRequests(auth -> {auth
-                        .antMatchers("api/jwt/**").permitAll()
-                        .antMatchers("/api-docs", "/v3/api-docs")
-                        .permitAll()
-                        .anyRequest()
-                        .permitAll();
-                });
+        httpSecurity.cors().and().csrf().disable().authorizeHttpRequests(auth -> {
+            auth.antMatchers("api/auth/**").permitAll().antMatchers("/api-docs", "/v3/api-docs").permitAll().anyRequest().permitAll();
+        });
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -77,8 +72,8 @@ public class WebAppSecurity {
         @Override
         public void customize(TomcatServletWebServerFactory factory) {
             factory.addConnectorCustomizers(connector -> {
-                connector.setAttribute("relaxedPathChars", "<>[\\]^`{|}");
-                connector.setAttribute("relaxedQueryChars", "<>[\\]^`{|}");
+                connector.setProperty("relaxedPathChars", "<>[\\]^`{|}");
+                connector.setProperty("relaxedQueryChars", "<>[\\]^`{|}");
             });
         }
     }

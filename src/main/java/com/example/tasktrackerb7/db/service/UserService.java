@@ -21,23 +21,27 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final RoleRepository roleRepository;
+
     private final JwtTokenUtil jwtTokenUtil;
+
     private final AuthInfoRepository authInfoRepository;
 
 
     public AuthResponse register(RegisterRequest request) {
         User user = new User();
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new BadCredentialsException(String.format("a user with this email already exists", request.getEmail()));
+            throw new BadCredentialsException(String.format("a user with this email %s already exists", request.getEmail()));
         }else {
             AuthInfo authInfo = new AuthInfo();
             authInfo.setEmail(request.getEmail());
@@ -49,7 +53,7 @@ public class UserService implements UserDetailsService {
             user.setName(request.getName());
             user.setSurname(request.getSurname());
             user.setAuthInfo(authInfo);
-            user.setRoles(Arrays.asList(role));
+            user.setRoles(Collections.singletonList(role));
 
             userRepository.save(user);
 
@@ -69,7 +73,7 @@ public class UserService implements UserDetailsService {
         }
         User user = userRepository.findByEmail(authRequest.getEmail()).orElseThrow(
                 () -> {
-                    throw new NotFoundException(String.format("the user with this email was not found", authRequest.getEmail()));
+                    throw new NotFoundException(String.format("the user with this email %s was not found", authRequest.getEmail()));
                 });
         if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("invalid password");
@@ -80,7 +84,7 @@ public class UserService implements UserDetailsService {
                 user.getName(),
                 user.getSurname(),
                 user.getAuthInfo().getEmail(),
-                roleRepository.findById(2L).get(),
+                roleRepository.findById(2L).orElseThrow( () -> new NotFoundException("role cannot be send to response")),
                 jwt);
     }
 

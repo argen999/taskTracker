@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -17,10 +16,10 @@ import java.util.Date;
 @Setter
 public class JwtTokenUtil {
 
-    @Value("Aruu")
     private String issuer;
-    @Value("java7")
+
     private String secretWord;
+
     private long expiresAt;
 
     public String generateToken(String email) {

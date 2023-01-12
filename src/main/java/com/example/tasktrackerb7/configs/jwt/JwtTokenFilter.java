@@ -22,6 +22,7 @@ import java.util.Optional;
 public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtUtils;
+
     private final UserRepository userRepository;
 
     @Override

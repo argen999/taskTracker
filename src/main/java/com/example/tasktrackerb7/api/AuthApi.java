@@ -14,17 +14,17 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/jwt")
+@RequestMapping("api/auth")
 public class AuthApi {
 
     private final UserService userService;
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public AuthResponse register(@RequestBody @Valid RegisterRequest request) {
         return userService.register(request);
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
         return userService.login(authRequest);
     }
