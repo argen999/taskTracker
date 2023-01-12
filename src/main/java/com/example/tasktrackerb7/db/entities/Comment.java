@@ -29,7 +29,6 @@ public class Comment {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<User> users;
 
-
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Card cards;
 }

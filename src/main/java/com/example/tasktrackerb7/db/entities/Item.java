@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import static javax.persistence.CascadeType.*;
 
-
 @Entity
 @Table(name = "items")
 @Getter
