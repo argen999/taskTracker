@@ -5,16 +5,14 @@ import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthApi {
 
     private final UserService userService;
