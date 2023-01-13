@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.dto.response;
 
-import com.example.tasktrackerb7.db.entities.Role;
+import com.example.tasktrackerb7.entities.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

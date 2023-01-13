@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.db.repository;
 
-import com.example.tasktrackerb7.db.entities.User;
+import com.example.tasktrackerb7.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.db.entities;
+package com.example.tasktrackerb7.entities;
 
 import javax.persistence.*;
 import lombok.Getter;

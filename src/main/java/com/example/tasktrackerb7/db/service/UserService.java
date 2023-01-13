@@ -1,9 +1,9 @@
 package com.example.tasktrackerb7.db.service;
 
 import com.example.tasktrackerb7.configs.jwt.JwtTokenUtil;
-import com.example.tasktrackerb7.db.entities.AuthInfo;
-import com.example.tasktrackerb7.db.entities.Role;
-import com.example.tasktrackerb7.db.entities.User;
+import com.example.tasktrackerb7.entities.AuthInfo;
+import com.example.tasktrackerb7.entities.Role;
+import com.example.tasktrackerb7.entities.User;
 import com.example.tasktrackerb7.db.repository.AuthInfoRepository;
 import com.example.tasktrackerb7.db.repository.RoleRepository;
 import com.example.tasktrackerb7.db.repository.UserRepository;
