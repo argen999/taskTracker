@@ -13,7 +13,14 @@ import com.example.tasktrackerb7.dto.response.AuthResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +28,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
+
+import java.io.IOException;
 import java.util.Collections;
 
 @Service
@@ -42,7 +52,7 @@ public class UserService implements UserDetailsService {
         User user = new User();
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadCredentialsException(String.format("a user with this email %s already exists", request.getEmail()));
-        }else {
+        } else {
             AuthInfo authInfo = new AuthInfo();
             authInfo.setEmail(request.getEmail());
             authInfo.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -84,10 +94,51 @@ public class UserService implements UserDetailsService {
                 user.getName(),
                 user.getSurname(),
                 user.getAuthInfo().getEmail(),
-                roleRepository.findById(2L).orElseThrow( () -> new NotFoundException("role cannot be send to response")),
+                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")),
                 jwt);
     }
 
+    @PostConstruct
+    public void initConnectFireBase() throws IOException {
+        GoogleCredentials googleCredentials =
+                GoogleCredentials.fromStream(new ClassPathResource("task_tracker.json").getInputStream());
+
+        FirebaseOptions firebaseOptions = FirebaseOptions
+                .builder()
+                .setCredentials(googleCredentials).build();
+
+        FirebaseApp firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
+    }
+
+    public AuthResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenFront);
+
+        String[] fullName = tokenFront.split(" ");
+
+        Role role = roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("Not found!"));
+
+        User user = userRepository.findByEmail(firebaseToken.getEmail())
+                .orElseThrow(() -> new NotFoundException("User with this mail not found!"));
+        if (!userRepository.existsByEmail(tokenFront)) {
+
+            User newUser = new User();
+            newUser.setName(fullName[0]);
+            newUser.setSurname(fullName[1]);
+            newUser.setAuthInfo(new AuthInfo(firebaseToken.getEmail(), firebaseToken.getEmail()));
+            newUser.addRole(role);
+
+            user = userRepository.save(newUser);
+        }
+
+        String token = jwtTokenUtil.generateToken(user.getAuthInfo().getEmail());
+        return new AuthResponse(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getUsername(),
+                role,
+                token);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

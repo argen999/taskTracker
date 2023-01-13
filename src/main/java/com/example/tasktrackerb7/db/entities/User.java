@@ -63,6 +63,8 @@ public class User implements UserDetails {
         return grantedAuthorityList;
     }
 
+
+
     @Override
     public String getPassword() {
         return authInfo.getPassword();
@@ -91,5 +93,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addRole(Role role) {
+        if (roles == null) roles = new ArrayList<>();
+        roles.add(role);
     }
 }
