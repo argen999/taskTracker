@@ -1,12 +1,10 @@
 package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.UserService;
-import com.example.tasktrackerb7.db.service.serviceimpl.UserServiceImpl;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
 import com.google.firebase.auth.FirebaseAuthException;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +28,7 @@ public class AuthApi {
         return userService.login(authRequest);
     }
 
-    @PostMapping("/auth/google")
+    @PostMapping("/google")
     public AuthResponse registerAndAuthWithGoogle(String tokenId) throws FirebaseAuthException {
         return userService.registerAndAuthWithGoogle(tokenId);
     }

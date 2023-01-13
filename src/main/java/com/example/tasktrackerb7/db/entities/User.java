@@ -63,8 +63,6 @@ public class User implements UserDetails {
         return grantedAuthorityList;
     }
 
-
-
     @Override
     public String getPassword() {
         return authInfo.getPassword();
