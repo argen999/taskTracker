@@ -33,7 +33,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             String email = jwtUtils.verifyToken(token);
             User user = userRepository.findByEmail(email)
                     .orElseThrow(NotFoundException::new);
-            userRepository.findAll().forEach(System.out::println);
+            userRepository.findAll();
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     user.getRoles(),
                     user.getAuthInfo().getEmail(),
