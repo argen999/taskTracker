@@ -1,6 +1,8 @@
 package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import static javax.persistence.CascadeType.*;
 @Setter
 @NoArgsConstructor
 public class Role {
+
     @Id
     @SequenceGenerator(name = "role_seq", sequenceName = "role_seq", allocationSize = 1)
     @GeneratedValue(generator = "role_seq", strategy = GenerationType.SEQUENCE)
@@ -22,6 +25,7 @@ public class Role {
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(targetEntity = User.class, mappedBy = "roles",
             cascade = {DETACH, MERGE, REFRESH})
     private List<User> users;

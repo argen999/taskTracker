@@ -19,7 +19,6 @@ public class UserWorkspaceRole {
     @GeneratedValue(generator = "userWorkspaceRole_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private User userId;
 
