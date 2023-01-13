@@ -24,6 +24,7 @@ public class Board {
 
     private String name;
 
+    @javax.persistence.Column(length = 100000)
     private String background;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
