@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,9 +37,6 @@ public class Workspace {
 
     @Transient
     private User creator;
-
-    @Transient
-    private Favourite favourite;
 
 }
 
