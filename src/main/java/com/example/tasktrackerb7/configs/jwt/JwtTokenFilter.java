@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.configs.jwt;
 
-import com.example.tasktrackerb7.entities.User;
+import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;

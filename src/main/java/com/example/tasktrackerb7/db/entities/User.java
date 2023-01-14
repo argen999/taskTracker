@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.entities;
+package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
 
