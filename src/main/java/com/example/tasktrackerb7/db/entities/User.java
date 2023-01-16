@@ -32,7 +32,7 @@ public class User implements UserDetails {
 
     private String surname;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToOne(cascade = ALL)
     private AuthInfo authInfo;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
