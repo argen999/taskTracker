@@ -32,11 +32,15 @@ public class User implements UserDetails {
 
     private String surname;
 
-    @OneToOne(cascade = ALL)
-    private AuthInfo authInfo;
+    private String email;
+
+    private String password;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Notification> notification;
+
+    @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
+    private List<Workspace> workspaces;
 
     @JsonIgnore
     @ManyToMany(targetEntity = Role.class, cascade = ALL, fetch = FetchType.EAGER)
@@ -48,7 +52,7 @@ public class User implements UserDetails {
     @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Card> cards;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "userId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<UserWorkspaceRole> userWorkspaceRoles;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
@@ -65,12 +69,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return authInfo.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return authInfo.getEmail();
+        return email;
     }
 
     @Override

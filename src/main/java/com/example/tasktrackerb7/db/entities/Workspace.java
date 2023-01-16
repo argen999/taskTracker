@@ -27,7 +27,7 @@ public class Workspace {
 
     private boolean isFavourite;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspaceId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
     private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
@@ -35,17 +35,12 @@ public class Workspace {
 
     private boolean archive;
 
-    @Transient
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User creator;
 
-    @Transient
-    private Favourite favourite;
-
-    public Workspace(String name, Favourite favourite) {
+    public Workspace(String name) {
         this.name = name;
-        this.favourite = favourite;
     }
-
 
     public void addBoard(Board board) {
         if(board == null) {

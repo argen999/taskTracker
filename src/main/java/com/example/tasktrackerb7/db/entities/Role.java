@@ -30,6 +30,6 @@ public class Role {
             cascade = {DETACH, MERGE, REFRESH})
     private List<User> users;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "roleId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "role")
     private List<UserWorkspaceRole> user_workSpace_roles;
 }

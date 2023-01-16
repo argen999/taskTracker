@@ -20,11 +20,11 @@ public class UserWorkspaceRole {
     private Long id;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
-    private User userId;
+    private User user;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
-    private Workspace workspaceId;
+    private Workspace workspace;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
-    private Role roleId;
+    private Role role;
 }

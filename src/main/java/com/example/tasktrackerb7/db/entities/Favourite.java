@@ -19,13 +19,13 @@ public class Favourite {
     @GeneratedValue(generator = "favourite_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Transient
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH})
     private Workspace workspace;
 
-    @Transient
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH})
     private Board board;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
-    private User userId;
+    private User user;
 
 }

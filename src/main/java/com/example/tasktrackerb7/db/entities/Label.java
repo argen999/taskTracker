@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.awt.*;
-
 @Entity
 @Getter
 @Setter
@@ -20,6 +18,6 @@ public class Label {
 
     private String text;
 
-    private Color color;
+    private String color;
 
 }

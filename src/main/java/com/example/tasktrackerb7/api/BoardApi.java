@@ -1,10 +1,12 @@
 package com.example.tasktrackerb7.api;
 
+import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.service.BoardService;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,9 +35,9 @@ public class BoardApi {
         return boardService.updateBackground(id, boardRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public SimpleResponse delete(@PathVariable Long id) {
-        return boardService.delete(id);
+    @DeleteMapping("/{id}/{workspaceId}")
+    public SimpleResponse delete(@PathVariable Long id, @PathVariable Long workspaceId) {
+        return boardService.delete(id, workspaceId);
     }
 
     @GetMapping("/workspace/{id}")
