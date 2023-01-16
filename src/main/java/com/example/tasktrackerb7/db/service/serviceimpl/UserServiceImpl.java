@@ -115,13 +115,11 @@ public class UserServiceImpl implements UserService {
     public AuthResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException {
         FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenFront);
 
-        String[] fullName = tokenFront.split(" ");
-
         Role role = roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("Not found!"));
 
-        User user = userRepository.findByEmail(firebaseToken.getEmail())
-                .orElseThrow(() -> new NotFoundException("User with this mail not found!"));
         if (!userRepository.existsByEmail(tokenFront)) {
+
+            String[] fullName = tokenFront.split(" ");
 
             User newUser = new User();
             newUser.setName(fullName[0]);
@@ -129,8 +127,11 @@ public class UserServiceImpl implements UserService {
             newUser.setAuthInfo(new AuthInfo(firebaseToken.getEmail(), firebaseToken.getEmail()));
             newUser.addRole(role);
 
-            user = userRepository.save(newUser);
+            userRepository.save(newUser);
         }
+
+        User user = userRepository.findByEmail(firebaseToken.getEmail())
+                .orElseThrow(() -> new NotFoundException("User with this mail not found!"));
 
         String token = jwtTokenUtil.generateToken(user.getAuthInfo().getEmail());
         return new AuthResponse(
