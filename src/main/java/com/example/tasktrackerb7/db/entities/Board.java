@@ -1,6 +1,8 @@
 package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
+
+import com.example.tasktrackerb7.dto.request.BoardRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +26,7 @@ public class Board {
 
     private String name;
 
+    @javax.persistence.Column(length = 1000)
     private String background;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
@@ -34,6 +37,13 @@ public class Board {
 
     private boolean archive;
 
-    @Transient
+    @ManyToOne
+    @JoinColumn(name = "favourite_id")
     private Favourite favourite;
+
+    public Board(BoardRequest boardRequest) {
+        this.name = boardRequest.getName();
+        this.background = boardRequest.getBackground();
+    }
+
 }

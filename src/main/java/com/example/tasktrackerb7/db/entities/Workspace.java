@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -39,6 +40,20 @@ public class Workspace {
 
     @Transient
     private Favourite favourite;
+
+    public Workspace(String name, Favourite favourite) {
+        this.name = name;
+        this.favourite = favourite;
+    }
+
+
+    public void addBoard(Board board) {
+        if(board == null) {
+            boards = new ArrayList<>();
+        }
+        boards.add(board);
+    }
+
 
 }
 

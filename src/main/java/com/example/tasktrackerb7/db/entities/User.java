@@ -32,14 +32,14 @@ public class User implements UserDetails {
 
     private String surname;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToOne(cascade = ALL)
     private AuthInfo authInfo;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Notification> notification;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = Role.class, cascade = ALL)
+    @ManyToMany(targetEntity = Role.class, cascade = ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
