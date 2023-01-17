@@ -32,7 +32,7 @@ public class User implements UserDetails {
 
     private String surname;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToOne(cascade = ALL)
     private AuthInfo authInfo;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
@@ -91,5 +91,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void addRole(Role role) {
+        if (roles == null) roles = new ArrayList<>();
+        roles.add(role);
     }
 }
