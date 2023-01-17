@@ -21,4 +21,8 @@ public class AuthInfo {
 
     private String password;
 
+    public AuthInfo(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
