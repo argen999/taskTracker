@@ -20,7 +20,7 @@ import static javax.persistence.CascadeType.REMOVE;
 public class Board {
 
     @Id
-    @SequenceGenerator(name = "board_seq", sequenceName = "board_seq", allocationSize = 1)
+    @SequenceGenerator(name = "board_seq", sequenceName = "board_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "board_seq", strategy = GenerationType.SEQUENCE)
     private Long id;
 
