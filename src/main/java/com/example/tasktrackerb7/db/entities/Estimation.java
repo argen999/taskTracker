@@ -16,8 +16,8 @@ import java.time.LocalDate;
 public class Estimation {
 
     @Id
-    @SequenceGenerator(name = "estimation_seq", sequenceName = "estimation_seq", allocationSize = 1)
-    @GeneratedValue(generator = "estimation_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "estimation_gen", sequenceName = "estimation_seq", allocationSize = 1)
+    @GeneratedValue(generator = "estimation_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

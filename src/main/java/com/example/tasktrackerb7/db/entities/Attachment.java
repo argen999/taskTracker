@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +16,8 @@ import java.time.LocalDate;
 public class Attachment {
 
     @Id
-    @SequenceGenerator(name = "attachment_seq", sequenceName = "attachment_seq", allocationSize = 1)
-    @GeneratedValue(generator = "attachment_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "attachment_gen", sequenceName = "attachment_seq", allocationSize = 1)
+    @GeneratedValue(generator = "attachment_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String attachment;

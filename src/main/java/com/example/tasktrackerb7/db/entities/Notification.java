@@ -17,8 +17,8 @@ import static javax.persistence.CascadeType.*;
 public class Notification {
 
     @Id
-    @SequenceGenerator(name = "notification_seq", sequenceName = "notification_seq", allocationSize = 1)
-    @GeneratedValue(generator = "notification_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
+    @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;
@@ -31,7 +31,7 @@ public class Notification {
     private User fromUser;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
-    private User userId;
+    private User user;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Board board;

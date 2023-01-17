@@ -17,8 +17,8 @@ import static javax.persistence.CascadeType.*;
 public class Card {
 
     @Id
-    @SequenceGenerator(name = "card_seq", sequenceName = "card_seq", allocationSize = 1)
-    @GeneratedValue(generator = "card_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "card_gen", sequenceName = "card_seq", allocationSize = 1)
+    @GeneratedValue(generator = "card_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;

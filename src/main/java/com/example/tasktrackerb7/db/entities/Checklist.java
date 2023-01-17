@@ -17,8 +17,8 @@ import static javax.persistence.CascadeType.*;
 public class Checklist {
 
     @Id
-    @SequenceGenerator(name = "checklist_seq", sequenceName = "checklist_seq", allocationSize = 1)
-    @GeneratedValue(generator = "checklist_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "checklist_gen", sequenceName = "checklist_seq", allocationSize = 1)
+    @GeneratedValue(generator = "checklist_gen", strategy = GenerationType.SEQUENCE)
 
     private Long id;
 
