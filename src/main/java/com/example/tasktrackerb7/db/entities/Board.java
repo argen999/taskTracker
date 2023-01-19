@@ -37,10 +37,6 @@ public class Board {
 
     private boolean archive;
 
-    @ManyToOne
-    @JoinColumn(name = "favourite_id")
-    private Favourite favourite;
-
     public Board(BoardRequest boardRequest) {
         this.name = boardRequest.getName();
         this.background = boardRequest.getBackground();
