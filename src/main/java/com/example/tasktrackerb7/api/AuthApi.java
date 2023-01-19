@@ -20,14 +20,14 @@ public class AuthApi {
 
     private final UserService userService;
 
-    @Operation(summary = "Sign up",description = "Any user can register")
+    @Operation(summary = "Sign up", description = "Any user can register")
     @PostMapping("/registration")
     public AuthResponse register(@RequestBody @Valid RegisterRequest request) {
         return userService.register(request);
     }
 
 
-    @Operation(summary = "Sign in",description = "Only registered users can login")
+    @Operation(summary = "Sign in", description = "Only registered users can login")
     @PostMapping("/login")
     public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
         return userService.login(authRequest);

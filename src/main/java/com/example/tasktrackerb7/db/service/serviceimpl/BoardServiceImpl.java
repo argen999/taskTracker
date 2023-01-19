@@ -3,7 +3,10 @@ package com.example.tasktrackerb7.db.service.serviceimpl;
 import com.example.tasktrackerb7.db.entities.Board;
 import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.entities.Workspace;
-import com.example.tasktrackerb7.db.repository.*;
+import com.example.tasktrackerb7.db.repository.BoardRepository;
+import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
+import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.BoardService;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
@@ -87,7 +90,7 @@ public class BoardServiceImpl implements BoardService {
                     board.getBackground(),
                     board.getFavourite()
             );
-        }else {
+        } else {
             throw new BadRequestException("you can't update name");
         }
     }
@@ -135,7 +138,7 @@ public class BoardServiceImpl implements BoardService {
             );
             boardRepository.delete(board);
             return new SimpleResponse("board deleted successfully");
-        }else {
+        } else {
             throw new BadRequestException("you can't delete board");
         }
     }

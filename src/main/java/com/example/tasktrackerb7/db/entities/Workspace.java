@@ -48,7 +48,5 @@ public class Workspace {
         }
         boards.add(board);
     }
-
-
 }
 
