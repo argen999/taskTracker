@@ -59,8 +59,7 @@ public class BoardServiceImpl implements BoardService {
             return new BoardResponse(
                     board.getId(),
                     board.getName(),
-                    board.getBackground(),
-                    board.getFavourite()
+                    board.getBackground()
             );
         } else {
             throw new BadRequestException("you can't create");
@@ -87,8 +86,7 @@ public class BoardServiceImpl implements BoardService {
             return new BoardResponse(
                     board.getId(),
                     board.getName(),
-                    board.getBackground(),
-                    board.getFavourite()
+                    board.getBackground()
             );
         } else {
             throw new BadRequestException("you can't update name");
@@ -114,8 +112,7 @@ public class BoardServiceImpl implements BoardService {
             return new BoardResponse(
                     board.getId(),
                     board.getName(),
-                    board.getBackground(),
-                    board.getFavourite()
+                    board.getBackground()
             );
         } else {
             throw new BadRequestException("you can't update background");
@@ -157,8 +154,7 @@ public class BoardServiceImpl implements BoardService {
                     new BoardResponse(
                             board.getId(),
                             board.getName(),
-                            board.getBackground(),
-                            board.getFavourite()
+                            board.getBackground()
                     ));
         }
         return boardResponses;
@@ -174,8 +170,7 @@ public class BoardServiceImpl implements BoardService {
         return new BoardResponse(
                 board.getId(),
                 board.getName(),
-                board.getBackground(),
-                board.getFavourite()
+                board.getBackground()
         );
     }
 
