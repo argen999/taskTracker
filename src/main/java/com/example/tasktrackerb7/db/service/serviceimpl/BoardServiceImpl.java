@@ -173,5 +173,4 @@ public class BoardServiceImpl implements BoardService {
                 board.getBackground()
         );
     }
-
 }
