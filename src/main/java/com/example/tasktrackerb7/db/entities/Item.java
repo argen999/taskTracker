@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ public class Item {
 
     private String text;
 
-    private boolean isDone = false;
+    private boolean isDone;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Checklist checklist;
