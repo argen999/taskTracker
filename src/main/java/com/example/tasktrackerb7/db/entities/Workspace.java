@@ -19,7 +19,7 @@ import static javax.persistence.CascadeType.REFRESH;
 public class Workspace {
 
     @Id
-    @SequenceGenerator(name = "workspace_gen", sequenceName = "workspace_seq", allocationSize = 1)
+    @SequenceGenerator(name = "workspace_gen", sequenceName = "workspace_seq",allocationSize = 1)
     @GeneratedValue(generator = "workspace_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
