@@ -21,7 +21,7 @@ public class Board {
 
     @Id
     @SequenceGenerator(name = "board_seq", sequenceName = "board_seq", allocationSize = 1, initialValue = 6)
-    @GeneratedValue(generator = "board_seq", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "board_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
