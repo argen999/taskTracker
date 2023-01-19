@@ -28,10 +28,10 @@ public class Card {
 
     private String description;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.EAGER)
     private Column column;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = FetchType.EAGER)
     private Estimation estimation;
 
     @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "cards")
@@ -48,4 +48,7 @@ public class Card {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
     private List<Label> labels;
+
+    @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
+    private Notification notification;
 }

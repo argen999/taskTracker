@@ -37,6 +37,7 @@ public class Board {
 
     private boolean archive;
 
+
     public Board(BoardRequest boardRequest) {
         this.name = boardRequest.getName();
         this.background = boardRequest.getBackground();

@@ -28,18 +28,18 @@ public class Notification {
 
     private LocalDate dateOfWrite;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User user;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Board board;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Column column;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST}, fetch = FetchType.LAZY)
     private Card card;
 }
