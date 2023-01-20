@@ -21,4 +21,7 @@ public interface BoardService {
     List<BoardResponse> getAllByWorkspaceId(Long id);
 
     BoardResponse getById(Long id);
+
+    SimpleResponse deleteBoardById(Long id);
+
 }

@@ -1,16 +1,14 @@
 package com.example.tasktrackerb7.db.entities;
 
-import javax.persistence.*;
-
 import com.example.tasktrackerb7.dto.request.BoardRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
-import static javax.persistence.CascadeType.REMOVE;
 
 @Entity
 @Table(name = "boards")
@@ -32,11 +30,10 @@ public class Board {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Workspace workspace;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "board")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH,PERSIST, REMOVE},mappedBy = "board")
     private List<Column> columns;
 
     private boolean archive;
-
 
     public Board(BoardRequest boardRequest) {
         this.name = boardRequest.getName();

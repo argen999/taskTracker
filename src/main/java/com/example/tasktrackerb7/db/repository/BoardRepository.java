@@ -2,8 +2,10 @@ package com.example.tasktrackerb7.db.repository;
 
 import com.example.tasktrackerb7.db.entities.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
@@ -11,5 +13,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select b from Board b where b.workspace.id = ?1 and b.archive = false")
     List<Board> getAllBoards(Long id);
 
-
+    @Query("delete from Board b where b.id = :id")
+    @Transactional
+    @Modifying
+    void deleteBoardById(Long id);
 }

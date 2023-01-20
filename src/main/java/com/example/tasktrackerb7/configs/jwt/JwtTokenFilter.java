@@ -4,11 +4,11 @@ import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

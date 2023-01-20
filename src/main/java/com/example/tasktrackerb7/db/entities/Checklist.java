@@ -1,10 +1,10 @@
 package com.example.tasktrackerb7.db.entities;
 
-import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -28,6 +28,5 @@ public class Checklist {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "checklist")
     private List<Item> items;
-
 
 }

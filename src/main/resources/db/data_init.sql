@@ -24,7 +24,7 @@ values (1, false, 'Peaksoft House', 1),
        (5, false, 'MegaCom', 5);
 
 insert into boards(id, archive, background, name, workspace_id)
-values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java', 1),
+values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1),
        (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 1),
        (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 2),
        (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 2),
@@ -40,10 +40,10 @@ values (1, 'TO DO', 1),
        (2, 'IN PROGRESS', 1),
        (3, 'KICK BACK', 1),
        (4, 'FINAL REVIEW', 1),
-       (5, 'COMPLETE', 1);
---        (6, 'TO DO', 2),
---        (7, 'IN PROGRESS', 2),
---        (8, 'KICK BACK', 2),
+       (5, 'COMPLETE', 1),
+       (6, 'TO DO', 2),
+       (7, 'IN PROGRESS', 2),
+       (8, 'KICK BACK', 2);
 --        (9, 'FINAL REVIEW', 2),
 --        (10, 'COMPLETE', 2),
 --        (11, 'TO DO', 3),
@@ -107,7 +107,7 @@ values (1, false, '', 'Variables', 1, 1),
        (2, false, '', 'byte', 1, 1),
        (3, false, '', 'short', 2, 1),
        (4, false, '', 'int', 2, 1),
-       (5, false, '', 'long', 3, 1);
+       (5, false, '', 'long', 3, 2);
 --        (6, false, '', 'float', 3, 1),
 --        (7, false, '', 'double', 4, 1),
 --        (8, false, '', 'char', 4, 1),
@@ -240,7 +240,7 @@ values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1),
        (2, '2023-01-10', 'I will do it only in a week,after the vocation', 1),
        (3, '2023-01-13', 'I will do it only in a week,after the vocation', 1),
        (4, '2023-01-05', 'I will do it only in a week,after the vocation', 1),
-       (5, '2023-01-06', 'I will do it only in a week,after the vocation', 1);
+       (5, '2023-01-06', 'I will do it only in a week,after the vocation', 2);
 
 insert into items(id, is_done, text, checklist_id)
 values (1, false, 'Finish before deadline', 1),

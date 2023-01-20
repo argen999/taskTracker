@@ -56,5 +56,4 @@ public class BoardApi {
     public BoardResponse getById(@PathVariable Long id) {
         return boardServiceImpl.getById(id);
     }
-
 }
