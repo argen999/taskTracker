@@ -27,13 +27,16 @@ public class Board {
     @javax.persistence.Column(length = 1000)
     private String background;
 
+    private boolean archive;
+
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Workspace workspace;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH,PERSIST, REMOVE},mappedBy = "board")
     private List<Column> columns;
 
-    private boolean archive;
+    @OneToOne(cascade = {DETACH, REFRESH, MERGE, REMOVE})
+    private Favourite favourite;
 
     public Board(BoardRequest boardRequest) {
         this.name = boardRequest.getName();

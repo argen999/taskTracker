@@ -36,7 +36,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<Notification> notification;
 
     @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
@@ -49,14 +49,17 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "users")
     private List<Card> cards;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<UserWorkspaceRole> userWorkspaceRoles;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<Favourite> favourites;
+
+    @ManyToOne(cascade = {ALL})
+    private Comment comment;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

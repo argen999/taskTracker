@@ -31,7 +31,7 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User user;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})

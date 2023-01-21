@@ -33,19 +33,19 @@ public class Card {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, fetch = FetchType.EAGER)
     private Estimation estimation;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "cards")
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
     private List<User> users;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private List<Checklist> checklists;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "cards")
     private List<Comment> comments;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private List<Attachment> attachments;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH})
     private List<Label> labels;
 
     @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")

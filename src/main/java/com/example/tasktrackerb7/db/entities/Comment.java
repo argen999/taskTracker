@@ -26,7 +26,7 @@ public class Comment {
 
     private LocalDate dateOfStart;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "comment")
     private List<User> users;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})

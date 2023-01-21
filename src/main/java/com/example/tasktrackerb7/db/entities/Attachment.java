@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Getter
 @Setter
@@ -23,4 +25,7 @@ public class Attachment {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dateOfStart;
+
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
+    private Card card;
 }
