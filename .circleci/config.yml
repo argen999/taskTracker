@@ -23,7 +23,7 @@ workflows:
       - aws-ecs/deploy-service-update:
           name: "deploy-service-update"
           cluster: tasktracker-b7
-          container-image-name-updates: 'container=tasktracker-b7-con,tag=${CIRCLE_SHA1}'
+          container-image-name-updates: 'container=tasktracker-b7,tag=${CIRCLE_SHA1}'
           family: tasktracker-b7-task
           service-name: tasktracker-b7-service
           force-new-deployment: true
