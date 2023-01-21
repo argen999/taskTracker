@@ -26,6 +26,7 @@ public class AuthApi {
         return userService.register(request);
     }
 
+
     @Operation(summary = "Sign in", description = "Only registered users can login")
     @PostMapping("/login")
     public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
