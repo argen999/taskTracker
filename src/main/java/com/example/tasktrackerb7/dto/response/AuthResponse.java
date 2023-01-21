@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.dto.response;
 
-import com.example.tasktrackerb7.db.entities.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,11 +17,11 @@ public class AuthResponse {
 
     private String email;
 
-    private Role role;
+    private String role;
 
     private String jwt;
 
-    public AuthResponse(Long id, String name, String surname, String email, Role role, String jwt) {
+    public AuthResponse(Long id, String name, String surname, String email, String role, String jwt) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -30,5 +29,4 @@ public class AuthResponse {
         this.role = role;
         this.jwt = jwt;
     }
-
 }
