@@ -4,6 +4,7 @@ import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
+import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,15 @@ public class AuthApi {
         return userService.register(request);
     }
 
-
     @Operation(summary = "Sign in",description = "Only registered users can login")
     @PostMapping("/login")
     public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
         return userService.login(authRequest);
     }
 
+    @Operation(summary = "Auth with google",description = "Any user can authenticate or register with google")
+    @PostMapping("/")
+    public AuthResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        return userService.registerAndAuthWithGoogle(tokenId);
+    }
 }
