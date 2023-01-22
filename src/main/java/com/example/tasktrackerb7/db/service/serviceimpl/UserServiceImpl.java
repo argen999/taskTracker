@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
                 user.getName(),
                 user.getSurname(),
                 user.getUsername(),
-                role,
+                role.getName(),
                 token);
     }
 
