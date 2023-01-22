@@ -11,11 +11,9 @@ import com.example.tasktrackerb7.db.service.BoardService;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
-import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@Slf4j
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
@@ -57,14 +54,14 @@ public class BoardServiceImpl implements BoardService {
             workspace.addBoard(board);
             board.setWorkspace(workspace);
             boardRepository.save(board);
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground());
+            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
         } else {
             throw new BadRequestException("you can't create");
         }
     }
 
     @Override
-    public BoardResponse updateName(Long id, BoardRequest boardRequest) {
+    public BoardResponse update(Long id, BoardRequest boardRequest) {
         User user = getAuthenticateUser();
         Board board = boardRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("board not found");
@@ -73,62 +70,31 @@ public class BoardServiceImpl implements BoardService {
             throw new NotFoundException("workspace not found");
         });
         if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            board.setName(boardRequest.getName());
+            if (!boardRequest.isNameOrBackground()) {
+                board.setName(boardRequest.getName());
+            }
+            if (boardRequest.isNameOrBackground()) {
+                board.setBackground(boardRequest.getBackground());
+            }
             boardRepository.save(board);
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground());
+            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
         } else {
-            throw new BadRequestException("you can't update name");
+            throw new BadRequestException("you can't do update");
         }
     }
 
     @Override
-    public BoardResponse updateBackground(Long id, BoardRequest boardRequest) {
+    public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
-        Board board = boardRepository.findById(id).orElseThrow(() -> {
-            throw new NotFoundException("board not found");
-        });
-        Workspace workspace = workspaceRepository.findById(boardRequest.getWorkspaceId()).orElseThrow(() -> {
-            throw new NotFoundException("workspace not found");
-        });
-        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            board.setBackground(boardRequest.getBackground());
-            boardRepository.save(board);
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground());
-        } else {
-            throw new BadRequestException("you can't update background");
-        }
-    }
-
-    public SimpleResponse deleteBoardById(Long id){
-        User user =getAuthenticateUser();
-        Board board = boardRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Board with id: " + id + " not found!")
-        );
-
-        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(
-                () -> new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found!")
-        );
-
-        boardRepository.deleteById(board.getId());
-        return new SimpleResponse("Board with id : " + board.getId() + " deleted!");
-
-    }
-
-    @Override
-    public SimpleResponse delete(Long id, Long workspaceId) {
-        User user = getAuthenticateUser();
-        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(() -> {
-            throw new NotFoundException("workspace not found");
-        });
         Board board = boardRepository.findById(id).orElseThrow(() -> {
                     throw new NotFoundException("board not found");
                 });
+        Workspace workspace = board.getWorkspace();
         if (!workspace.getBoards().contains(board)) {
             throw new NotFoundException("we don't have this board in this workspace");
         } else {
             if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 boardRepository.deleteById(board.getId());
-                log.info("Board wih id: " + id + " deleted ");
                 return new SimpleResponse("board deleted with id: " + id + " successfully");
             } else {
                 throw new NullPointerException("you can't delete board");
@@ -144,7 +110,7 @@ public class BoardServiceImpl implements BoardService {
         List<Board> boards = boardRepository.getAllBoards(workspace.getId());
         List<BoardResponse> boardResponses = new ArrayList<>();
         for (Board board : boards) {
-            boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground()));
+            boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite()));
         }
         return boardResponses;
     }
@@ -154,6 +120,6 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("board not found");
         });
-        return new BoardResponse(board.getId(), board.getName(), board.getBackground());
+        return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
     }
 }

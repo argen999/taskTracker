@@ -12,16 +12,12 @@ public interface BoardService {
 
     BoardResponse create(BoardRequest boardRequest);
 
-    BoardResponse updateName(Long id, BoardRequest boardRequest);
+    BoardResponse update(Long id, BoardRequest boardRequest);
 
-    BoardResponse updateBackground(Long id, BoardRequest boardRequest);
-
-    SimpleResponse delete(Long id, Long workspaceId);
+    SimpleResponse delete(Long id);
 
     List<BoardResponse> getAllByWorkspaceId(Long id);
 
     BoardResponse getById(Long id);
-
-    SimpleResponse deleteBoardById(Long id);
 
 }

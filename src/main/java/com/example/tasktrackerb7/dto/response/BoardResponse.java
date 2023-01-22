@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.dto.response;
 
+import com.example.tasktrackerb7.db.entities.Favourite;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,7 @@ public class BoardResponse {
     private String name;
 
     private String background;
+
+    private Favourite isFavourite;
 
 }
