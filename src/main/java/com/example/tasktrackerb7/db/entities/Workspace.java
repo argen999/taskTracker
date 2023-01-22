@@ -36,6 +36,9 @@ public class Workspace {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User creator;
 
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Favourite favourite;
+
     public Workspace(String name) {
         this.name = name;
     }

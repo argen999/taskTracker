@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.List;
+
 import static javax.persistence.CascadeType.*;
 
 @Entity
@@ -20,11 +22,11 @@ public class Favourite {
     @GeneratedValue(generator = "favourite_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH})
-    private Workspace workspace;
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "favourite")
+    private List<Workspace> workspaces;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH})
-    private Board board;
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "favourite")
+    private List<Board> boards;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User user;

@@ -16,34 +16,33 @@ values (1, 2),
        (4, 2),
        (5, 2);
 
-insert into workspaces(id, archive, name, creator_id)
-values (1, false, 'Peaksoft House', 1),
-       (2, false, 'Makers', 2),
-       (3, false, 'DevX', 3),
-       (4, false, 'IT School', 4),
-       (5, false, 'MegaCom', 5);
+insert into favourites(id, user_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
-insert into boards(id, archive, background, name, workspace_id)
-values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1),
-       (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 1),
-       (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 2),
-       (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 2),
-       (5, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Kotlin', 3),
-       (6, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','PHP', 3),
-       (7, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Go', 4),
-       (8, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Dart', 4),
-       (9, false,'https://i.pinimg.com/236x/ca/a0/cc/caa0ccc4bd948e9b543e2193cd6592bc.jpg','C', 5),
-       (10, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Scala', 5);
+insert into workspaces(id, archive, name, creator_id, favourite_id)
+values (1, false, 'Peaksoft House', 1, 1),
+       (2, false, 'Makers', 2, 2),
+       (3, false, 'DevX', 3, 3),
+       (4, false, 'IT School', 4, 4),
+       (5, false, 'MegaCom', 5, 5);
+
+insert into boards(id, archive, background, name, workspace_id, favourite_id)
+values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1, 1),
+       (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 2, 2),
+       (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 3, 3),
+       (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 4, 4),
+       (5, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Kotlin', 5, 5);
 
 insert into columns(id, name, board_id)
 values (1, 'TO DO', 1),
        (2, 'IN PROGRESS', 2),
        (3, 'KICK BACK', 3),
        (4, 'FINAL REVIEW', 4),
-       (5, 'COMPLETE', 5),
-       (6, 'TO DO', 6),
-       (7, 'IN PROGRESS', 7),
-       (8, 'KICK BACK', 8);
+       (5, 'COMPLETE', 5);
 
 insert into user_workspace_roles(id, role_id, user_id, workspace_id)
 values (1, 1, 1, 1),
@@ -57,8 +56,7 @@ values (1, '2023-01-15', '2023-01-02'),
        (2, '2023-01-29', '2023-01-16'),
        (3, '2023-02-12', '2023-01-30'),
        (4, '2023-02-26', '2023-02-13'),
-       (5, '2023-03-12', '2023-02-27'),
-       (6, '2023-03-26', '2023-03-13');
+       (5, '2023-03-12', '2023-02-27');
 
 insert into cards(id, archive, description, name, column_id, estimation_id)
 values (1, false, '', 'Variables', 1, 1),
@@ -123,9 +121,3 @@ values (1, 1),
        (4, 4),
        (5, 5);
 
-insert into favourites(id, board_id, user_id, workspace_id)
-values (1, 1, 1, 1),
-       (2, 3, 2, 2),
-       (3, 5, 3, 3),
-       (4, 7, 4, 4),
-       (5, 9, 5, 5);

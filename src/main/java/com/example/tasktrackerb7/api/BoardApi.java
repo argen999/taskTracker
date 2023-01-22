@@ -2,6 +2,7 @@ package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.serviceimpl.BoardServiceImpl;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
+import com.example.tasktrackerb7.dto.request.BoardUpdateRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +29,9 @@ public class BoardApi {
     }
 
     @Operation(summary = "Update name", description = "Update board name")
-    @PutMapping("/{id}")
-    public BoardResponse update(@PathVariable Long id, @RequestBody @Valid BoardRequest boardRequest) {
-        return boardServiceImpl.update(id, boardRequest);
+    @PutMapping
+    public BoardResponse update(@RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
+        return boardServiceImpl.update(boardUpdateRequest);
     }
 
     @Operation(summary = "Delete", description = "Delete board by board id")
