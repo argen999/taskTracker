@@ -39,7 +39,7 @@ public class Board {
     private List<Column> columns;
 
     @JsonIgnore
-    @OneToOne(cascade = {DETACH, REFRESH, MERGE, REMOVE}, mappedBy = "board")
+    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, REMOVE})
     private Favourite favourite;
 
     public Board(BoardRequest boardRequest) {

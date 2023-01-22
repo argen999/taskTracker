@@ -15,5 +15,4 @@ public class BoardRequest {
 
     private Long workspaceId;
 
-    private boolean nameOrBackground;
 }

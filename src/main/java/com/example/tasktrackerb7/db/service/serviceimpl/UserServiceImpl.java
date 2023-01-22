@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
                     user.getName(),
                     user.getSurname(),
                     user.getEmail(),
-                    role,
+                    role.getName(),
                     jwt);
         }
     }
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
                 user.getName(),
                 user.getSurname(),
                 user.getEmail(),
-                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")),
+                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
                 jwt);
     }
 

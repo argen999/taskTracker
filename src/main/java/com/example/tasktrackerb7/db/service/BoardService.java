@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.service;
 
 import com.example.tasktrackerb7.dto.request.BoardRequest;
+import com.example.tasktrackerb7.dto.request.BoardUpdateRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ public interface BoardService {
 
     BoardResponse create(BoardRequest boardRequest);
 
-    BoardResponse update(Long id, BoardRequest boardRequest);
+    BoardResponse update(BoardUpdateRequest boardUpdateRequest);
 
     SimpleResponse delete(Long id);
 

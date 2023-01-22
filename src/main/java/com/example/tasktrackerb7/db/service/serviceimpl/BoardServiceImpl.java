@@ -9,6 +9,7 @@ import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.BoardService;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
+import com.example.tasktrackerb7.dto.request.BoardUpdateRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
@@ -61,20 +62,20 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardResponse update(Long id, BoardRequest boardRequest) {
+    public BoardResponse update(BoardUpdateRequest boardUpdateRequest) {
         User user = getAuthenticateUser();
-        Board board = boardRepository.findById(id).orElseThrow(() -> {
+        Board board = boardRepository.findById(boardUpdateRequest.getBoardId()).orElseThrow(() -> {
             throw new NotFoundException("board not found");
         });
-        Workspace workspace = workspaceRepository.findById(boardRequest.getWorkspaceId()).orElseThrow(() -> {
+        Workspace workspace = workspaceRepository.findById(board.getId()).orElseThrow(() -> {
             throw new NotFoundException("workspace not found");
         });
         if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            if (!boardRequest.isNameOrBackground()) {
-                board.setName(boardRequest.getName());
+            if (!boardUpdateRequest.getValue().equals("name")) {
+                board.setName(boardUpdateRequest.getValue());
             }
-            if (boardRequest.isNameOrBackground()) {
-                board.setBackground(boardRequest.getBackground());
+            if (boardUpdateRequest.getValue().equals("background")) {
+                board.setBackground(boardUpdateRequest.getValue());
             }
             boardRepository.save(board);
             return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
