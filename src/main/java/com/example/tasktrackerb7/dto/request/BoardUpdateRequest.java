@@ -10,4 +10,6 @@ public class BoardUpdateRequest {
     private Long boardId;
 
     private String value;
+
+    private boolean isBackground = false;
 }

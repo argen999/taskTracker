@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.Board;
+import com.example.tasktrackerb7.db.entities.Favourite;
 import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.entities.Workspace;
 import com.example.tasktrackerb7.db.repository.BoardRepository;
@@ -39,7 +40,6 @@ public class BoardServiceImpl implements BoardService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        System.out.println(login);
         return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found!"));
     }
 
@@ -72,14 +72,20 @@ public class BoardServiceImpl implements BoardService {
             throw new NotFoundException("workspace not found");
         });
         if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            if (!boardUpdateRequest.getValue().equals("name")) {
+            if (!boardUpdateRequest.isBackground()) {
                 board.setName(boardUpdateRequest.getValue());
             }
-            if (boardUpdateRequest.getValue().equals("background")) {
+            if (boardUpdateRequest.isBackground()) {
                 board.setBackground(boardUpdateRequest.getValue());
             }
             boardRepository.save(board);
-            boolean isFavourite = board.getFavourite().getBoards().contains(board);
+            boolean isFavourite = false;
+            for (Favourite favorite : user.getFavourites()) {
+                if (favorite.getUser().getId().equals(board.getFavourite().getUser().getId())) {
+                    isFavourite = true;
+                    break;
+                }
+            }
             return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
         } else {
             throw new BadRequestException("you can't do update");
@@ -90,8 +96,8 @@ public class BoardServiceImpl implements BoardService {
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
         Board board = boardRepository.findById(id).orElseThrow(() -> {
-                    throw new NotFoundException("board not found");
-                });
+            throw new NotFoundException("board not found");
+        });
         Workspace workspace = board.getWorkspace();
         if (!workspace.getBoards().contains(board)) {
             throw new NotFoundException("we don't have this board in this workspace");
