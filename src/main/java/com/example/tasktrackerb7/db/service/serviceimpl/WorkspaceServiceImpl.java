@@ -52,12 +52,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return new WorkspaceResponse(workspace.getId(), workspace.getName());
     }
 
-    public WorkspaceResponse getById(Long id) {
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("workspace with id " + id + " not found"));
-        return new WorkspaceResponse(workspace.getId(), workspace.getName());
-    }
-
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("workspace with id " + id + "not found"));
@@ -69,5 +63,16 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return new SimpleResponse("workspace deleted successfully");
     }
 
-    
+    public WorkspaceResponse getById(Long id) {
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("workspace with id " + id + " not found"));
+        return new WorkspaceResponse(workspace.getId(), workspace.getName());
+    }
+
+//    public WorkspaceResponse getAll(Long id) {
+//        User user = getAuthenticateUser();
+//        if ()
+//    }
+
+
 }
