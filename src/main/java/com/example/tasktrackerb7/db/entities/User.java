@@ -104,4 +104,11 @@ public class User implements UserDetails {
         if (roles == null) roles = new ArrayList<>();
         roles.add(role);
     }
+
+    public void addUserWorkspaceRole(UserWorkspaceRole userWorkspaceRole) {
+        if (userWorkspaceRoles == null) {
+            userWorkspaceRoles = new ArrayList<>();
+        }
+        userWorkspaceRoles.add(userWorkspaceRole);
+    }
 }
