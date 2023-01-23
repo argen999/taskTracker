@@ -13,6 +13,7 @@ import com.example.tasktrackerb7.dto.request.BoardRequest;
 import com.example.tasktrackerb7.dto.request.BoardUpdateRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
+import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -49,16 +50,27 @@ public class BoardServiceImpl implements BoardService {
         Workspace workspace = workspaceRepository.findById(boardRequest.getWorkspaceId()).orElseThrow(() -> {
             throw new NotFoundException("workspace not found");
         });
-
-        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            Board board = new Board(boardRequest);
-            workspace.addBoard(board);
-            board.setWorkspace(workspace);
-            boardRepository.save(board);
-            boolean isFavourite = true;
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+                Board board = new Board(boardRequest);
+                workspace.addBoard(board);
+                board.setWorkspace(workspace);
+                boardRepository.save(board);
+                boolean isFavourite = false;
+                if (board.getFavourite() != null) {
+                    for (Favourite favorite : user.getFavourites()) {
+                        if (user.getFavourites().contains(favorite)) {
+                            isFavourite = true;
+                            break;
+                        }
+                    }
+                }
+                return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
+            } else {
+                throw new BadRequestException("you can't create");
+            }
         } else {
-            throw new BadRequestException("you can't create");
+            throw new BadRequestException("you are not member in this workspace");
         }
     }
 
@@ -68,27 +80,37 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(boardUpdateRequest.getBoardId()).orElseThrow(() -> {
             throw new NotFoundException("board not found");
         });
-        Workspace workspace = workspaceRepository.findById(board.getId()).orElseThrow(() -> {
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() -> {
             throw new NotFoundException("workspace not found");
         });
-        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            if (!boardUpdateRequest.isBackground()) {
-                board.setName(boardUpdateRequest.getValue());
-            }
-            if (boardUpdateRequest.isBackground()) {
-                board.setBackground(boardUpdateRequest.getValue());
-            }
-            boardRepository.save(board);
-            boolean isFavourite = false;
-            for (Favourite favorite : user.getFavourites()) {
-                if (favorite.getUser().getId().equals(board.getFavourite().getUser().getId())) {
-                    isFavourite = true;
-                    break;
-                }
-            }
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
+        if (!workspace.getBoards().contains(board)) {
+            throw new NotFoundException("This board not found!");
         } else {
-            throw new BadRequestException("you can't do update");
+            if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+                if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+                    if (!boardUpdateRequest.isBackground()) {
+                        board.setName(boardUpdateRequest.getValue());
+                    }
+                    if (boardUpdateRequest.isBackground()) {
+                        board.setBackground(boardUpdateRequest.getValue());
+                    }
+                    boolean isFavourite = false;
+                    if (board.getFavourite() != null) {
+                        for (Favourite favorite : user.getFavourites()) {
+                            if (user.getFavourites().contains(favorite)) {
+                                isFavourite = true;
+                                break;
+                            }
+                        }
+                    }
+                    boardRepository.save(board);
+                    return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
+                } else {
+                    throw new BadCredentialsException("you can't do update");
+                }
+            } else {
+                throw new BadRequestException("This bad requestmk");
+            }
         }
     }
 
@@ -102,35 +124,66 @@ public class BoardServiceImpl implements BoardService {
         if (!workspace.getBoards().contains(board)) {
             throw new NotFoundException("we don't have this board in this workspace");
         } else {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-                boardRepository.deleteById(board.getId());
-                return new SimpleResponse("board deleted with id: " + id + " successfully");
+            if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+                if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+                    if (board.getFavourite() != null) {
+                        board.getFavourite().getBoards().remove(board);
+                    }
+                    board.setFavourite(null);
+                    boardRepository.delete(board);
+                    return new SimpleResponse("board deleted with id: " + id + " successfully");
+                } else {
+                    throw new BadCredentialsException("you can't delete board");
+                }
             } else {
-                throw new NullPointerException("you can't delete board");
+                throw new BadRequestException("you are not member in this workspace");
             }
         }
     }
 
     @Override
     public List<BoardResponse> getAllByWorkspaceId(Long id) {
+        User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("workspace not found");
         });
-        List<Board> boards = boardRepository.getAllBoards(workspace.getId());
-        List<BoardResponse> boardResponses = new ArrayList<>();
-        boolean isFavourite = true;
-        for (Board board : boards) {
-            boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            List<Board> boards = boardRepository.getAllBoards(workspace.getId());
+            List<BoardResponse> boardResponses = new ArrayList<>();
+            for (Board board : boards) {
+                boolean isFavourite = false;
+                if (board.getFavourite() != null) {
+                    for (Favourite favorite : user.getFavourites()) {
+                        if (user.getFavourites().contains(favorite)) {
+                            isFavourite = true;
+                            break;
+                        }
+                    }
+                }
+                boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite));
+            }
+            return boardResponses;
+        } else {
+            throw new BadRequestException("you are not member in this workspace");
         }
-        return boardResponses;
+
     }
 
     @Override
     public BoardResponse getById(Long id) {
+        User user = getAuthenticateUser();
         Board board = boardRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("board not found");
         });
-        boolean isFavourite = true;
+        boolean isFavourite = false;
+        if (board.getFavourite() != null) {
+            for (Favourite favorite : user.getFavourites()) {
+                if (user.getFavourites().contains(favorite)) {
+                    isFavourite = true;
+                    break;
+                }
+            }
+        }
         return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
     }
 }

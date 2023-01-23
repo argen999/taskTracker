@@ -65,6 +65,13 @@ values (1, false, '', 'Variables', 1, 1),
        (4, false, '', 'int', 4, 4),
        (5, false, '', 'long', 5, 5);
 
+insert into comments(id, date_of_start, text, cards_id, user_id)
+values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1),
+       (2, '2023-01-10', 'I will do it only in a week,after the vocation', 2, 2),
+       (3, '2023-01-13', 'I will do it only in a week,after the vocation', 3, 3),
+       (4, '2023-01-05', 'I will do it only in a week,after the vocation', 4, 4),
+       (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5, 4);
+
 insert into label(id, color, text)
 values (1, 'Gray', 'TO DO'),
        (2, 'Red', 'IN PROGRESS'),
@@ -85,13 +92,6 @@ values (1, 'title.pdf', '2023-01-02', 1),
        (3, 'title.doc', '2023-01-30', 3),
        (4, 'title.zip', '2023-02-13', 4),
        (5, 'title.txt', '2023-02-27', 5);
-
-insert into comments(id, date_of_start, text, cards_id)
-values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1),
-       (2, '2023-01-10', 'I will do it only in a week,after the vocation', 2),
-       (3, '2023-01-13', 'I will do it only in a week,after the vocation', 3),
-       (4, '2023-01-05', 'I will do it only in a week,after the vocation', 4),
-       (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5);
 
 insert into items(id, is_done, text, checklist_id)
 values (1, false, 'Finish before deadline', 1),
