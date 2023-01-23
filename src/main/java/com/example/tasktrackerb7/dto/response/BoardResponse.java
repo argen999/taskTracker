@@ -18,6 +18,6 @@ public class BoardResponse {
 
     private String background;
 
-    private Favourite isFavourite;
+    private boolean isFavourite;
 
 }
