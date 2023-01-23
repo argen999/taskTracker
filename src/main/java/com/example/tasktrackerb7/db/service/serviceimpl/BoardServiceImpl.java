@@ -55,7 +55,8 @@ public class BoardServiceImpl implements BoardService {
             workspace.addBoard(board);
             board.setWorkspace(workspace);
             boardRepository.save(board);
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
+            boolean isFavourite = true;
+            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
         } else {
             throw new BadRequestException("you can't create");
         }
@@ -78,7 +79,8 @@ public class BoardServiceImpl implements BoardService {
                 board.setBackground(boardUpdateRequest.getValue());
             }
             boardRepository.save(board);
-            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
+            boolean isFavourite = board.getFavourite().getBoards().contains(board);
+            return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
         } else {
             throw new BadRequestException("you can't do update");
         }
@@ -110,8 +112,9 @@ public class BoardServiceImpl implements BoardService {
         });
         List<Board> boards = boardRepository.getAllBoards(workspace.getId());
         List<BoardResponse> boardResponses = new ArrayList<>();
+        boolean isFavourite = true;
         for (Board board : boards) {
-            boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite()));
+            boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite));
         }
         return boardResponses;
     }
@@ -121,6 +124,7 @@ public class BoardServiceImpl implements BoardService {
         Board board = boardRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("board not found");
         });
-        return new BoardResponse(board.getId(), board.getName(), board.getBackground(), board.getFavourite());
+        boolean isFavourite = true;
+        return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
     }
 }

@@ -8,5 +8,6 @@ import lombok.Setter;
 public class BoardUpdateRequest {
 
     private Long boardId;
+
     private String value;
 }
