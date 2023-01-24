@@ -38,7 +38,7 @@ public class ColumnServiceImpl implements ColumnService {
     @Override
     public ColumnResponse create(Long boardId, ColumnRequest columnRequest) {
         User user = getAuthenticateUser();
-        Column column = new Column();
+        Column column = new Column(columnRequest);
 
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new NotFoundException("Board not found!")

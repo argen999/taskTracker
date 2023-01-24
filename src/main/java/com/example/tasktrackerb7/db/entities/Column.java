@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
+import com.example.tasktrackerb7.dto.request.ColumnRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,5 +29,9 @@ public class Column {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "column")
     private List<Card> cards;
+
+    public Column(ColumnRequest columnRequest) {
+        this.name = columnRequest.getName();
+    }
 
 }
