@@ -1,7 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
 import com.example.tasktrackerb7.dto.request.BoardRequest;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,15 +29,12 @@ public class Board {
 
     private boolean archive;
 
-    @JsonIgnore
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Workspace workspace;
 
-    @JsonIgnore
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH,PERSIST, REMOVE},mappedBy = "board")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, PERSIST, REMOVE}, mappedBy = "board")
     private List<Column> columns;
 
-    @JsonIgnore
     @ManyToOne(cascade = {DETACH, REFRESH, MERGE, REMOVE})
     private Favourite favourite;
 

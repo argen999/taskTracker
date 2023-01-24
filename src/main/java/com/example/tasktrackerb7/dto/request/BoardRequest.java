@@ -14,5 +14,4 @@ public class BoardRequest {
     private String background;
 
     private Long workspaceId;
-
 }
