@@ -1,5 +1,8 @@
 package com.example.tasktrackerb7.validations;
 
+import com.example.tasktrackerb7.exceptions.BadCredentialsException;
+import com.example.tasktrackerb7.exceptions.BadRequestException;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -8,8 +11,8 @@ public class PasswordValid implements ConstraintValidator<Password, String> {
     @Override
     public boolean isValid(String password, ConstraintValidatorContext constraintValidatorContext) {
         if (password.length() > 6 && password.length() < 30) {
-            return password.matches("^(?=.*[A-Za-z])(?=.*\\\\d)[A-Za-z\\\\d]{6,30}$");
-        }else {
+            return password.matches("^(?=.*[a-z])(?=\\\\S+$).{6,20}$");
+        } else {
             return false;
         }
     }

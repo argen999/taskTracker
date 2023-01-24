@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.*;
 public class Column {
 
     @Id
-    @SequenceGenerator(name = "column_gen", sequenceName = "column_seq", allocationSize = 1)
+    @SequenceGenerator(name = "column_gen", sequenceName = "column_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "column_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
