@@ -15,16 +15,16 @@ import static javax.persistence.CascadeType.*;
 public class UserWorkspaceRole {
 
     @Id
-    @SequenceGenerator(name = "userWorkspaceRole_seq", sequenceName = "userWorkspaceRole_seq", allocationSize = 1)
-    @GeneratedValue(generator = "userWorkspaceRole_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "userWorkspaceRole_gen", sequenceName = "userWorkspaceRole_seq", allocationSize = 1)
+    @GeneratedValue(generator = "userWorkspaceRole_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
-    private User userId;
+    private User user;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
-    private Workspace workspaceId;
+    private Workspace workspace;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
-    private Role roleId;
+    private Role role;
 }

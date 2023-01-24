@@ -4,5 +4,10 @@
       "name": "security.jwt.secret-word",
       "type": "java.lang.String",
       "description": "Description for security.jwt.secret-word."
-  }
-] }
+    },
+    {
+      "name": "security.secretWord",
+      "type": "java.lang.String",
+      "description": "Description for security.secretWord."
+    }
+  ] }

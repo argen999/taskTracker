@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.awt.*;
-
 @Entity
 @Getter
 @Setter
@@ -14,12 +12,12 @@ import java.awt.*;
 public class Label {
 
     @Id
-    @SequenceGenerator(name = "label_seq", sequenceName = "label_seq", allocationSize = 1)
-    @GeneratedValue(generator = "label_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "label_gen", sequenceName = "label_seq", allocationSize = 1)
+    @GeneratedValue(generator = "label_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;
 
-    private Color color;
+    private String color;
 
 }

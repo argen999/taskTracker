@@ -1,11 +1,11 @@
 package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -19,15 +19,13 @@ import static javax.persistence.CascadeType.REFRESH;
 public class Workspace {
 
     @Id
-    @SequenceGenerator(name = "workspace_seq", sequenceName = "workspace_seq", allocationSize = 1)
-    @GeneratedValue(generator = "workspace_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "workspace_gen", sequenceName = "workspace_seq",allocationSize = 1)
+    @GeneratedValue(generator = "workspace_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
 
-    private boolean isFavourite;
-
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspaceId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
     private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
@@ -35,8 +33,21 @@ public class Workspace {
 
     private boolean archive;
 
-    @Transient
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User creator;
 
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Favourite favourite;
+
+    public Workspace(String name) {
+        this.name = name;
+    }
+
+    public void addBoard(Board board) {
+        if(board == null) {
+            boards = new ArrayList<>();
+        }
+        boards.add(board);
+    }
 }
 

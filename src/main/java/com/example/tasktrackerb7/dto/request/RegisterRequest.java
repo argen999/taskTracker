@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.dto.request;
 
+import com.example.tasktrackerb7.validations.Password;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,5 +25,6 @@ public class RegisterRequest {
 
     @NotNull
     @NotBlank
+    @Password
     private String password;
 }

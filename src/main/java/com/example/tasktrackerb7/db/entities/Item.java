@@ -1,10 +1,10 @@
 package com.example.tasktrackerb7.db.entities;
 
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 import static javax.persistence.CascadeType.*;
 
@@ -16,8 +16,8 @@ import static javax.persistence.CascadeType.*;
 public class Item {
 
     @Id
-    @SequenceGenerator(name = "item_seq", sequenceName = "item_seq", allocationSize = 1)
-    @GeneratedValue(generator = "item_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "item_gen", sequenceName = "item_seq", allocationSize = 1)
+    @GeneratedValue(generator = "item_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;

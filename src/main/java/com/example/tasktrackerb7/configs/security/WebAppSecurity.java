@@ -38,10 +38,7 @@ public class WebAppSecurity {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtTokenFilter filter) throws Exception {
-        httpSecurity.cors().and().csrf().disable().authorizeHttpRequests(auth ->
-                auth.antMatchers("api/auth/**").permitAll().antMatchers("/api-docs",
-                        "/v3/api-docs",
-                        "/swagger-ui/index.html").permitAll().anyRequest().permitAll());
+        httpSecurity.cors().and().csrf().disable().authorizeHttpRequests(auth -> auth.antMatchers("api/auth/**").permitAll().antMatchers("/api-docs", "/v3/api-docs", "/swagger-ui/index.html").permitAll().anyRequest().permitAll());
         httpSecurity.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

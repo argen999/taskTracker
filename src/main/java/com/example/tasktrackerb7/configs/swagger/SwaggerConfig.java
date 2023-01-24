@@ -17,19 +17,11 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .components(new Components()
-                        .addSecuritySchemes(API_KEY, apiKeySecuritySchema()))
-                .info(new Info().title("Task Tracker"))
-                .security(Collections.singletonList(new SecurityRequirement().addList(API_KEY)));
+        return new OpenAPI().components(new Components().addSecuritySchemes(API_KEY, apiKeySecuritySchema())).info(new Info().title("Task Tracker")).security(Collections.singletonList(new SecurityRequirement().addList(API_KEY)));
     }
+
     public SecurityScheme apiKeySecuritySchema() {
-        return new SecurityScheme()
-                .name("Authorization")
-                .description("Just put the token")
-                .in(SecurityScheme.In.HEADER)
-                .type(SecurityScheme.Type.HTTP)
-                .scheme("Bearer");
+        return new SecurityScheme().name("Authorization").description("Just put the token").in(SecurityScheme.In.HEADER).type(SecurityScheme.Type.HTTP).scheme("Bearer");
     }
 
 }

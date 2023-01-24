@@ -1,10 +1,8 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.configs.jwt.JwtTokenUtil;
-import com.example.tasktrackerb7.db.entities.AuthInfo;
 import com.example.tasktrackerb7.db.entities.Role;
 import com.example.tasktrackerb7.db.entities.User;
-import com.example.tasktrackerb7.db.repository.AuthInfoRepository;
 import com.example.tasktrackerb7.db.repository.RoleRepository;
 import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.service.UserService;
@@ -45,7 +43,6 @@ public class UserServiceImpl implements UserService {
 
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final AuthInfoRepository authInfoRepository;
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -53,25 +50,22 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadCredentialsException(String.format("a user with this email %s already exists", request.getEmail()));
         } else {
-            AuthInfo authInfo = new AuthInfo();
-            authInfo.setEmail(request.getEmail());
-            authInfo.setPassword(passwordEncoder.encode(request.getPassword()));
-            authInfoRepository.save(authInfo);
 
             Role role = roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("not found role"));
 
             user.setName(request.getName());
             user.setSurname(request.getSurname());
-            user.setAuthInfo(authInfo);
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setRoles(Collections.singletonList(role));
 
             userRepository.save(user);
 
-            String jwt = jwtTokenUtil.generateToken(user.getAuthInfo().getEmail());
+            String jwt = jwtTokenUtil.generateToken(user.getEmail());
             return new AuthResponse(user.getId(),
                     user.getName(),
                     user.getSurname(),
-                    user.getAuthInfo().getEmail(),
+                    user.getEmail(),
                     role.getName(),
                     jwt);
         }
@@ -89,12 +83,12 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("invalid password");
         }
-        String jwt = jwtTokenUtil.generateToken(user.getAuthInfo().getEmail());
+        String jwt = jwtTokenUtil.generateToken(user.getEmail());
         return new AuthResponse(
                 user.getId(),
                 user.getName(),
                 user.getSurname(),
-                user.getAuthInfo().getEmail(),
+                user.getEmail(),
                 roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
                 jwt);
     }
@@ -124,7 +118,8 @@ public class UserServiceImpl implements UserService {
             User newUser = new User();
             newUser.setName(fullName[0]);
             newUser.setSurname(fullName[1]);
-            newUser.setAuthInfo(new AuthInfo(firebaseToken.getEmail(), firebaseToken.getEmail()));
+            newUser.setEmail(firebaseToken.getEmail());
+            newUser.setPassword(firebaseToken.getEmail());
             newUser.addRole(role);
 
             userRepository.save(newUser);
@@ -133,7 +128,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(firebaseToken.getEmail())
                 .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!",firebaseToken.getEmail())));
 
-        String token = jwtTokenUtil.generateToken(user.getAuthInfo().getEmail());
+        String token = jwtTokenUtil.generateToken(user.getEmail());
         return new AuthResponse(
                 user.getId(),
                 user.getName(),

@@ -1,7 +1,5 @@
 package com.example.tasktrackerb7.db.entities;
 
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,35 +23,42 @@ import static javax.persistence.CascadeType.*;
 public class User implements UserDetails {
 
     @Id
-    @SequenceGenerator(name = "user_seq", sequenceName = "user_seq", allocationSize = 1)
-    @GeneratedValue(generator = "user_seq", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "user_gen", sequenceName = "user_seq", allocationSize = 1, initialValue = 6)
+    @GeneratedValue(generator = "user_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
 
     private String surname;
 
-    @OneToOne(cascade = ALL)
-    private AuthInfo authInfo;
+    private String email;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    private String password;
+
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<Notification> notification;
 
+    @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
+    private List<Workspace> workspaces;
+
     @JsonIgnore
-    @ManyToMany(targetEntity = Role.class, cascade = ALL)
+    @ManyToMany(targetEntity = Role.class, cascade = ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "users")
     private List<Card> cards;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "userId")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<UserWorkspaceRole> userWorkspaceRoles;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE},mappedBy = "user")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<Favourite> favourites;
+
+    @OneToMany(cascade = {ALL}, mappedBy = "user")
+    private List<Comment> comments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -65,12 +71,12 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return authInfo.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return authInfo.getEmail();
+        return email;
     }
 
     @Override
