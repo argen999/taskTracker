@@ -10,6 +10,8 @@ import lombok.Setter;
 public class WorkspaceResponse {
 
     private Long id;
+
     private String name;
 
+    private boolean isFavourite;
 }
