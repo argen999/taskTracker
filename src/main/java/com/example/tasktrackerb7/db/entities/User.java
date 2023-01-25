@@ -114,4 +114,9 @@ public class User implements UserDetails {
         }
         userWorkspaceRoles.add(userWorkspaceRole);
     }
+
+    public void addFavourite(Favourite favourite) {
+        if (favourite == null) favourites = new ArrayList<>();
+        favourites.add(favourite);
+    }
 }
