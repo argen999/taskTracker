@@ -1,7 +1,5 @@
 package com.example.tasktrackerb7.validations;
 
-import com.example.tasktrackerb7.exceptions.BadCredentialsException;
-import com.example.tasktrackerb7.exceptions.BadRequestException;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
