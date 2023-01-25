@@ -1,7 +1,10 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
-import com.example.tasktrackerb7.db.repository.*;
+import com.example.tasktrackerb7.db.repository.RoleRepository;
+import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
+import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +78,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     public WorkspaceResponse update(Long id, WorkspaceRequest workspaceRequest) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-            new NotFoundException("workspace with id: " + id + " not found"));
+                new NotFoundException("workspace with id: " + id + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 workspace.setName(workspaceRequest.getName());
@@ -94,13 +96,16 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
         for (Workspace w : user.getWorkspaces()) {
-            if (Objects.equals(w.getId(), id)) {
+            if (w.getId() == id) {
                 workspace = w;
-            } else {
-                throw new BadCredentialsException("you can't see workspace with id: " + id + ", because you are not a member");
             }
         }
-        return convertToResponse(workspace);
+
+        if (workspace.getId() != id) {
+            throw new BadCredentialsException("you can't do update, because you are not admin in workspace with id: " + id);
+        } else {
+            return convertToResponse(workspace);
+        }
     }
 
 
@@ -123,7 +128,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         boolean isFavourite = false;
         if (workspace.getFavourites() != null) {
-            for (Favourite favorite : user.getFavourites()) {
+            for (Favourite favorite : workspace.getFavourites()) {
                 if (user.getFavourites().contains(favorite)) {
                     isFavourite = true;
                     break;
