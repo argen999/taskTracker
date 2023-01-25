@@ -109,7 +109,7 @@ public class BoardServiceImpl implements BoardService {
                     throw new BadCredentialsException("you can't do update");
                 }
             } else {
-                throw new BadRequestException("This bad requestmk");
+                throw new BadRequestException("you are nor member");
             }
         }
     }

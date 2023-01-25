@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.*;
 public class Board {
 
     @Id
-    @SequenceGenerator(name = "board_gen", sequenceName = "board_seq", allocationSize = 1, initialValue = 11)
+    @SequenceGenerator(name = "board_gen", sequenceName = "board_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "board_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 

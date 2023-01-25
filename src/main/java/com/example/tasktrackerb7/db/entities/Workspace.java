@@ -19,7 +19,7 @@ import static javax.persistence.CascadeType.REFRESH;
 public class Workspace {
 
     @Id
-    @SequenceGenerator(name = "workspace_gen", sequenceName = "workspace_seq",allocationSize = 1)
+    @SequenceGenerator(name = "workspace_gen", sequenceName = "workspace_seq",allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "workspace_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -44,6 +44,13 @@ public class Workspace {
             boards = new ArrayList<>();
         }
         boards.add(board);
+    }
+
+    public void addUserWorkspaceRole(UserWorkspaceRole userWorkspaceRole) {
+        if (members == null) {
+            members = new ArrayList<>();
+        }
+        members.add(userWorkspaceRole);
     }
 }
 
