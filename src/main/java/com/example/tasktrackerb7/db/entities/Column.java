@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
+import com.example.tasktrackerb7.dto.request.ColumnRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import static javax.persistence.CascadeType.*;
 public class Column {
 
     @Id
-    @SequenceGenerator(name = "column_gen", sequenceName = "column_seq", allocationSize = 1)
+    @SequenceGenerator(name = "column_gen", sequenceName = "column_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "column_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -28,5 +29,9 @@ public class Column {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "column")
     private List<Card> cards;
+
+    public Column(ColumnRequest columnRequest) {
+        this.name = columnRequest.getName();
+    }
 
 }
