@@ -102,7 +102,7 @@ public class ColumnServiceImpl implements ColumnService {
     @Override
     public List<ColumnResponse> getAll(Long boardId) {
         List<Column> columns = boardRepository.findById(boardId).orElseThrow(
-                () -> new NotFoundException("Columns not found!")
+                () -> new NotFoundException(String.format("Board with id: %d not found!", boardId))
         ).getColumns();
 
         return columns.stream().map(x -> new ColumnResponse(x.getId(), x.getName())).toList();

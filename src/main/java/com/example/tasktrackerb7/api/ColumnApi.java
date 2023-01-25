@@ -7,6 +7,7 @@ import com.example.tasktrackerb7.dto.response.ColumnResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,26 +23,27 @@ public class ColumnApi {
     private final ColumnServiceImpl columnService;
 
 
-    @Operation(summary = "create", description = "create column by boardId")
+    @Operation(summary = "Create", description = "Create column by boardId")
     @PostMapping("/{boardId}")
     ColumnResponse create(@PathVariable Long boardId, @RequestBody @Valid ColumnRequest columnRequest) {
         return columnService.create(boardId, columnRequest);
     }
 
-    @Operation(summary = "update", description = "update column by id")
+    @Operation(summary = "Update", description = "Update column by id")
     @PutMapping("/{id}")
     ColumnResponse update(@PathVariable Long id, @RequestBody @Valid ColumnRequest columnRequest) {
         return columnService.update(id, columnRequest);
     }
 
-    @Operation(summary = "delete", description = "delete column by id")
+    @Operation(summary = "Delete", description = "Delete column by id")
     @DeleteMapping("/{id}")
     ColumnResponse delete(@PathVariable Long id) {
         return columnService.delete(id);
     }
 
-    @Operation(summary = "get all", description = "get all column by boardId")
+    @Operation(summary = "Get all", description = "Get all column by boardId")
     @GetMapping("/{boardId}")
+    @PreAuthorize("isAuthenticated()")
     List<ColumnResponse> getAll(@PathVariable Long boardId) {
         return columnService.getAll(boardId);
     }
