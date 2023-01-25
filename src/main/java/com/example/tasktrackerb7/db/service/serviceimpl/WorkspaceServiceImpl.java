@@ -59,8 +59,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("workspace with id " + id + " not found"));
-        if (workspace.getMembers().contains(
-                userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 workspaceRepository.delete(workspace);
             } else {
@@ -76,15 +75,33 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     public WorkspaceResponse update(Long id, WorkspaceRequest workspaceRequest) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("workspace with id: " + id + " not found"));
-        return null;
+            new NotFoundException("workspace with id: " + id + " not found"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+                workspace.setName(workspaceRequest.getName());
+                workspaceRepository.save(workspace);
+            } else {
+                throw new BadCredentialsException("you can't do update, because you are not admin in workspace with id: " + id);
+            }
+        } else {
+            throw new BadCredentialsException("you can't do update, because you are not member in workspace with id: " + id);
+        }
+        return convertToResponse(workspace);
     }
 
     public WorkspaceResponse getById(Long id) {
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-               new NotFoundException("workspace with id " + id + " not found"));
+        User user = getAuthenticateUser();
+        Workspace workspace = new Workspace();
+        for (Workspace w : user.getWorkspaces()) {
+            if (w.getId() == id) {
+                workspace = w;
+            } else {
+                throw new BadCredentialsException("you can't see workspace with id: " + id + ", because you are not a member");
+            }
+        }
         return convertToResponse(workspace);
     }
+
 
     public List<WorkspaceResponse> getAll() {
         User user = getAuthenticateUser();

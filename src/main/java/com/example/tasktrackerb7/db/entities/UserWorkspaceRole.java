@@ -19,12 +19,12 @@ public class UserWorkspaceRole {
     @GeneratedValue(generator = "userWorkspaceRole_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User user;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Workspace workspace;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Role role;
 }

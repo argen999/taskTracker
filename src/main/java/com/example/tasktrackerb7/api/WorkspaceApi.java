@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,6 +31,12 @@ public class WorkspaceApi {
     @DeleteMapping("/{id}")
     public SimpleResponse delete(@PathVariable Long id) {
         return workspaceService.delete(id);
+    }
+
+    @Operation(summary = "Update", description = "Update workspace name")
+    @PatchMapping("/{id}")
+    public WorkspaceResponse update(@PathVariable Long id, @RequestBody @Valid WorkspaceRequest workspaceRequest) {
+        return workspaceService.update(id, workspaceRequest);
     }
 
     @Operation(summary = "Get all", description = "Get all workspaces in which the user consists")

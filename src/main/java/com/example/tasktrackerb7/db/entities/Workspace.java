@@ -39,10 +39,6 @@ public class Workspace {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Favourite favourite;
 
-    public Workspace(String name) {
-        this.name = name;
-    }
-
     public void addBoard(Board board) {
         if(board == null) {
             boards = new ArrayList<>();
