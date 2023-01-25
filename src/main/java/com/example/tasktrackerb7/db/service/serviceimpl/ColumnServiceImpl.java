@@ -31,7 +31,6 @@ public class ColumnServiceImpl implements ColumnService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        System.out.println(login);
         return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found!"));
     }
 
