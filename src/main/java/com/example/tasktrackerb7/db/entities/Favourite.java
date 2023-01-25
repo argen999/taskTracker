@@ -21,11 +21,11 @@ public class Favourite {
     @GeneratedValue(generator = "favourite_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "favourite")
-    private List<Workspace> workspaces;
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Workspace workspace;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "favourite")
-    private List<Board> boards;
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Board board;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User user;

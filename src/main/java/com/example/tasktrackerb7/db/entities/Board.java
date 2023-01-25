@@ -35,8 +35,8 @@ public class Board {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, PERSIST, REMOVE}, mappedBy = "board")
     private List<Column> columns;
 
-    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, REMOVE})
-    private Favourite favourite;
+    @OneToMany(cascade = {DETACH, REFRESH, MERGE}, mappedBy = "board")
+    private List<Favourite> favourites;
 
     public Board(BoardRequest boardRequest) {
         this.name = boardRequest.getName();
