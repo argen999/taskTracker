@@ -4,10 +4,12 @@ import com.example.tasktrackerb7.db.entities.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("select b from Board b where b.workspace.id = ?1 and b.archive = false")

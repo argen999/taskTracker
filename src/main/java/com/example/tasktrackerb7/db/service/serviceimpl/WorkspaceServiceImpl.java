@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -93,7 +94,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
         for (Workspace w : user.getWorkspaces()) {
-            if (w.getId() == id) {
+            if (Objects.equals(w.getId(), id)) {
                 workspace = w;
             } else {
                 throw new BadCredentialsException("you can't see workspace with id: " + id + ", because you are not a member");
@@ -121,7 +122,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private WorkspaceResponse convertToResponse(Workspace workspace) {
         User user = getAuthenticateUser();
         boolean isFavourite = false;
-        if (workspace.getFavourite() != null) {
+        if (workspace.getFavourites() != null) {
             for (Favourite favorite : user.getFavourites()) {
                 if (user.getFavourites().contains(favorite)) {
                     isFavourite = true;
