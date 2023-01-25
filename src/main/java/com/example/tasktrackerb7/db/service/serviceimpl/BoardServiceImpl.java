@@ -128,7 +128,7 @@ public class BoardServiceImpl implements BoardService {
                 if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                     if (board.getFavourites() != null) {
                         for (Favourite f : board.getFavourites()) {
-                            f.getBoards().remove(board);
+                            f.setBoard(null);
                         }
                     }
                     board.setFavourites(null);

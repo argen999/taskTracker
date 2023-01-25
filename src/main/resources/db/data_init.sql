@@ -16,13 +16,6 @@ values (1, 2),
        (4, 2),
        (5, 2);
 
-insert into favourites(id)
-values (1),
-       (2),
-       (3),
-       (4),
-       (5);
-
 insert into workspaces(id, archive, name, creator_id)
 values (1, false, 'Peaksoft House', 1),
        (2, false, 'Makers', 2),
@@ -106,6 +99,13 @@ values (1, '2023-01-09', false, 'Appointed you  as an admin to workspace Peaksof
        (3, '2023-01-09', false, 'My God,let me not burn out on this task', 3, 3, 3, 3, 2),
        (4, '2023-01-09', false, 'Added you to the board C', 4, 4, 4, 4, 1);
 
+insert into favourites(id, user_id, board_id, workspace_id)
+values (1, 1, 1, null),
+       (2, 2, null, 2),
+       (3, 3, 3, null),
+       (4, 4, null, 4),
+       (5, 5, 5, null);
+
 
 insert into cards_labels(card_id, labels_id)
 values (1, 1),
@@ -121,24 +121,4 @@ values (1, 1),
        (4, 4),
        (5, 5);
 
-insert into favourite_user (favourite_id, user_id)
-values (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
-
-insert into favourite_board (favourite_id, board_id)
-values (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
-
-insert into favourite_workspace (favourite_id, workspace_id)
-values (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
 

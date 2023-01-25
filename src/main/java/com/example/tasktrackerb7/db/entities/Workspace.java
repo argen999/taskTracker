@@ -36,12 +36,8 @@ public class Workspace {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User creator;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "workspaces")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "workspace")
     private List<Favourite> favourites;
-
-    public Workspace(String name) {
-        this.name = name;
-    }
 
     public void addBoard(Board board) {
         if(board == null) {

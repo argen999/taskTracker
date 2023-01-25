@@ -21,22 +21,13 @@ public class Favourite {
     @GeneratedValue(generator = "favourite_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
-    @JoinTable(name = "favourite_workspace",
-            joinColumns = @JoinColumn(name = "favourite_id"),
-            inverseJoinColumns = @JoinColumn(name = "workspace_id"))
-    private List<Workspace> workspaces;
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Workspace workspace;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
-    @JoinTable(name = "favourite_board",
-            joinColumns = @JoinColumn(name = "favourite_id"),
-            inverseJoinColumns = @JoinColumn(name = "board_id"))
-    private List<Board> boards;
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Board board;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
-    @JoinTable(name = "favourite_user",
-            joinColumns = @JoinColumn(name = "favourite_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
+    private User user;
 
 }
