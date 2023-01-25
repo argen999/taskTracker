@@ -13,5 +13,10 @@ public class WorkspaceResponse {
 
     private String name;
 
+    private String leadPhotoLink;
+
+    private String leadName;
+
     private boolean isFavourite;
+
 }

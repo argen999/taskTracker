@@ -1,9 +1,9 @@
-insert into users(id, name, surname, email, password)
-values (1, 'Kerezbek', 'Aibekov', 'kerezbek@gmail.com', '$2a$12$Kzwf20Tt.RqrbCjvljxSKeS0ajkjHmswyZPB0jJ1GDkcS3I4jhj1i'),
-       (2, 'Aruuke', 'Sartbaeva', 'aruuke@gmail.com', '$2a$12$axNSZ2ekesrc4cNDzxxlUuiElncsMs91KJd325HBREw5SNl0.Clxe'),
-       (3, 'Mahamatjan', 'Islamidinov', 'mahamatjan@gmail.com', '$2a$12$634QZhZUKhhIkaPexme/wOeRDnvZBLbqV.EAAh0Jy8RCPlDiWrX2K'),
-       (4, 'Argen', 'Abdymomunov', 'argen@gmail.com', '$2a$12$cVTaN/z9ZWlkhm3d.7Xemea11Og6MeooUWm8//PNuKQKJc6XxQ24y'),
-       (5, 'Nurislam', 'Bakytov' , 'nurislam@gmail.com', '$2a$12$xINOT3UG0ubHqO9RsSk5hOsc4ywAjJynkBWByhoWPIbbJ5T2Hxexu');
+insert into users(id, name, surname, email, password, photo_link)
+values (1, 'Kerezbek', 'Aibekov', 'kerezbek@gmail.com', '$2a$12$Kzwf20Tt.RqrbCjvljxSKeS0ajkjHmswyZPB0jJ1GDkcS3I4jhj1i', 'https://ru.pinterest.com/pin/907686499876044855/'),
+       (2, 'Aruuke', 'Sartbaeva', 'aruuke@gmail.com', '$2a$12$axNSZ2ekesrc4cNDzxxlUuiElncsMs91KJd325HBREw5SNl0.Clxe', 'https://ru.pinterest.com/pin/907686499876044855/'),
+       (3, 'Mahamatjan', 'Islamidinov', 'mahamatjan@gmail.com', '$2a$12$634QZhZUKhhIkaPexme/wOeRDnvZBLbqV.EAAh0Jy8RCPlDiWrX2K', 'https://ru.pinterest.com/pin/907686499876044855/'),
+       (4, 'Argen', 'Abdymomunov', 'argen@gmail.com', '$2a$12$cVTaN/z9ZWlkhm3d.7Xemea11Og6MeooUWm8//PNuKQKJc6XxQ24y', 'https://ru.pinterest.com/pin/907686499876044855/'),
+       (5, 'Nurislam', 'Bakytov' , 'nurislam@gmail.com', '$2a$12$xINOT3UG0ubHqO9RsSk5hOsc4ywAjJynkBWByhoWPIbbJ5T2Hxexu', 'https://ru.pinterest.com/pin/907686499876044855/');
 
 insert into roles(id, name)
 values (1, 'ADMIN'),

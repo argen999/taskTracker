@@ -133,6 +133,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return new WorkspaceResponse(
                 workspace.getId(),
                 workspace.getName(),
+                user.getPhotoLink(),
+                user.getUsername(),
                 isFavourite
         );
     }

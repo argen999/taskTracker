@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +35,9 @@ public class User implements UserDetails {
     private String email;
 
     private String password;
+
+    @Column(length = 1000)
+    private String photoLink;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<Notification> notification;
