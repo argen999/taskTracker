@@ -54,7 +54,7 @@ public class User implements UserDetails {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
     private List<UserWorkspaceRole> userWorkspaceRoles;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "users")
     private List<Favourite> favourites;
 
     @OneToMany(cascade = {ALL}, mappedBy = "user")

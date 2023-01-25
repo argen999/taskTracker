@@ -57,7 +57,7 @@ public class BoardServiceImpl implements BoardService {
                 board.setWorkspace(workspace);
                 boardRepository.save(board);
                 boolean isFavourite = false;
-                if (board.getFavourite() != null) {
+                if (board.getFavourites() != null) {
                     for (Favourite favorite : user.getFavourites()) {
                         if (user.getFavourites().contains(favorite)) {
                             isFavourite = true;
@@ -95,7 +95,7 @@ public class BoardServiceImpl implements BoardService {
                         board.setBackground(boardUpdateRequest.getValue());
                     }
                     boolean isFavourite = false;
-                    if (board.getFavourite() != null) {
+                    if (board.getFavourites() != null) {
                         for (Favourite favorite : user.getFavourites()) {
                             if (user.getFavourites().contains(favorite)) {
                                 isFavourite = true;
@@ -126,10 +126,12 @@ public class BoardServiceImpl implements BoardService {
         } else {
             if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
                 if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-                    if (board.getFavourite() != null) {
-                        board.getFavourite().getBoards().remove(board);
+                    if (board.getFavourites() != null) {
+                        for (Favourite f : board.getFavourites()) {
+                            f.getBoards().remove(board);
+                        }
                     }
-                    board.setFavourite(null);
+                    board.setFavourites(null);
                     boardRepository.delete(board);
                     return new SimpleResponse("board deleted with id: " + id + " successfully");
                 } else {
@@ -152,7 +154,7 @@ public class BoardServiceImpl implements BoardService {
             List<BoardResponse> boardResponses = new ArrayList<>();
             for (Board board : boards) {
                 boolean isFavourite = false;
-                if (board.getFavourite() != null) {
+                if (board.getFavourites() != null) {
                     for (Favourite favorite : user.getFavourites()) {
                         if (user.getFavourites().contains(favorite)) {
                             isFavourite = true;
@@ -176,7 +178,7 @@ public class BoardServiceImpl implements BoardService {
             throw new NotFoundException("board not found");
         });
         boolean isFavourite = false;
-        if (board.getFavourite() != null) {
+        if (board.getFavourites() != null) {
             for (Favourite favorite : user.getFavourites()) {
                 if (user.getFavourites().contains(favorite)) {
                     isFavourite = true;

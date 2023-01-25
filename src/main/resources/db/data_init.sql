@@ -16,26 +16,26 @@ values (1, 2),
        (4, 2),
        (5, 2);
 
-insert into favourites(id, user_id)
-values (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
+insert into favourites(id)
+values (1),
+       (2),
+       (3),
+       (4),
+       (5);
 
-insert into workspaces(id, archive, name, creator_id, favourite_id)
-values (1, false, 'Peaksoft House', 1, 1),
-       (2, false, 'Makers', 2, 2),
-       (3, false, 'DevX', 3, 3),
-       (4, false, 'IT School', 4, 4),
-       (5, false, 'MegaCom', 5, 5);
+insert into workspaces(id, archive, name, creator_id)
+values (1, false, 'Peaksoft House', 1),
+       (2, false, 'Makers', 2),
+       (3, false, 'DevX', 3),
+       (4, false, 'IT School', 4),
+       (5, false, 'MegaCom', 5);
 
-insert into boards(id, archive, background, name, workspace_id, favourite_id)
-values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1, 1),
-       (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 2, 2),
-       (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 3, 3),
-       (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 4, 4),
-       (5, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Kotlin', 5, 5);
+insert into boards(id, archive, background, name, workspace_id)
+values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1),
+       (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 2),
+       (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 3),
+       (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 4),
+       (5, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Kotlin', 5);
 
 insert into columns(id, name, board_id)
 values (1, 'TO DO', 1),
@@ -115,6 +115,27 @@ values (1, 1),
        (5, 5);
 
 insert into cards_users(cards_id, users_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
+
+insert into favourite_user (favourite_id, user_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
+
+insert into favourite_board (favourite_id, board_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
+
+insert into favourite_workspace (favourite_id, workspace_id)
 values (1, 1),
        (2, 2),
        (3, 3),
