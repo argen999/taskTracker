@@ -17,7 +17,7 @@ import static javax.persistence.CascadeType.*;
 public class Favourite {
 
     @Id
-    @SequenceGenerator(name = "favourite_gen", sequenceName = "favourite_seq", allocationSize = 1)
+    @SequenceGenerator(name = "favourite_gen", sequenceName = "favourite_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "favourite_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
