@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userRepository.findByEmail(firebaseToken.getEmail())
-                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!",firebaseToken.getEmail())));
+                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!", firebaseToken.getEmail())));
 
         String token = jwtTokenUtil.generateToken(user.getEmail());
         return new AuthResponse(

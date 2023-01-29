@@ -1,23 +1,21 @@
 package com.example.tasktrackerb7.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class CardResponse {
+@AllArgsConstructor
+public class EstimationResponse {
 
     private Long id;
 
-    private String name;
+    private LocalDate dateOfWrite;
 
-    private List<LabelResponse> labelResponses;
-
-    private String duration;
-
-
+    private LocalDate dateOfFinish;
 }

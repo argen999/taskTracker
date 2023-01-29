@@ -5,7 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LabelRequest {
+public class UpdateCardTitleRequest {
 
     private Long id;
+
+    private String title;
 }

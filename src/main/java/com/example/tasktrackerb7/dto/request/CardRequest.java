@@ -15,7 +15,7 @@ public class CardRequest {
 
     private String description;
 
-    private List<LabelRequest> labels;
+    private List<LabelRequest> labelRequests;
 
     private EstimationRequest estimationRequest;
 
