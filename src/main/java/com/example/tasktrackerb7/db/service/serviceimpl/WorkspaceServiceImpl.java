@@ -58,6 +58,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return convertToResponse(workspace);
     }
 
+    @Override
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
@@ -75,6 +76,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return new SimpleResponse("workspace with id: " + id + " deleted successfully");
     }
 
+    @Override
     public WorkspaceResponse update(Long id, WorkspaceRequest workspaceRequest) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
@@ -92,6 +94,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return convertToResponse(workspace);
     }
 
+    @Override
     public WorkspaceResponse getById(Long id) {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
@@ -108,7 +111,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
-
+    @Override
     public List<WorkspaceResponse> getAll() {
         User user = getAuthenticateUser();
         List<Workspace> workspaces = new ArrayList<>();
