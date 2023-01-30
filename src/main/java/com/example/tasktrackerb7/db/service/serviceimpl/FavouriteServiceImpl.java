@@ -51,7 +51,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         int count = 0;
         if (board.getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), board.getWorkspace().getId()))) {
             if (user.getFavourites() != null) {
-                for (Favourite f : user.getFavourites()) {
+                for (Favourite f : board.getFavourites()) {
                     if (Objects.equals(f.getBoard().getId(), id)) {
                         favouriteRepository.delete(f);
                         count++;
@@ -82,19 +82,17 @@ public class FavouriteServiceImpl implements FavouriteService {
                 });
         int count = 0;
         if (user.getFavourites() != null) {
-            for (Favourite favourite : user.getFavourites()) {
+            for (Favourite favourite : workspace.getFavourites()) {
                 if (Objects.equals(favourite.getWorkspace().getId(), id)) {
-                    if (workspace.getBoards() != null) {
-                        workspace.setBoards(null);
                         favouriteRepository.delete(favourite);
                         count++;
                         break;
                     }
-                }
             }
 
             if (count < 1) {
                 Favourite favourite = new Favourite();
+                workspace.setBoards(null);
                 favourite.setWorkspace(workspace);
                 favourite.setUser(user);
                 user.addFavourite(favourite);
