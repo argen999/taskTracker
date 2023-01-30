@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface FavouriteRepository extends JpaRepository<com.example.tasktrackerb7.db.entities.Favourite, Long> {
 
-    @Query("select f.id,f.user,f.board from Favourite f where f.user.id =:id")
+    @Query("select f.id,f.board,f.workspace from Favourite f where f.user.id =:id")
     List<Favourite> getAllFavouriteBoard (Long id);
 
 }
