@@ -3,12 +3,19 @@ package com.example.tasktrackerb7.db.service.serviceimpl;
 import com.example.tasktrackerb7.configs.jwt.JwtTokenUtil;
 import com.example.tasktrackerb7.db.entities.Role;
 import com.example.tasktrackerb7.db.entities.User;
+import com.example.tasktrackerb7.db.entities.Workspace;
 import com.example.tasktrackerb7.db.repository.RoleRepository;
 import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
+import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
+import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
+import com.example.tasktrackerb7.dto.response.ProfileResponse;
+import com.example.tasktrackerb7.dto.response.SimpleResponse;
+import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
@@ -19,7 +26,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -29,7 +39,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.annotation.PostConstruct;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +55,15 @@ public class UserServiceImpl implements UserService {
 
     private final JwtTokenUtil jwtTokenUtil;
 
+    private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
+
+    private final WorkspaceRepository workspaceRepository;
+
+    private User getAuthenticateUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String login = authentication.getName();
+        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found"));
+    }
 
     @Override
     public AuthResponse register(RegisterRequest request) {
@@ -126,7 +147,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userRepository.findByEmail(firebaseToken.getEmail())
-                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!",firebaseToken.getEmail())));
+                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!", firebaseToken.getEmail())));
 
         String token = jwtTokenUtil.generateToken(user.getEmail());
         return new AuthResponse(
@@ -136,6 +157,63 @@ public class UserServiceImpl implements UserService {
                 user.getUsername(),
                 role.getName(),
                 token);
+    }
+
+    @Override
+    public ProfileResponse updatingUserData(ProfileRequest profileRequest) {
+        User user = getAuthenticateUser();
+
+        String email = user.getEmail();
+
+        for (User u : userRepository.findAll()) {
+            if (u.getEmail().equals(profileRequest.getEmail()) && !profileRequest.getEmail().equals(user.getEmail())) {
+                throw new BadRequestException(String.format("This %s already exists!", profileRequest.getEmail()));
+            }
+        }
+
+        user.setName(profileRequest.getName());
+        user.setSurname(profileRequest.getSurname());
+        user.setEmail(profileRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(profileRequest.getPassword()));
+        user.setPhotoLink(profileRequest.getPhotoLink());
+
+        userRepository.save(user);
+
+        if (!email.equals(profileRequest.getEmail())) {
+            return new ProfileResponse(user.getId(),
+                    user.getName(),
+                    user.getSurname(),
+                    user.getEmail(),
+                    jwtTokenUtil.generateToken(user.getEmail()),
+                    user.getPhotoLink());
+        } else {
+            return new ProfileResponse(user.getId(),
+                    user.getName(),
+                    user.getSurname(),
+                    user.getEmail(),
+                    user.getPhotoLink());
+        }
+
+    }
+
+    @Override
+    public List<WorkspaceResponse> getAllWorkspaceOwnedByUser() {
+        User user = getAuthenticateUser();
+
+        List<Workspace> userWorkspaces = user.getWorkspaces();
+
+        for (Workspace w : workspaceRepository.findAll()) {
+            if (w.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), w.getId()))
+                && !w.getCreator().equals(user)) {
+                userWorkspaces.add(w);
+            }
+        }
+
+        return userWorkspaces.stream().map(x -> new WorkspaceResponse(x.getId(),
+                x.getName(),
+                x.getCreator().getPhotoLink(),
+                x.getCreator().getName()))
+                .toList();
     }
 
     @Override
