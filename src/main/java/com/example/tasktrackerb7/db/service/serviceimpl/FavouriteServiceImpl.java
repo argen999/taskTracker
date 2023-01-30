@@ -8,7 +8,6 @@ import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.FavouriteService;
 import com.example.tasktrackerb7.dto.response.FavouriteResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
-import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -16,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,7 +67,7 @@ public class FavouriteServiceImpl implements FavouriteService {
                 user.addFavourite(newFavourite);
                 favouriteRepository.save(newFavourite);
             }
-        }else {
+        } else {
             throw new NotFoundException("user not found this board");
         }
         return new SimpleResponse("make favourite  board  successfully!!");
@@ -85,10 +83,13 @@ public class FavouriteServiceImpl implements FavouriteService {
         int count = 0;
         if (user.getFavourites() != null) {
             for (Favourite favourite : user.getFavourites()) {
-                if (Objects.equals(workspace.getId(), id)) {
-                    favouriteRepository.delete(favourite);
-                    count++;
-                    break;
+                if (Objects.equals(favourite.getWorkspace().getId(), id)) {
+                    if (workspace.getBoards() != null) {
+                        workspace.setBoards(null);
+                        favouriteRepository.delete(favourite);
+                        count++;
+                        break;
+                    }
                 }
             }
 
@@ -98,8 +99,8 @@ public class FavouriteServiceImpl implements FavouriteService {
                 favourite.setUser(user);
                 user.addFavourite(favourite);
                 favouriteRepository.save(favourite);
-            }
 
+            }
         }
         return new SimpleResponse("make favourite workspace successfully!!");
     }
@@ -107,7 +108,9 @@ public class FavouriteServiceImpl implements FavouriteService {
     @Override
     public List<FavouriteResponse> getAllFavourite() {
         User user = getAuthenticateUser();
-        return null;
+        List<FavouriteResponse> favourites = favouriteRepository.getAllFavourite(user.getId());
+
+        return favourites.stream().map(x -> new FavouriteResponse(x.getId(), x.getWorkspace(), x.getBoard())).toList();
     }
 }
 

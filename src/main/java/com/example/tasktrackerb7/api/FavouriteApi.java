@@ -1,11 +1,17 @@
 package com.example.tasktrackerb7.api;
 
+import com.example.tasktrackerb7.db.entities.Favourite;
 import com.example.tasktrackerb7.db.service.serviceimpl.FavouriteServiceImpl;
+import com.example.tasktrackerb7.dto.response.ColumnResponse;
+import com.example.tasktrackerb7.dto.response.FavouriteResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +33,13 @@ public class FavouriteApi {
     @PostMapping("/workspace/{id}")
     public SimpleResponse makeFavouriteWorkspace(@PathVariable Long id) {
         return favouriteServiceImpl.makeFavouriteWorkspace(id);
+    }
+
+    @Operation(summary = "get all", description = "get all favourite")
+    @GetMapping()
+    @PreAuthorize("isAuthenticated()")
+    List<FavouriteResponse> getAll() {
+        return favouriteServiceImpl.getAllFavourite();
     }
 
 }
