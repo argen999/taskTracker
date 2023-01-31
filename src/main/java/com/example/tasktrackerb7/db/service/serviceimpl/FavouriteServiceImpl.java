@@ -15,8 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -61,7 +63,7 @@ public class FavouriteServiceImpl implements FavouriteService {
 
             }
             if (count < 1) {
-                Favourite newFavourite = new Favourite();
+                com.example.tasktrackerb7.db.entities.Favourite newFavourite = new com.example.tasktrackerb7.db.entities.Favourite();
                 newFavourite.setBoard(board);
                 newFavourite.setUser(user);
                 user.addFavourite(newFavourite);
@@ -81,17 +83,20 @@ public class FavouriteServiceImpl implements FavouriteService {
                     throw new NotFoundException("Workspace  not found");
                 });
         int count = 0;
-        if (user.getFavourites() != null) {
-            for (Favourite favourite : workspace.getFavourites()) {
-                if (Objects.equals(favourite.getWorkspace().getId(), id)) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            if (user.getFavourites() != null) {
+                for (Favourite favourite : workspace.getFavourites()) {
+                    if (Objects.equals(favourite.getWorkspace().getId(), id)) {
                         favouriteRepository.delete(favourite);
                         count++;
                         break;
                     }
+                }
+
             }
 
             if (count < 1) {
-                Favourite favourite = new Favourite();
+                com.example.tasktrackerb7.db.entities.Favourite favourite = new com.example.tasktrackerb7.db.entities.Favourite();
                 workspace.setBoards(null);
                 favourite.setWorkspace(workspace);
                 favourite.setUser(user);
@@ -99,6 +104,8 @@ public class FavouriteServiceImpl implements FavouriteService {
                 favouriteRepository.save(favourite);
 
             }
+        } else {
+            throw new NotFoundException("user not found this workspace!!");
         }
         return new SimpleResponse("make favourite workspace successfully!!");
     }
@@ -106,9 +113,22 @@ public class FavouriteServiceImpl implements FavouriteService {
     @Override
     public List<FavouriteResponse> getAllFavourite() {
         User user = getAuthenticateUser();
-        List<FavouriteResponse> favourites = favouriteRepository.getAllFavourite(user.getId());
 
-        return favourites.stream().map(x -> new FavouriteResponse(x.getId(), x.getWorkspace(), x.getBoard())).toList();
+        List<FavouriteResponse> favourites = new ArrayList<>();
+
+        for (Favourite favourite : user.getFavourites()) {
+            if (favourite.getWorkspace() != null) {
+                if (favourite.getBoard() != null) {
+                    favourites.add(new FavouriteResponse(favourite.getId(), favourite.getWorkspace().getName(), favourite.getBoard().getName(), user.getPhotoLink()));
+                } else {
+                    favourites.add(new FavouriteResponse(favourite.getId(), favourite.getWorkspace().getName(), null, user.getPhotoLink()));
+                }
+            } else if (favourite.getBoard() != null) {
+                favourites.add(new FavouriteResponse(favourite.getId(), null, favourite.getBoard().getName(), user.getPhotoLink()));
+            }
+        }
+
+        return favourites;
     }
 }
 
