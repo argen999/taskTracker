@@ -6,6 +6,7 @@ import com.example.tasktrackerb7.db.service.CardService;
 import com.example.tasktrackerb7.dto.converter.CardConverter;
 import com.example.tasktrackerb7.dto.request.*;
 import com.example.tasktrackerb7.dto.response.*;
+import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -59,13 +62,60 @@ public class CardServiceImpl implements CardService {
         }
     }
 
+    @Override
     public CardInnerPageResponse updateTitle(UpdateCardTitleRequest request) {
+        User user = getAuthenticateUser();
         Card card = cardRepository.findById(request.getId()).orElseThrow(() ->
                 new NotFoundException("Card with id: " + request.getId()  + " not found"));
-        card.setTitle(request.getTitle());
-        return converter.convertToCardInnerPageResponse(card);
+        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            card.setTitle(request.getTitle());
+            return converter.convertToCardInnerPageResponse(card);
+        } else {
+            throw new BadRequestException("you are not member in this workspace");
+        }
     }
 
+    @Override
+    public CardInnerPageResponse getById(Long id) {
+        return converter.convertToCardInnerPageResponse(cardRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Card with id " + id + " not found")));
+    }
 
+    @Override
+    public List<CardResponse> getAllCardsByColumnId(Long id) {
+        User user = getAuthenticateUser();
+        Column column = columnRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Column with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            List<CardResponse> cardResponses = new ArrayList<>();
+            for (Card card : column.getCards()) {
+                if (!card.isArchive()) {
+                    cardResponses.add(converter.convertToResponseForGetAll(card));
+                }
+            }
+            return cardResponses;
+        } else {
+            throw new BadCredentialsException("You are not member in this workspace");
+        }
+    }
+
+    @Override
+    public SimpleResponse delete(Long id) {
+        User user = getAuthenticateUser();
+        Card card = cardRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Card with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            cardRepository.delete(card);
+        } else {
+            throw new BadCredentialsException("You are not member in this workspace");
+        }
+        return new SimpleResponse("Card with id: " + id + " deleted successfully");
+    }
 
 }

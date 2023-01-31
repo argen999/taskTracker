@@ -19,5 +19,10 @@ public class CardResponse {
 
     private String duration;
 
+    private int numOfMembers;
+
+    private int numOfItems;
+
+    private int numOfCompletedItems;
 
 }

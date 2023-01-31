@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,12 +52,9 @@ public class CardConverter {
 
     public Card convertRequestToEntity(CardRequest cardRequest) {
         User user = getAuthenticateUser();
-        Column column = columnRepository.findById(cardRequest.getColumnId()).orElseThrow(() ->
-                new NotFoundException("column with id: " + cardRequest.getColumnId() + " not found"));
-        Board board = boardRepository.findById(column.getBoard().getId()).orElseThrow(() ->
-                new NotFoundException("board with id: " + column.getBoard().getId() + " not found"));
-        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("workspace with id: " + board.getWorkspace().getId() + " not found"));
+        Column column = columnRepository.findById(cardRequest.getColumnId()).orElseThrow(() -> new NotFoundException("column with id: " + cardRequest.getColumnId() + " not found"));
+        Board board = boardRepository.findById(column.getBoard().getId()).orElseThrow(() -> new NotFoundException("board with id: " + column.getBoard().getId() + " not found"));
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() -> new NotFoundException("workspace with id: " + board.getWorkspace().getId() + " not found"));
         Card card = new Card();
 
         card.setTitle(cardRequest.getName());
@@ -95,8 +93,7 @@ public class CardConverter {
         }
 
         for (LabelRequest labelRequest : cardRequest.getLabelRequests()) {
-            Label label = labelRepository.findById(labelRequest.getId()).orElseThrow(() ->
-                    new NotFoundException("label with id: " + labelRequest.getId() + " not found"));
+            Label label = labelRepository.findById(labelRequest.getId()).orElseThrow(() -> new NotFoundException("label with id: " + labelRequest.getId() + " not found"));
             label.setCard(card);
             card.addLabel(label);
         }
@@ -182,11 +179,41 @@ public class CardConverter {
     }
 
     private EstimationResponse getEstimationByCardId(Long id) {
-        Card card = cardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Card with id: " + " not found"));
-        Estimation estimation = estimationRepository.findById(card.getEstimation().getId()).orElseThrow(() ->
-                new NotFoundException("estimation with id: " + card.getEstimation().getId() + " not found"));
+        Card card = cardRepository.findById(id).orElseThrow(() -> new NotFoundException("Card with id: " + " not found"));
+        Estimation estimation = estimationRepository.findById(card.getEstimation().getId()).orElseThrow(() -> new NotFoundException("estimation with id: " + card.getEstimation().getId() + " not found"));
         return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish());
+    }
+
+    public CardResponse convertToResponseForGetAll(Card card) {
+        CardResponse cardResponse = new CardResponse();
+        cardResponse.setId(card.getId());
+        cardResponse.setName(card.getTitle());
+        cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+        if (card.getEstimation() != null) {
+            int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+            cardResponse.setDuration(" " + between + " days");
+        }
+
+        cardResponse.setNumOfMembers(card.getUsers().size());
+        int item = 0;
+        for (Checklist checklist : checklistRepository.getAllChecklists(card.getId())) {
+            for (int i = 0; i < checklist.getItems().size(); i++) {
+                item++;
+            }
+        }
+
+        cardResponse.setNumOfItems(item);
+        int completedItems = 0;
+        for (Checklist c : card.getChecklists()) {
+            for (Item item1 : c.getItems()) {
+                if (item1.isDone()) {
+                    completedItems++;
+                }
+            }
+        }
+
+        cardResponse.setNumOfCompletedItems(completedItems);
+        return cardResponse;
     }
 
     private List<MemberResponse> getAllCardMembers(List<User> users) {
@@ -204,4 +231,5 @@ public class CardConverter {
     private User convertMemberToUser(MemberRequest memberRequest) {
         return userRepository.findByEmail(memberRequest.getEmail()).orElseThrow(() -> new NotFoundException("the user with this email was not found"));
     }
+
 }
