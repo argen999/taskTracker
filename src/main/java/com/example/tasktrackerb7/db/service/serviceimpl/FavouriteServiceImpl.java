@@ -15,10 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -63,7 +60,8 @@ public class FavouriteServiceImpl implements FavouriteService {
 
             }
             if (count < 1) {
-                com.example.tasktrackerb7.db.entities.Favourite newFavourite = new com.example.tasktrackerb7.db.entities.Favourite();
+               Favourite newFavourite = new com.example.tasktrackerb7.db.entities.Favourite();
+               newFavourite.setIsBoard(false);
                 newFavourite.setBoard(board);
                 newFavourite.setUser(user);
                 user.addFavourite(newFavourite);
@@ -92,12 +90,12 @@ public class FavouriteServiceImpl implements FavouriteService {
                         break;
                     }
                 }
-
             }
 
             if (count < 1) {
-                com.example.tasktrackerb7.db.entities.Favourite favourite = new com.example.tasktrackerb7.db.entities.Favourite();
+                Favourite favourite = new com.example.tasktrackerb7.db.entities.Favourite();
                 workspace.setBoards(null);
+                favourite.setIsBoard(true);
                 favourite.setWorkspace(workspace);
                 favourite.setUser(user);
                 user.addFavourite(favourite);
@@ -111,31 +109,14 @@ public class FavouriteServiceImpl implements FavouriteService {
     }
 
     @Override
-    public List<FavouriteResponse> getAllFavourite() {
+    public FavouriteResponse getAllFavourite() {
         User user = getAuthenticateUser();
-
-        List<FavouriteResponse> favourites = new ArrayList<>();
-
-        for (Favourite favourite : user.getFavourites()) {
-            if (favourite.getWorkspace() != null) {
-                if (favourite.getBoard() != null) {
-                    favourites.add(new FavouriteResponse(favourite.getId(), favourite.getWorkspace().getName(), favourite.getBoard().getName(), user.getPhotoLink()));
-                } else {
-                    favourites.add(new FavouriteResponse(favourite.getId(), favourite.getWorkspace().getName(), null, user.getPhotoLink()));
-                }
-            } else if (favourite.getBoard() != null) {
-                favourites.add(new FavouriteResponse(favourite.getId(), null, favourite.getBoard().getName(), user.getPhotoLink()));
-            }
-        }
-
+        FavouriteResponse favourites = new FavouriteResponse();
+        favourites.setBoard(favouriteRepository.getFavouriteByIsBoard(user.getId()));
+        favourites.setWorkspace(favouriteRepository.getWorkspaceByIsFavourite(user.getId()));
         return favourites;
     }
 }
-
-
-
-
-
 
 
 

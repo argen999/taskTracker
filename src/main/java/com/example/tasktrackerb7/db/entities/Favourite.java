@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.persistence.Column;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -30,4 +31,6 @@ public class Favourite {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User user;
 
+    @Column
+    private Boolean isBoard;
 }

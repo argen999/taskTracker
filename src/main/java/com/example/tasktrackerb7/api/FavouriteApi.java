@@ -6,7 +6,6 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +34,7 @@ public class FavouriteApi {
 
     @Operation(summary = "get all", description = "get all favourite")
     @GetMapping("/getAll")
-    List<FavouriteResponse> getAll() {
+    FavouriteResponse getAll() {
         return favouriteServiceImpl.getAllFavourite();
     }
 
