@@ -204,15 +204,15 @@ public class UserServiceImpl implements UserService {
 
         for (Workspace w : workspaceRepository.findAll()) {
             if (w.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), w.getId()))
-                && !w.getCreator().equals(user)) {
+                    && !w.getCreator().equals(user)) {
                 userWorkspaces.add(w);
             }
         }
 
         return userWorkspaces.stream().map(x -> new WorkspaceResponse(x.getId(),
-                x.getName(),
-                x.getCreator().getPhotoLink(),
-                x.getCreator().getName()))
+                        x.getName(),
+                        x.getCreator().getPhotoLink(),
+                        x.getCreator().getName()))
                 .toList();
     }
 

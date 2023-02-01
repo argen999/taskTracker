@@ -6,7 +6,6 @@ import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
 import com.example.tasktrackerb7.dto.response.ProfileResponse;
-import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,32 +32,30 @@ public class AuthApi {
         return userService.register(request);
     }
 
-    @Operation(summary = "Sign in",description = "Only registered users can login")
+    @Operation(summary = "Sign in", description = "Only registered users can login")
     @PostMapping("/login")
     public AuthResponse login(@RequestBody @Valid AuthRequest authRequest) {
         return userService.login(authRequest);
     }
 
-    @Operation(summary = "Auth with google",description = "Any user can authenticate or register with google")
+    @Operation(summary = "Auth with google", description = "Any user can authenticate or register with google")
     @PostMapping("/")
     public AuthResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
         return userService.registerAndAuthWithGoogle(tokenId);
     }
 
-    @Operation(summary = "Update",description = "Updating user data")
+    @Operation(summary = "Update", description = "Updating user data")
     @PostMapping("/update")
     @PreAuthorize("isAuthenticated()")
     public ProfileResponse updatingUserData(@RequestBody @Valid ProfileRequest profileRequest) {
         return userService.updatingUserData(profileRequest);
     }
 
-    @Operation(summary = "Get all",description = "Get all workspace owned by user")
+    @Operation(summary = "Get all", description = "Get all workspace owned by user")
     @GetMapping()
     @PreAuthorize("isAuthenticated()")
     public List<WorkspaceResponse> getAllWorkspaceOwnedByUser() {
         return userService.getAllWorkspaceOwnedByUser();
     }
-
-
 
 }
