@@ -25,7 +25,7 @@ public class Workspace {
 
     private String name;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "workspace")
     private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")

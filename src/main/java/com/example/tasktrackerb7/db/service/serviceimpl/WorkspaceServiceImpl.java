@@ -6,17 +6,23 @@ import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
+import com.example.tasktrackerb7.dto.request.InvitationRequest;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
+import com.example.tasktrackerb7.dto.response.ParticipantResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.List;
 
