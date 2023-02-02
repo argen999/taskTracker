@@ -32,7 +32,7 @@ public class ProfileRequest {
 
     @NotNull
     @NotBlank
-    @Password
+//    @Password
     private String password;
 
     private String photoLink;
