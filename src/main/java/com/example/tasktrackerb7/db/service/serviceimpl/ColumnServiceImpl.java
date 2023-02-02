@@ -11,7 +11,6 @@ import com.example.tasktrackerb7.db.service.ColumnService;
 import com.example.tasktrackerb7.dto.request.ColumnRequest;
 import com.example.tasktrackerb7.dto.response.ColumnResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
-import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -47,11 +46,11 @@ public class ColumnServiceImpl implements ColumnService {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException("Board not found!"));
 
         if (board.getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), board.getWorkspace().getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), board.getWorkspace().getId()).getRole().getName().equals("ADMIN")) {
-                board.getColumns().add(column);
-                column.setBoard(board);
-                columnRepository.save(column);
-            } else throw new BadCredentialsException("You cannot delete because you do not have permission to do so!");
+
+            board.getColumns().add(column);
+            column.setBoard(board);
+            columnRepository.save(column);
+
         } else throw new BadRequestException("You are not member in this workspace!");
 
         return new ColumnResponse(column.getId(), column.getName());
@@ -64,10 +63,10 @@ public class ColumnServiceImpl implements ColumnService {
         Column column = columnRepository.findById(id).orElseThrow(() -> new NotFoundException("Column not found!"));
 
         if (column.getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), column.getBoard().getWorkspace().getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), column.getBoard().getWorkspace().getId()).getRole().getName().equals("ADMIN")) {
-                column.setName(columnRequest.getName());
-                columnRepository.save(column);
-            } else throw new BadRequestException("You cannot delete because you do not have permission to do so!");
+
+            column.setName(columnRequest.getName());
+            columnRepository.save(column);
+
         } else throw new BadRequestException("You are not member in this workspace!");
 
         return new ColumnResponse(column.getId(), column.getName());
@@ -80,9 +79,9 @@ public class ColumnServiceImpl implements ColumnService {
         Column column = columnRepository.findById(id).orElseThrow(() -> new NotFoundException("Column not found!"));
 
         if (column.getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), column.getBoard().getWorkspace().getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), column.getBoard().getWorkspace().getId()).getRole().getName().equals("ADMIN")) {
-                columnRepository.delete(column);
-            } else throw new BadRequestException("You cannot delete because you do not have permission to do so!");
+
+            columnRepository.delete(column);
+
         } else throw new BadRequestException("You are not member in this workspace!");
 
         return new SimpleResponse("This column deleted successfully");
