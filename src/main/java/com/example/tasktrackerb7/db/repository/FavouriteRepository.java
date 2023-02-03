@@ -10,5 +10,4 @@ public interface FavouriteRepository extends JpaRepository<Favourite, Long> {
             (select b.id from boards b where b.workspace_id = :id);
             """, nativeQuery = true)
     Favourite deleteWorkspace(Long id);
-
 }

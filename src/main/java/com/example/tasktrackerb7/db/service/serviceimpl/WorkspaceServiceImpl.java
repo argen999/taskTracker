@@ -30,6 +30,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final RoleRepository roleRepository;
+    private final FavouriteRepository favouriteRepository;
 
     private final BoardRepository boardRepository;
 
@@ -68,6 +69,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 new NotFoundException("workspace with id " + id + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
+            favouriteRepository.delete(favouriteRepository.deleteWorkspace(id));
             workspaceRepository.delete(workspace);
 
         } else throw new BadRequestException("you are not member in workspace with id: " + id);
