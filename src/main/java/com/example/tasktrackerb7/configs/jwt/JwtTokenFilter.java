@@ -2,9 +2,14 @@ package com.example.tasktrackerb7.configs.jwt;
 
 import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.exceptions.BadCredentialsException;
+import com.example.tasktrackerb7.exceptions.BadRequestException;
+import com.example.tasktrackerb7.exceptions.ExceptionResponse;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -32,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         optionalToken.ifPresent(token -> {
             String email = jwtUtils.verifyToken(token);
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(NotFoundException::new);
+                    .orElseThrow(() -> new NotFoundException(String.format("User not found with this email: %s ", email)));
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     user.getEmail(),
                     user.getRoles(),

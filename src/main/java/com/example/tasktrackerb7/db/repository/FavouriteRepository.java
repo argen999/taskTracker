@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.db.repository;
 
+
 import com.example.tasktrackerb7.dto.response.FavouriteBoardResponse;
 import com.example.tasktrackerb7.dto.response.FavouriteWorkspaceResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,6 @@ public interface FavouriteRepository extends JpaRepository<com.example.tasktrack
 
     @Query("select new com.example.tasktrackerb7.dto.response.FavouriteWorkspaceResponse(f.workspace.name) from Favourite f where f.user.id =:id  and f.isBoard =true")
     List<FavouriteWorkspaceResponse> getWorkspaceByIsFavourite(Long id);
+
 
 }
