@@ -3,8 +3,6 @@ package com.example.tasktrackerb7.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class CardRequest {
@@ -15,13 +13,4 @@ public class CardRequest {
 
     private String description;
 
-    private List<LabelRequest> labelRequests;
-
-    private EstimationRequest estimationRequest;
-
-    private List<MemberRequest> memberRequests;
-
-    private List<ChecklistRequest> checklistRequests;
-
-    private List<CommentRequest> commentRequests;
 }

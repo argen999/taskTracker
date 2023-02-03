@@ -123,5 +123,12 @@ public class User implements UserDetails {
         notifications.add(notification);
     }
 
+    public void addCard(Card card) {
+        if (cards == null) {
+            cards = new ArrayList<>();
+        }
+        cards = new ArrayList<>();
+    }
+
 
 }

@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +55,11 @@ public class CardServiceImpl implements CardService {
         Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            Card card = converter.convertRequestToEntity(cardRequest);
+            Card card = new Card(cardRequest.getName(), cardRequest.getDescription());
             card.setColumn(card.getColumn());
+            column.addCard(card);
+            card.setCreated(LocalDate.now());
+            user.addCard(card);
             return converter.convertToCardInnerPageResponse(cardRepository.save(card));
         } else {
             throw new BadRequestException("you are not member in workspace with id: " + workspace.getId());
