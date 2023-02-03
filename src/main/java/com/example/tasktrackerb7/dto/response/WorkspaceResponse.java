@@ -19,4 +19,10 @@ public class WorkspaceResponse {
 
     private boolean isFavourite;
 
+    public WorkspaceResponse(Long id, String name, String leadPhotoLink, String leadName) {
+        this.id = id;
+        this.name = name;
+        this.leadPhotoLink = leadPhotoLink;
+        this.leadName = leadName;
+    }
 }
