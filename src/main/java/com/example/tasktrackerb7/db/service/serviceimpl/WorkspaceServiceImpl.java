@@ -1,10 +1,7 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
-import com.example.tasktrackerb7.db.repository.RoleRepository;
-import com.example.tasktrackerb7.db.repository.UserRepository;
-import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
-import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
+import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -17,10 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class WorkspaceServiceImpl implements WorkspaceService {
 
@@ -31,6 +30,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final RoleRepository roleRepository;
+
+    private final BoardRepository boardRepository;
+
+    private final FavouriteRepository favouriteRepository;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -68,7 +71,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             workspaceRepository.delete(workspace);
 
         } else throw new BadRequestException("you are not member in workspace with id: " + id);
-
         return new SimpleResponse("workspace with id: " + id + " deleted successfully");
     }
 

@@ -10,6 +10,8 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.CascadeType.REFRESH;
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "workspaces")
@@ -52,5 +54,10 @@ public class Workspace {
         }
         members.add(userWorkspaceRole);
     }
+
+    public void remove(Board board) {
+        boards.remove(board);
+    }
+
 }
 

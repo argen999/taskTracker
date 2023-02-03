@@ -43,4 +43,8 @@ public class Board {
         this.background = boardRequest.getBackground();
     }
 
+    public void remove(Board board){
+        workspace.getBoards().remove(board);
+    }
+
 }
