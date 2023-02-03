@@ -56,9 +56,10 @@ public class CardServiceImpl implements CardService {
                 new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             Card card = new Card(cardRequest.getName(), cardRequest.getDescription());
-            card.setColumn(card.getColumn());
+            card.setColumn(column);
             column.addCard(card);
             card.setCreated(LocalDate.now());
+            card.addUser(user);
             user.addCard(card);
             return converter.convertToCardInnerPageResponse(cardRepository.save(card));
         } else {

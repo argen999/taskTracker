@@ -60,25 +60,18 @@ public class Card {
         this.description = description;
     }
 
-    public void addLabel(Label label) {
-        if (labels == null) {
-            labels = new ArrayList<>();
-        }
-        labels.add(label);
-    }
-
-    public void addMember(User user) {
-        if (users == null) {
-            users = new ArrayList<>();
-        }
-        users.add(user);
-    }
-
     public void addChecklist(Checklist checklist) {
         if (checklists == null) {
             checklists = new ArrayList<>();
         }
         checklists.add(checklist);
+    }
+
+    public void addUser(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+        users.add(user);
     }
 
     public void addComment(Comment comment) {

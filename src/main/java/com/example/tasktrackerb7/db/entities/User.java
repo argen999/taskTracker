@@ -116,18 +116,11 @@ public class User implements UserDetails {
         userWorkspaceRoles.add(userWorkspaceRole);
     }
 
-    public void addNotification(Notification notification) {
-        if (notifications == null) {
-            notifications  = new ArrayList<>();
-        }
-        notifications.add(notification);
-    }
-
     public void addCard(Card card) {
         if (cards == null) {
             cards = new ArrayList<>();
         }
-        cards = new ArrayList<>();
+        cards.add(card);
     }
 
 
