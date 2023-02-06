@@ -8,8 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/favourite")
@@ -20,19 +18,19 @@ public class FavouriteApi {
     private final FavouriteServiceImpl favouriteServiceImpl;
 
 
-    @Operation(summary = "make favourite board", description = "make favourite board")
+    @Operation(summary = "Make favourite board", description = "Make favourite board")
     @PostMapping("/{id}")
     public SimpleResponse makeFavouriteBoard(@PathVariable Long id) {
         return favouriteServiceImpl.makeFavouriteBoard(id);
     }
 
-    @Operation(summary = "make favourite workspace", description = "make favourite workspace")
+    @Operation(summary = "Make favourite workspace", description = "Make favourite workspace")
     @PostMapping("/workspace/{id}")
     public SimpleResponse makeFavouriteWorkspace(@PathVariable Long id) {
         return favouriteServiceImpl.makeFavouriteWorkspace(id);
     }
 
-    @Operation(summary = "get all", description = "get all favourite")
+    @Operation(summary = "Get all", description = "Get all favourite")
     @GetMapping("/getAll")
     FavouriteResponse getAll() {
         return favouriteServiceImpl.getAllFavourite();

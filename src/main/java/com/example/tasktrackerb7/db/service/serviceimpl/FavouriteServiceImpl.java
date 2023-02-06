@@ -60,8 +60,8 @@ public class FavouriteServiceImpl implements FavouriteService {
 
             }
             if (count < 1) {
-               Favourite newFavourite = new com.example.tasktrackerb7.db.entities.Favourite();
-               newFavourite.setIsBoard(false);
+                Favourite newFavourite = new com.example.tasktrackerb7.db.entities.Favourite();
+                newFavourite.setIsBoard(false);
                 newFavourite.setBoard(board);
                 newFavourite.setUser(user);
                 user.addFavourite(newFavourite);
