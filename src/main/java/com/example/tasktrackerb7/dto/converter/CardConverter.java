@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
@@ -99,36 +98,44 @@ public class CardConverter {
         return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish());
     }
 
-    public CardResponse convertToResponseForGetAll(Card card) {
-        CardResponse cardResponse = new CardResponse();
-        cardResponse.setId(card.getId());
-        cardResponse.setName(card.getTitle());
-        cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
-        if (card.getEstimation() != null) {
-            int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
-            cardResponse.setDuration(" " + between + " days");
-        }
-
-        cardResponse.setNumOfMembers(card.getUsers().size());
-        int item = 0;
-        for (Checklist checklist : checklistRepository.getAllChecklists(card.getId())) {
-            for (int i = 0; i < checklist.getItems().size(); i++) {
-                item++;
-            }
-        }
-
-        cardResponse.setNumOfItems(item);
-        int completedItems = 0;
-        for (Checklist c : card.getChecklists()) {
-            for (Item item1 : c.getItems()) {
-                if (item1.isDone()) {
-                    completedItems++;
+    public List<CardResponse> convertToResponseForGetAll(List<Card> cards) {
+        List<CardResponse> cardResponses = new ArrayList<>();
+        if (cards == null) {
+            return cardResponses;
+        } else {
+            for (Card card : cards) {
+                CardResponse cardResponse = new CardResponse();
+                cardResponse.setId(card.getId());
+                cardResponse.setName(card.getTitle());
+                cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+                if (card.getEstimation() != null) {
+                    int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+                    cardResponse.setDuration(" " + between + " days");
                 }
+
+                cardResponse.setNumOfMembers(card.getUsers().size());
+                int item = 0;
+                for (Checklist checklist : checklistRepository.getAllChecklists(card.getId())) {
+                    for (int i = 0; i < checklist.getItems().size(); i++) {
+                        item++;
+                    }
+                }
+
+                cardResponse.setNumOfItems(item);
+                int completedItems = 0;
+                for (Checklist c : card.getChecklists()) {
+                    for (Item item1 : c.getItems()) {
+                        if (item1.isDone()) {
+                            completedItems++;
+                        }
+                    }
+                }
+
+                cardResponse.setNumOfCompletedItems(completedItems);
+                cardResponses.add(cardResponse);
             }
         }
-
-        cardResponse.setNumOfCompletedItems(completedItems);
-        return cardResponse;
+        return cardResponses;
     }
 
     private List<MemberResponse> getAllCardMembers(List<User> users) {

@@ -68,14 +68,20 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardInnerPageResponse updateTitle(UpdateCardTitleRequest request) {
+    public CardInnerPageResponse update(UpdateCardRequest request) {
         User user = getAuthenticateUser();
         Card card = cardRepository.findById(request.getId()).orElseThrow(() ->
                 new NotFoundException("Card with id: " + request.getId()  + " not found"));
         Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
                 new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            card.setTitle(request.getTitle());
+            if (!request.isName()) {
+                System.out.println("something1");
+                card.setTitle(request.getValue());
+            } else {
+                System.out.println("something2");
+                card.setDescription(request.getValue());
+            }
             return converter.convertToCardInnerPageResponse(card);
         } else {
             throw new BadRequestException("you are not member in this workspace");
@@ -89,23 +95,28 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardResponse> getAllCardsByColumnId(Long id) {
+    public BoardInnerPageResponse getAllCards(Long id) {
         User user = getAuthenticateUser();
-        Column column = columnRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Column with id: " + id + " not found"));
-        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found"));
+        Board board = boardRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Board with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
+        BoardInnerPageResponse boardInnerPageResponse = new BoardInnerPageResponse();
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            List<CardResponse> cardResponses = new ArrayList<>();
-            for (Card card : column.getCards()) {
-                if (!card.isArchive()) {
-                    cardResponses.add(converter.convertToResponseForGetAll(card));
-                }
+            List<ColumnResponse> columnResponses = new ArrayList<>();
+            for (Column column : board.getColumns()) {
+                ColumnResponse columnResponse = new ColumnResponse();
+                columnResponse.setId(column.getId());
+                columnResponse.setName(column.getName());
+                columnResponse.setCardResponses(converter.convertToResponseForGetAll(column.getCards()));
+                columnResponses.add(columnResponse);
             }
-            return cardResponses;
+            boardInnerPageResponse.setBoardName(board.getName());
+            boardInnerPageResponse.setColumnResponses(columnResponses);
         } else {
             throw new BadCredentialsException("You are not member in this workspace");
         }
+        return boardInnerPageResponse;
     }
 
     @Override
