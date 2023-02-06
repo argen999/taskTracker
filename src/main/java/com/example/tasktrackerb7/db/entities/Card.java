@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -50,4 +51,12 @@ public class Card {
 
     @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
     private Notification notification;
+
+
+    public void addComment(Comment comment) {
+        if(comment == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
 }

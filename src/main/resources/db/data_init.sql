@@ -58,7 +58,7 @@ values (1, false, '', 'Variables', 1, 1),
        (4, false, '', 'int', 4, 4),
        (5, false, '', 'long', 5, 5);
 
-insert into comments(id, date_of_start, text, cards_id, user_id)
+insert into comments(id, local_date_time, text, cards_id, user_id)
 values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1),
        (2, '2023-01-10', 'I will do it only in a week,after the vocation', 2, 2),
        (3, '2023-01-13', 'I will do it only in a week,after the vocation', 3, 3),
