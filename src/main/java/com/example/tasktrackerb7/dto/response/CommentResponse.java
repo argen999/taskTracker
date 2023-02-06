@@ -19,7 +19,7 @@ public class CommentResponse {
 
     private String lastNameUser;
 
-    private  String photoLinkUser;
+    private String photoLinkUser;
 
     public CommentResponse(Long id, String text, String firstNameUser, String lastNameUser, String photoLinkUser, LocalDateTime localDateTime) {
         this.id = id;

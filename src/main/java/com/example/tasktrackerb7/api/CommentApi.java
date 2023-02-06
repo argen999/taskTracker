@@ -36,6 +36,7 @@ public class CommentApi {
     SimpleResponse delete(@PathVariable Long id) {
         return commentService.deleteComment(id);
     }
+
     @Operation(summary = "get all", description = "get all comment")
     @PostMapping("/getAll/{id}")
     List<CommentResponse> getAll(@PathVariable Long id) {

@@ -51,23 +51,23 @@ public class CommentServiceImpl implements CommentService {
         comment.setLocalDateTime(LocalDateTime.now());
         card.addComment(comment);
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(),comment.getText(),comment.getUser().getName(),comment.getUser().getSurname(), comment.getUser().getPhotoLink(),comment.getLocalDateTime());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getUser().getPhotoLink(), comment.getLocalDateTime());
     }
 
     @Override
     public CommentResponse editComment(Long id, CommentRequest commentRequest) {
         User user = getAuthenticateUser();
         Comment comment = commentRepository.findById(id).orElseThrow(
-                ()-> new NotFoundException("comment not found!!")
+                () -> new NotFoundException("comment not found!!")
 
         );
-        if (!user.equals(comment.getUser())){
+        if (!user.equals(comment.getUser())) {
             throw new BadCredentialsException("You cannot edit this comments!!");
         }
         comment.setText(commentRequest.getText());
         comment.setLocalDateTime(LocalDateTime.now());
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(),comment.getText(),comment.getUser().getName(),comment.getUser().getSurname(), comment.getUser().getPhotoLink(),comment.getLocalDateTime());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getUser().getPhotoLink(), comment.getLocalDateTime());
     }
 
     @Override
@@ -76,11 +76,11 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("comment not found")
         );
-        if (!user.equals(comment.getUser())){
+        if (!user.equals(comment.getUser())) {
             throw new BadCredentialsException("You can't delete this comment");
         }
         commentRepository.delete(comment);
-        return  new SimpleResponse("Comment delete successfully!!!");
+        return new SimpleResponse("Comment delete successfully!!!");
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.getAllComments(id);
         List<CommentResponse> commentResponses = new ArrayList<>();
         for (Comment comment : comments) {
-            commentResponses.add(new CommentResponse(comment.getId(),comment.getText(),comment.getUser().getName(),comment.getUser().getSurname(), comment.getUser().getPhotoLink(),comment.getLocalDateTime()));
+            commentResponses.add(new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getUser().getPhotoLink(), comment.getLocalDateTime()));
 
         }
         return commentResponses;
