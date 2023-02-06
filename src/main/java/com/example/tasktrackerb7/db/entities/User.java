@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String photoLink;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
-    private List<Notification> notifications;
+    private List<Notification> notification;
 
     @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
     private List<Workspace> workspaces;
@@ -124,4 +124,9 @@ public class User implements UserDetails {
     }
 
 
+
+    public void addFavourite(Favourite favourite) {
+        if (favourite == null) favourites = new ArrayList<>();
+        favourites.add(favourite);
+    }
 }

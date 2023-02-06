@@ -99,12 +99,12 @@ values (1, '2023-01-09', false, 'Appointed you  as an admin to workspace Peaksof
        (3, '2023-01-09', false, 'My God,let me not burn out on this task', 3, 3, 3, 3, 2),
        (4, '2023-01-09', false, 'Added you to the board C', 4, 4, 4, 4, 1);
 
-insert into favourites(id, user_id, board_id, workspace_id)
-values (1, 1, 1, null),
-       (2, 2, null, 2),
-       (3, 3, 3, null),
-       (4, 4, null, 4),
-       (5, 5, 5, null);
+insert into favourites(id, user_id, board_id, workspace_id,is_board)
+values (1, 1, 1, null,false),
+       (2, 2, null, 2,true),
+       (3, 3, 3, null,false),
+       (4, 4, null, 4,true),
+       (5, 5, 5, null,false);
 
 insert into cards_users(cards_id, users_id)
 values (1, 1),

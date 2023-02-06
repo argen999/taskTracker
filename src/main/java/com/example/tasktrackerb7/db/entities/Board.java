@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -41,6 +42,12 @@ public class Board {
     public Board(BoardRequest boardRequest) {
         this.name = boardRequest.getName();
         this.background = boardRequest.getBackground();
+    }
+    public void addFavourite(Favourite favourite) {
+        if(favourite == null) {
+            favourites = new ArrayList<>();
+        }
+        favourites.add(favourite);
     }
 
 }
