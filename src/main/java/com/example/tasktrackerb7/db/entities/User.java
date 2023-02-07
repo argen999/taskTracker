@@ -104,7 +104,8 @@ public class User implements UserDetails {
     }
 
     public void addRole(Role role) {
-        if (roles == null) roles = new ArrayList<>();
+        if (roles == null)
+            roles = new ArrayList<>();
         roles.add(role);
     }
 
@@ -114,6 +115,15 @@ public class User implements UserDetails {
         }
         userWorkspaceRoles.add(userWorkspaceRole);
     }
+
+    public void addCard(Card card) {
+        if (cards == null) {
+            cards = new ArrayList<>();
+        }
+        cards.add(card);
+    }
+
+
 
     public void addFavourite(Favourite favourite) {
         if (favourite == null) favourites = new ArrayList<>();

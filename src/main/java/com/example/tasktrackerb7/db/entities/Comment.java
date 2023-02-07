@@ -17,7 +17,7 @@ import static javax.persistence.CascadeType.*;
 public class Comment {
 
     @Id
-    @SequenceGenerator(name = "comment_gen", sequenceName = "comment_seq", allocationSize = 1,initialValue = 6)
+    @SequenceGenerator(name = "comment_gen", sequenceName = "comment_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "comment_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -29,5 +29,10 @@ public class Comment {
     private User user;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
-    private Card cards;
+    private Card card;
+
+    public Comment(String text, LocalDateTime dateOfStart) {
+        this.text = text;
+        this.dateOfStart = dateOfStart;
+    }
 }

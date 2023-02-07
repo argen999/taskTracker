@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+
 import static javax.persistence.CascadeType.*;
 
 @Entity
@@ -16,14 +18,20 @@ import static javax.persistence.CascadeType.*;
 public class Item {
 
     @Id
-    @SequenceGenerator(name = "item_gen", sequenceName = "item_seq", allocationSize = 1)
+    @SequenceGenerator(name = "item_gen", sequenceName = "item_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "item_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String text;
 
-    private boolean isDone;
+    private Boolean isDone;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Checklist checklist;
+
+    public Item(String text, boolean done) {
+        this.text = text;
+        this.isDone = done;
+    }
+
 }
