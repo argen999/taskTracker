@@ -20,8 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CardConverter {
 
-    private final ColumnRepository columnRepository;
-
     private final CardRepository cardRepository;
 
     private final EstimationRepository estimationRepository;
