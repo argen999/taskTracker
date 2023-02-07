@@ -55,9 +55,8 @@ public class Card {
     @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
     private Notification notification;
 
-    public Card(String title, String description) {
+    public Card(String title) {
         this.title = title;
-        this.description = description;
     }
 
     public void addChecklist(Checklist checklist) {
