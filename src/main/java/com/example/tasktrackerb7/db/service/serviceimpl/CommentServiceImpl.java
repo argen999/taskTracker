@@ -13,6 +13,8 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -51,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setLocalDateTime(LocalDateTime.now());
         card.addComment(comment);
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getUser().getPhotoLink(), comment.getLocalDateTime());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName() ,comment.getUser().getPhotoLink(), comment.getLocalDateTime());
     }
 
     @Override
@@ -67,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setText(commentRequest.getText());
         comment.setLocalDateTime(LocalDateTime.now());
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getUser().getPhotoLink(), comment.getLocalDateTime());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getPhotoLink(), comment.getLocalDateTime());
     }
 
     @Override
@@ -88,9 +91,14 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.getAllComments(id);
         List<CommentResponse> commentResponses = new ArrayList<>();
         for (Comment comment : comments) {
-            commentResponses.add(new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getUser().getPhotoLink(), comment.getLocalDateTime()));
+            commentResponses.add(new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getPhotoLink(), comment.getLocalDateTime()));
 
         }
         return commentResponses;
+    }
+
+    @Scheduled
+    public void showComment(){
+        System.out.println("the comment now is =" + new Comment());
     }
 }

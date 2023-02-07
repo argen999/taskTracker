@@ -15,17 +15,15 @@ public class CommentResponse {
 
     private LocalDateTime localDateTime;
 
-    private String firstNameUser;
+    private String userName;
 
-    private String lastNameUser;
 
     private String photoLinkUser;
 
-    public CommentResponse(Long id, String text, String firstNameUser, String lastNameUser, String photoLinkUser, LocalDateTime localDateTime) {
+    public CommentResponse(Long id, String text, String firstNameUser,String photoLinkUser, LocalDateTime localDateTime) {
         this.id = id;
         this.text = text;
-        this.firstNameUser = firstNameUser;
-        this.lastNameUser = lastNameUser;
+        this.userName = firstNameUser;
         this.photoLinkUser = photoLinkUser;
         this.localDateTime = localDateTime;
     }

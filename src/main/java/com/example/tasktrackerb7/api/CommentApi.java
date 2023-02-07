@@ -7,6 +7,7 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,11 +27,13 @@ public class CommentApi {
     CommentResponse create(@PathVariable Long id, @RequestBody @Valid CommentRequest commentRequest) {
         return commentService.saveComment(id, commentRequest);
     }
+
     @Operation(summary = "Update", description = "Update comment")
     @PostMapping("/comment/{id}")
     CommentResponse edit(@PathVariable Long id, @RequestBody @Valid CommentRequest commentRequest) {
         return commentService.editComment(id, commentRequest);
     }
+
     @Operation(summary = "Delete", description = "Delete comment")
     @PostMapping("/delete/{id}")
     SimpleResponse delete(@PathVariable Long id) {
