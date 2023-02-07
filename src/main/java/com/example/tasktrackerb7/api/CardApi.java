@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.api;
 
-import com.example.tasktrackerb7.db.service.serviceimpl.CardServiceImpl;
+import com.example.tasktrackerb7.db.service.CardService;
 import com.example.tasktrackerb7.dto.request.CardRequest;
 import com.example.tasktrackerb7.dto.request.UpdateCardRequest;
 import com.example.tasktrackerb7.dto.response.BoardInnerPageResponse;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
 @Tag(name = "Card api", description = "Card Api")
 public class CardApi {
 
-    private final CardServiceImpl cardService;
+    private final CardService cardService;
 
     @Operation(summary = "Create", description = "Create card")
     @PostMapping
@@ -28,9 +28,9 @@ public class CardApi {
         return cardService.create(cardRequest);
     }
 
-    @Operation(summary = "Update", description = "Update card title")
+    @Operation(summary = "Update", description = "Update card(if isName = true - update title, id isNam = false = update description")
     @PatchMapping
-    public CardInnerPageResponse updateTitle(@RequestBody @Valid UpdateCardRequest updateCardRequest) {
+    public CardInnerPageResponse update(@RequestBody @Valid UpdateCardRequest updateCardRequest) {
         return cardService.update(updateCardRequest);
     }
 
@@ -42,8 +42,8 @@ public class CardApi {
 
     @Operation(summary = "Get all cards", description = "Get all cards by board id")
     @GetMapping("/all/{id}")
-    public BoardInnerPageResponse getAllCards(@PathVariable Long id) {
-        return cardService.getAllCards(id);
+    public BoardInnerPageResponse getAll(@PathVariable Long id) {
+        return cardService.getAll(id);
     }
 
     @Operation(summary = "Delete", description = "Delete card by id")

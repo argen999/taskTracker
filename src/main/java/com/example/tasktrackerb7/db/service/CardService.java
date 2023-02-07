@@ -19,5 +19,5 @@ public interface CardService {
 
     SimpleResponse delete(Long id);
 
-    BoardInnerPageResponse getAllCards(Long id);
+    BoardInnerPageResponse getAll(Long id);
 }

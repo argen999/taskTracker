@@ -1,13 +1,12 @@
 package com.example.tasktrackerb7.api;
 
-import com.example.tasktrackerb7.db.service.serviceimpl.ChecklistServiceImpl;
+import com.example.tasktrackerb7.db.service.ChecklistService;
 import com.example.tasktrackerb7.dto.request.ChecklistRequest;
 import com.example.tasktrackerb7.dto.request.UpdateChecklistRequest;
 import com.example.tasktrackerb7.dto.response.ChecklistResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ import java.util.List;
 @Tag(name = "Checklist api", description = "Checklist Api")
 public class ChecklistApi {
 
-    private final ChecklistServiceImpl checklistService;
+    private final ChecklistService checklistService;
 
     @Operation(summary = "Create", description = "Create checklist")
     @PostMapping("/{id}")
@@ -35,9 +34,9 @@ public class ChecklistApi {
         return checklistService.update(updateChecklistRequest);
     }
 
-    @Operation(summary = "Find all", description = "Find all checklists by card is")
+    @Operation(summary = "Find all", description = "Get all checklists by card is")
     @GetMapping("/{id}")
-    public List<ChecklistResponse> findAllChecklistsByCardId(@PathVariable Long id) {
+    public List<ChecklistResponse> getAll(@PathVariable Long id) {
         return checklistService.findAllChecklistsByCardId(id);
     }
 

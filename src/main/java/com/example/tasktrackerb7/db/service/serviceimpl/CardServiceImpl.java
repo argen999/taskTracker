@@ -95,7 +95,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public BoardInnerPageResponse getAllCards(Long id) {
+    public BoardInnerPageResponse getAll(Long id) {
         User user = getAuthenticateUser();
         Board board = boardRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Board with id: " + id + " not found"));
