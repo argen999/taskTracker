@@ -9,5 +9,5 @@ public interface ItemService {
 
     ItemResponse create(Long id, ItemRequest itemRequest);
 
-    ItemResponse makeDone(Long id, ItemRequest itemRequest);
+    ItemResponse makeDone(Long id);
 }

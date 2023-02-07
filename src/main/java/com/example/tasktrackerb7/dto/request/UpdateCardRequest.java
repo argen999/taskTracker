@@ -11,5 +11,5 @@ public class UpdateCardRequest {
 
     private String value;
 
-    private boolean isName;
+    private Boolean isName;
 }

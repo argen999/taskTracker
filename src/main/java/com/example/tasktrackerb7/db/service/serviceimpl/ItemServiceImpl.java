@@ -42,27 +42,27 @@ public class ItemServiceImpl implements ItemService {
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             Item item = new Item();
             item.setText(itemRequest.getText());
-            item.setDone(itemRequest.isDone());
+            item.setIsDone(!item.getIsDone());
             item.setChecklist(checklist);
             checklist.addItem(item);
             itemRepository.save(item);
-            return new ItemResponse(item.getId(), item.getText(), item.isDone());
+            return new ItemResponse(item.getId(), item.getText(), item.getIsDone());
         } else {
             throw new BadRequestException("You are not member in this workspace");
         }
     }
 
     @Override
-    public ItemResponse makeDone(Long id, ItemRequest itemRequest) {
+    public ItemResponse makeDone(Long id) {
         User user = getAuthenticateUser();
         Item item = itemRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Item with id: " + id + " not found"));
         Workspace workspace = workspaceRepository.findById(item.getChecklist().getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + item.getChecklist().getCard().getColumn().getBoard().getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            item.setDone(itemRequest.isDone());
+            item.setIsDone(!item.getIsDone());
             itemRepository.save(item);
-            return new ItemResponse(item.getId(), item.getText(), item.isDone());
+            return new ItemResponse(item.getId(), item.getText(), item.getIsDone());
         } else {
             throw new BadRequestException("You are not member in this workspace");
         }

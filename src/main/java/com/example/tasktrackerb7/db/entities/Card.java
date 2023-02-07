@@ -25,7 +25,7 @@ public class Card {
 
     private String title;
 
-    private boolean archive;
+    private Boolean archive;
 
     private String description;
 

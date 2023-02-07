@@ -25,7 +25,7 @@ public class ItemApi {
 
     @Operation(summary = "Make done", description = "Make item done or not done")
     @PatchMapping("/{id}")
-    public ItemResponse makeDone(@PathVariable Long id, @RequestBody ItemRequest itemRequest) {
-        return itemService.makeDone(id, itemRequest);
+    public ItemResponse makeDone(@PathVariable Long id) {
+        return itemService.makeDone(id);
     }
 }
