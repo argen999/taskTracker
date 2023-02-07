@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.api;
 
+import com.example.tasktrackerb7.db.service.FavouriteService;
 import com.example.tasktrackerb7.db.service.serviceimpl.FavouriteServiceImpl;
 import com.example.tasktrackerb7.dto.response.FavouriteResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -15,25 +16,25 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Favourite Api", description = "Favourite Api")
 public class FavouriteApi {
 
-    private final FavouriteServiceImpl favouriteServiceImpl;
+    private final FavouriteService favouriteService;
 
 
     @Operation(summary = "Make favourite board", description = "Make favourite board")
     @PostMapping("/{id}")
     public SimpleResponse makeFavouriteBoard(@PathVariable Long id) {
-        return favouriteServiceImpl.makeFavouriteBoard(id);
+        return favouriteService.makeFavouriteBoard(id);
     }
 
     @Operation(summary = "Make favourite workspace", description = "Make favourite workspace")
     @PostMapping("/workspace/{id}")
     public SimpleResponse makeFavouriteWorkspace(@PathVariable Long id) {
-        return favouriteServiceImpl.makeFavouriteWorkspace(id);
+        return favouriteService.makeFavouriteWorkspace(id);
     }
 
     @Operation(summary = "Get all", description = "Get all favourite")
     @GetMapping("/getAll")
     FavouriteResponse getAll() {
-        return favouriteServiceImpl.getAllFavourite();
+        return favouriteService.getAllFavourite();
     }
 
 }

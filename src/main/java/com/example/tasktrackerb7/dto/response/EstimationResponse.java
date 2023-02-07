@@ -5,18 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class BoardResponse {
+@AllArgsConstructor
+public class EstimationResponse {
 
     private Long id;
 
-    private String name;
+    private LocalDate dateOfWrite;
 
-    private String background;
-
-    private boolean isFavourite;
-
+    private LocalDate dateOfFinish;
 }

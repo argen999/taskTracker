@@ -44,40 +44,40 @@ values (1, 1, 1, 1),
        (4, 1, 4, 4),
        (5, 1, 5, 5);
 
-insert into estimations(id, date_of_finish, date_of_start)
-values (1, '2023-01-15', '2023-01-02'),
-       (2, '2023-01-29', '2023-01-16'),
-       (3, '2023-02-12', '2023-01-30'),
-       (4, '2023-02-26', '2023-02-13'),
-       (5, '2023-03-12', '2023-02-27');
+insert into cards(id, archive, created, description, title, column_id)
+values (1, false, '2023-01-28', '', 'Variables', 1),
+       (2, false, '2023-01-28', '', 'byte', 2),
+       (3, false, '2023-01-28', '', 'short', 3),
+       (4, false, '2023-01-28', '', 'int', 4),
+       (5, false, '2023-01-28', '', 'long', 5);
 
-insert into cards(id, archive, description, name, column_id, estimation_id)
-values (1, false, '', 'Variables', 1, 1),
-       (2, false, '', 'byte', 2, 2),
-       (3, false, '', 'short', 3, 3),
-       (4, false, '', 'int', 4, 4),
-       (5, false, '', 'long', 5, 5);
+insert into estimations(id, date_of_finish, date_of_start, card_id)
+values (1, '2023-01-15', '2023-01-02', 1),
+       (2, '2023-01-29', '2023-01-16', 2),
+       (3, '2023-02-12', '2023-01-30', 3),
+       (4, '2023-02-26', '2023-02-13', 4),
+       (5, '2023-03-12', '2023-02-27', 5);
 
-insert into comments(id, date_of_start, text, cards_id, user_id)
+insert into comments(id, date_of_start, text, card_id, user_id)
 values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1),
        (2, '2023-01-10', 'I will do it only in a week,after the vocation', 2, 2),
        (3, '2023-01-13', 'I will do it only in a week,after the vocation', 3, 3),
        (4, '2023-01-05', 'I will do it only in a week,after the vocation', 4, 4),
        (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5, 4);
 
-insert into label(id, color, text)
-values (1, 'Gray', 'TO DO'),
-       (2, 'Red', 'IN PROGRESS'),
-       (3, 'Orange', 'KICK BACK'),
-       (4, 'Blue', 'FINAL REVIEW'),
-       (5, 'Green', 'COMPLETE');
+insert into label(id, color, description, card_id)
+values (1, 'Gray', 'TO DO', 1),
+       (2, 'Red', 'IN PROGRESS', 2),
+       (3, 'Orange', 'KICK BACK', 3),
+       (4, 'Blue', 'FINAL REVIEW', 4),
+       (5, 'Green', 'COMPLETE', 5);
 
 insert into checklists(id, percent, title, card_id)
-values (1, '20%', 'Auth with GOOGLE', 1),
-       (2, '35%', 'DataBase Initialization', 2),
-       (3, '50%', 'Create Entities', 3),
-       (4, '45%', 'Swagger', 4),
-       (5, '60%', 'Sign in/Sign up', 5);
+values (1, 0, 'Auth with GOOGLE', 1),
+       (2, 0, 'DataBase Initialization', 2),
+       (3, 0, 'Create Entities', 3),
+       (4, 0, 'Swagger', 4),
+       (5, 0, 'Sign in/Sign up', 5);
 
 insert into attachment(id, attachment, date_of_start, card_id)
 values (1, 'title.pdf', '2023-01-02', 1),
@@ -105,14 +105,6 @@ values (1, 1, 1, null,false),
        (3, 3, 3, null,false),
        (4, 4, null, 4,true),
        (5, 5, 5, null,false);
-
-
-insert into cards_labels(card_id, labels_id)
-values (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
 
 insert into cards_users(cards_id, users_id)
 values (1, 1),

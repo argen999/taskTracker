@@ -7,16 +7,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class BoardResponse {
+@AllArgsConstructor
+public class MemberResponse {
 
     private Long id;
 
-    private String name;
+    private String firstName;
 
-    private String background;
+    private String lastName;
 
-    private boolean isFavourite;
+    private String email;
+
+    private String image;
+
 
 }
