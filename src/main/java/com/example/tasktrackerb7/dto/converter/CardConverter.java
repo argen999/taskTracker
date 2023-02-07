@@ -123,7 +123,7 @@ public class CardConverter {
                 int completedItems = 0;
                 for (Checklist c : card.getChecklists()) {
                     for (Item item1 : c.getItems()) {
-                        if (item1.isDone()) {
+                        if (item1.getIsDone()) {
                             completedItems++;
                         }
                     }

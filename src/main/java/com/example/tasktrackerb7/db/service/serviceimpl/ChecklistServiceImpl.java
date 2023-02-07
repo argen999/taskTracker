@@ -4,7 +4,6 @@ import com.example.tasktrackerb7.db.entities.*;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.ChecklistService;
 import com.example.tasktrackerb7.dto.request.ChecklistRequest;
-import com.example.tasktrackerb7.dto.request.ItemRequest;
 import com.example.tasktrackerb7.dto.request.UpdateChecklistRequest;
 import com.example.tasktrackerb7.dto.response.ChecklistResponse;
 import com.example.tasktrackerb7.dto.response.ItemResponse;
@@ -55,13 +54,8 @@ public class ChecklistServiceImpl implements ChecklistService {
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             Checklist checklist = new Checklist();
             checklist.setTitle(checklistRequest.getName());
-            for (ItemRequest itemRequest : checklistRequest.getItemRequests()) {
-                Item item = new Item(itemRequest.getText(), itemRequest.isDone());
-                item.setChecklist(checklist);
-                checklist.addItem(item);
-                checklist.setCard(card);
-                card.addChecklist(checklist);
-            }
+            checklist.setCard(card);
+            card.addChecklist(checklist);
             return convertToResponse(checklistRepository.save(checklist));
         } else {
             throw new BadRequestException("You are not member in this workspace");
@@ -130,13 +124,14 @@ public class ChecklistServiceImpl implements ChecklistService {
 
         int countOfItems = 0;
         int countOfCompletedItems = 0;
+        String counts = " ";
         if (items != null) {
             for (Item item : items) {
                 countOfItems++;
-                if (item.isDone()) {
+                if (item.getIsDone()) {
                     countOfCompletedItems++;
                 }
-                itemResponses.add(new ItemResponse(item.getId(), item.getText(), item.isDone()));
+                itemResponses.add(new ItemResponse(item.getId(), item.getText(), item.getIsDone()));
             }
             int count;
             if(countOfCompletedItems <= 0) {
@@ -144,10 +139,11 @@ public class ChecklistServiceImpl implements ChecklistService {
             } else {
                 count = (countOfCompletedItems * 100) / countOfItems;
             }
+            counts = countOfItems + "/" + countOfCompletedItems;
             checklist.setPercent(count);
             checklistRepository.save(checklist);
         }
 
-        return new ChecklistResponse(checklist.getId(), checklist.getTitle(), countOfCompletedItems, countOfItems, checklist.getPercent(), itemResponses);
+        return new ChecklistResponse(checklist.getId(), checklist.getTitle(), counts, checklist.getPercent(), itemResponses);
     }
 }

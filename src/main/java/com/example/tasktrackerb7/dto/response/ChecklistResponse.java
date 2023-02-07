@@ -17,9 +17,7 @@ public class ChecklistResponse {
 
     private String name;
 
-    private int countOfCompletedItems;
-
-    private int countOfItems;
+    private String counts;
 
     private int percent;
 

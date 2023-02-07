@@ -42,7 +42,7 @@ public class ItemServiceImpl implements ItemService {
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             Item item = new Item();
             item.setText(itemRequest.getText());
-            item.setIsDone(!item.getIsDone());
+            item.setIsDone(itemRequest.getIsDone());
             item.setChecklist(checklist);
             checklist.addItem(item);
             itemRepository.save(item);

@@ -75,11 +75,9 @@ public class CardServiceImpl implements CardService {
         Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
                 new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            if (!request.isName()) {
-                System.out.println("something1");
+            if (!request.getIsName()) {
                 card.setTitle(request.getValue());
             } else {
-                System.out.println("something2");
                 card.setDescription(request.getValue());
             }
             return converter.convertToCardInnerPageResponse(card);
@@ -133,5 +131,6 @@ public class CardServiceImpl implements CardService {
         }
         return new SimpleResponse("Card with id: " + id + " deleted successfully");
     }
+
 
 }
