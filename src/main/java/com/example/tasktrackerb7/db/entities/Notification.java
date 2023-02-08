@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static javax.persistence.CascadeType.*;
 
@@ -19,7 +20,7 @@ import static javax.persistence.CascadeType.*;
 public class Notification {
 
     @Id
-    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
+    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1, initialValue = 5)
     @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 

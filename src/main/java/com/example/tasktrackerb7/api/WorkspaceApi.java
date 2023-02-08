@@ -7,6 +7,7 @@ import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,30 +24,35 @@ public class WorkspaceApi {
 
     @Operation(summary = "Create", description = "Create workspace")
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public WorkspaceResponse create(@RequestBody WorkspaceRequest workspaceRequest) {
         return workspaceService.create(workspaceRequest);
     }
 
     @Operation(summary = "Delete", description = "Delete workspace")
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public SimpleResponse delete(@PathVariable Long id) {
         return workspaceService.delete(id);
     }
 
     @Operation(summary = "Update", description = "Update workspace name")
     @PatchMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public WorkspaceResponse update(@PathVariable Long id, @RequestBody @Valid WorkspaceRequest workspaceRequest) {
         return workspaceService.update(id, workspaceRequest);
     }
 
     @Operation(summary = "Get all", description = "Get all workspaces in which the user consists")
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public List<WorkspaceResponse> getAll() {
         return workspaceService.getAll();
     }
 
     @Operation(summary = "Get by id", description = "Get workspace by id in which the user consists")
     @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public WorkspaceResponse getById(@PathVariable Long id) {
         return workspaceService.getById(id);
     }

@@ -26,18 +26,21 @@ public class ColumnApi {
 
     @Operation(summary = "Create", description = "Create column by boardId")
     @PostMapping("/{boardId}")
+    @PreAuthorize("isAuthenticated()")
     ColumnResponse create(@PathVariable Long boardId, @RequestBody @Valid ColumnRequest columnRequest) {
         return columnService.create(boardId, columnRequest);
     }
 
     @Operation(summary = "Update", description = "Update column by id")
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     ColumnResponse update(@PathVariable Long id, @RequestBody @Valid ColumnRequest columnRequest) {
         return columnService.update(id, columnRequest);
     }
 
     @Operation(summary = "Delete", description = "Delete column by id")
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     SimpleResponse delete(@PathVariable Long id) {
         return columnService.delete(id);
     }

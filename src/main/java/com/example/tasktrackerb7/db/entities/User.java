@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String photoLink;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
-    private List<Notification> notification;
+    private List<Notification> notifications;
 
     @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
     private List<Workspace> workspaces;
@@ -106,6 +106,11 @@ public class User implements UserDetails {
     public void addRole(Role role) {
         if (roles == null) roles = new ArrayList<>();
         roles.add(role);
+    }
+
+    public void addNotification(Notification notification) {
+        if (notifications == null) notifications = new ArrayList<>();
+        notifications.add(notification);
     }
 
     public void addUserWorkspaceRole(UserWorkspaceRole userWorkspaceRole) {

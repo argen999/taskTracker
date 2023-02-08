@@ -30,9 +30,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final RoleRepository roleRepository;
-    private final FavouriteRepository favouriteRepository;
-
-    private final BoardRepository boardRepository;
 
     private final FavouriteRepository favouriteRepository;
 
