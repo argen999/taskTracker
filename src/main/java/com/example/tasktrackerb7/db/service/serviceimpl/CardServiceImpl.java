@@ -103,11 +103,15 @@ public class CardServiceImpl implements CardService {
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             List<ColumnResponse> columnResponses = new ArrayList<>();
             for (Column column : board.getColumns()) {
-                ColumnResponse columnResponse = new ColumnResponse();
-                columnResponse.setId(column.getId());
-                columnResponse.setName(column.getName());
-                columnResponse.setCardResponses(converter.convertToResponseForGetAll(column.getCards()));
-                columnResponses.add(columnResponse);
+                for (Card card : column.getCards()) {
+                    if (card.getArchive().equals(false)) {
+                        ColumnResponse columnResponse = new ColumnResponse();
+                        columnResponse.setId(column.getId());
+                        columnResponse.setName(column.getName());
+                        columnResponse.setCardResponses(converter.convertToResponseForGetAll(column.getCards()));
+                        columnResponses.add(columnResponse);
+                    }
+                }
             }
             boardInnerPageResponse.setBoardName(board.getName());
             boardInnerPageResponse.setColumnResponses(columnResponses);
@@ -132,6 +136,7 @@ public class CardServiceImpl implements CardService {
         return new SimpleResponse("Card with id: " + id + " deleted successfully");
     }
 
+    @Override
     public CardInnerPageResponse archive(Long id) {
         User user = getAuthenticateUser();
         Card card = cardRepository.findById(id).orElseThrow(() ->
@@ -149,6 +154,7 @@ public class CardServiceImpl implements CardService {
         return converter.convertToCardInnerPageResponse(card);
     }
 
+    @Override
     public List<CardResponse> getAllArchivedCards(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Board with id: " + id + " not found"));

@@ -5,6 +5,7 @@ import com.example.tasktrackerb7.dto.request.CardRequest;
 import com.example.tasktrackerb7.dto.request.UpdateCardRequest;
 import com.example.tasktrackerb7.dto.response.BoardInnerPageResponse;
 import com.example.tasktrackerb7.dto.response.CardInnerPageResponse;
+import com.example.tasktrackerb7.dto.response.CardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,4 +54,15 @@ public class CardApi {
         return cardService.delete(id);
     }
 
+    @Operation(summary = "Archive", description = "Archive card by id")
+    @PatchMapping("/{id}")
+    public CardInnerPageResponse archive(@PathVariable Long id) {
+        return cardService.archive(id);
+    }
+
+    @Operation(summary = "Get all archived cards", description = "Get all archived cards by board id")
+    @GetMapping("/archive/{id}")
+    public List<CardResponse> getAllArchiveCards(@PathVariable Long id) {
+        return cardService.getAllArchivedCards(id);
+    }
 }

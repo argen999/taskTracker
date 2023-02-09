@@ -4,8 +4,11 @@ import com.example.tasktrackerb7.dto.request.CardRequest;
 import com.example.tasktrackerb7.dto.request.UpdateCardRequest;
 import com.example.tasktrackerb7.dto.response.BoardInnerPageResponse;
 import com.example.tasktrackerb7.dto.response.CardInnerPageResponse;
+import com.example.tasktrackerb7.dto.response.CardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -20,4 +23,8 @@ public interface CardService {
     SimpleResponse delete(Long id);
 
     BoardInnerPageResponse getAll(Long id);
+
+    CardInnerPageResponse archive(Long id);
+
+    List<CardResponse> getAllArchivedCards(Long id);
 }

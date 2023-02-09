@@ -44,6 +44,7 @@ public class CardConverter {
         response.setId(card.getId());
         response.setName(card.getTitle());
         response.setDescription(card.getDescription());
+        response.setIsArchive(card.getArchive());
         if (card.getLabels() != null) {
             response.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
         }
@@ -134,6 +135,38 @@ public class CardConverter {
             }
         }
         return cardResponses;
+    }
+
+    public CardResponse convertToResponseForGetAllArchived(Card card) {
+        CardResponse cardResponse = new CardResponse();
+        cardResponse.setId(card.getId());
+        cardResponse.setName(card.getTitle());
+        cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+        if (card.getEstimation() != null) {
+            int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+            cardResponse.setDuration(" " + between + " days");
+        }
+
+        cardResponse.setNumOfMembers(card.getUsers().size());
+        int item = 0;
+        for (Checklist checklist : checklistRepository.getAllChecklists(card.getId())) {
+            for (int i = 0; i < checklist.getItems().size(); i++) {
+                item++;
+            }
+        }
+
+        cardResponse.setNumOfItems(item);
+        int completedItems = 0;
+        for (Checklist c : card.getChecklists()) {
+            for (Item item1 : c.getItems()) {
+                if (item1.getIsDone()) {
+                    completedItems++;
+                }
+            }
+        }
+
+        cardResponse.setNumOfCompletedItems(completedItems);
+        return cardResponse;
     }
 
     private List<MemberResponse> getAllCardMembers(List<User> users) {
