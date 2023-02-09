@@ -5,18 +5,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class BoardResponse {
+@AllArgsConstructor
+public class ChecklistResponse {
 
     private Long id;
 
     private String name;
 
-    private String background;
+    private String counts;
 
-    private boolean isFavourite;
+    private int percent;
+
+    private List<ItemResponse> itemResponses;
 
 }

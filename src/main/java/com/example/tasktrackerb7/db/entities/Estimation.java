@@ -10,6 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "estimations")
 @Getter
@@ -35,4 +37,11 @@ public class Estimation {
         this.dateOfStart = estimationRequest.getDateOfStart();
         this.dateOfFinish = estimationRequest.getDateOfFinish();
     }
+
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    private User creator;
+
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH})
+    private Card card;
+
 }

@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.api;
 
-import com.example.tasktrackerb7.db.service.serviceimpl.WorkspaceServiceImpl;
+import com.example.tasktrackerb7.db.service.WorkspaceService;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
@@ -20,7 +20,7 @@ import java.util.List;
 @Tag(name = "Workspace api", description = "Workspace Api")
 public class WorkspaceApi {
 
-    private final WorkspaceServiceImpl workspaceService;
+    private final WorkspaceService workspaceService;
 
     @Operation(summary = "Create", description = "Create workspace")
     @PostMapping

@@ -2,13 +2,13 @@ package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 
@@ -20,7 +20,7 @@ import static javax.persistence.CascadeType.*;
 public class Notification {
 
     @Id
-    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1, initialValue = 5)
+    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -33,8 +33,11 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
-    private User user;
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, targetEntity = User.class)
+    @JoinTable(name = "users_notifications",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id"))
+    private List<User> users;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Board board;

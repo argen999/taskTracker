@@ -1,14 +1,15 @@
 package com.example.tasktrackerb7.db.entities;
 
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.CascadeType.REFRESH;
 
 @Entity
 @Table(name = "workspaces")
@@ -51,10 +52,11 @@ public class Workspace {
         }
         members.add(userWorkspaceRole);
     }
-
-    public void remove(Board board) {
-        boards.remove(board);
+    public void addFavourite(Favourite favourite) {
+        if(favourite == null) {
+            favourites = new ArrayList<>();
+        }
+        favourites.add(favourite);
     }
-
 }
 

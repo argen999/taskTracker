@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.api;
 
-import com.example.tasktrackerb7.db.service.serviceimpl.BoardServiceImpl;
+import com.example.tasktrackerb7.db.service.BoardService;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
 import com.example.tasktrackerb7.dto.request.BoardUpdateRequest;
 import com.example.tasktrackerb7.dto.response.BoardResponse;
@@ -21,7 +21,7 @@ import java.util.List;
 @Tag(name = "Board Api", description = "Board Api")
 public class BoardApi {
 
-    private final BoardServiceImpl boardServiceImpl;
+    private final BoardService boardServiceImpl;
 
     @Operation(summary = "Create", description = "Create board")
     @PostMapping

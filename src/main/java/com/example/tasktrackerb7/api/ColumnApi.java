@@ -1,7 +1,6 @@
 package com.example.tasktrackerb7.api;
 
-
-import com.example.tasktrackerb7.db.service.serviceimpl.ColumnServiceImpl;
+import com.example.tasktrackerb7.db.service.ColumnService;
 import com.example.tasktrackerb7.dto.request.ColumnRequest;
 import com.example.tasktrackerb7.dto.response.ColumnResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -21,7 +20,7 @@ import java.util.List;
 @Tag(name = "Column Api", description = "Column Api")
 public class ColumnApi {
 
-    private final ColumnServiceImpl columnService;
+    private final ColumnService columnService;
 
 
     @Operation(summary = "Create", description = "Create column by boardId")

@@ -156,7 +156,6 @@ public class BoardServiceImpl implements BoardService {
 
         } else throw new BadRequestException("you are not member in this workspace");
 
-
     }
 
     @Override
@@ -176,4 +175,5 @@ public class BoardServiceImpl implements BoardService {
         }
         return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
     }
+
 }

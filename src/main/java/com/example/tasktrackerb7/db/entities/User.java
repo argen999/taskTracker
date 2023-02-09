@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Column(length = 1000)
     private String photoLink;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "users")
     private List<Notification> notifications;
 
     @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
@@ -104,7 +104,8 @@ public class User implements UserDetails {
     }
 
     public void addRole(Role role) {
-        if (roles == null) roles = new ArrayList<>();
+        if (roles == null)
+            roles = new ArrayList<>();
         roles.add(role);
     }
 
@@ -118,5 +119,19 @@ public class User implements UserDetails {
             userWorkspaceRoles = new ArrayList<>();
         }
         userWorkspaceRoles.add(userWorkspaceRole);
+    }
+
+    public void addCard(Card card) {
+        if (cards == null) {
+            cards = new ArrayList<>();
+        }
+        cards.add(card);
+    }
+
+
+
+    public void addFavourite(Favourite favourite) {
+        if (favourite == null) favourites = new ArrayList<>();
+        favourites.add(favourite);
     }
 }
