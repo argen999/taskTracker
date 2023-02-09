@@ -1,10 +1,7 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
-import com.example.tasktrackerb7.db.repository.RoleRepository;
-import com.example.tasktrackerb7.db.repository.UserRepository;
-import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
-import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
+import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -31,6 +28,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final RoleRepository roleRepository;
+    private final FavouriteRepository favouriteRepository;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -58,40 +56,38 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return convertToResponse(workspace);
     }
 
+    @Override
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("workspace with id " + id + " not found"));
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
-            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-                workspaceRepository.delete(workspace);
-            } else {
-                throw new BadCredentialsException("you can't delete workspace with id: "
-                        + id + " because you are not admin");
-            }
-        } else {
-            throw new BadRequestException("you are not member in workspace with id: " + id);
-        }
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+
+            favouriteRepository.delete(favouriteRepository.deleteWorkspace(id));
+            workspaceRepository.delete(workspace);
+
+        } else throw new BadRequestException("you are not member in workspace with id: " + id);
+
         return new SimpleResponse("workspace with id: " + id + " deleted successfully");
     }
 
+    @Override
     public WorkspaceResponse update(Long id, WorkspaceRequest workspaceRequest) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("workspace with id: " + id + " not found"));
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
-            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-                workspace.setName(workspaceRequest.getName());
-                workspaceRepository.save(workspace);
-            } else {
-                throw new BadCredentialsException("you can't do update, because you are not admin in workspace with id: " + id);
-            }
-        } else {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+
+            workspace.setName(workspaceRequest.getName());
+            workspaceRepository.save(workspace);
+
+        } else
             throw new BadCredentialsException("you can't do update, because you are not member in workspace with id: " + id);
-        }
+
         return convertToResponse(workspace);
     }
 
+    @Override
     public WorkspaceResponse getById(Long id) {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
@@ -108,7 +104,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         }
     }
 
-
+    @Override
     public List<WorkspaceResponse> getAll() {
         User user = getAuthenticateUser();
         List<Workspace> workspaces = new ArrayList<>();

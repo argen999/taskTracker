@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserWorkspaceRoleRepository extends JpaRepository<UserWorkspaceRole, Long> {
 
     @Query("select u from UserWorkspaceRole u where u.user.id=:id and u.workspace.id=:workspaceId")
-    UserWorkspaceRole getAllUsersByWorkspaceId(Long id, Long workspaceId);
+    UserWorkspaceRole findByUserIdAndWorkspaceId(Long id, Long workspaceId);
 
     @Query("select u from UserWorkspaceRole u where u.workspace.id=:workspaceId")
     List<UserWorkspaceRole> getAllParticipantsByWorkspaceId(Long workspaceId);

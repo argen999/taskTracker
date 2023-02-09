@@ -4,8 +4,10 @@ import com.example.tasktrackerb7.dto.request.ColumnRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -34,4 +36,10 @@ public class Column {
         this.name = columnRequest.getName();
     }
 
+    public void addCard(Card card) {
+        if (cards == null) {
+            cards = new ArrayList<>();
+        }
+        cards.add(card);
+    }
 }

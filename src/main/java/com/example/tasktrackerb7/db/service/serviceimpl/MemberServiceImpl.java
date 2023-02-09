@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
     public void changeMemberRole(Long roleId, Long memberId, Long workspaceId) {
         Role role = roleRepository.findById(roleId).orElseThrow(
                 () -> new NotFoundException("Role with id " + roleId + " not found!"));
-        UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.getAllUsersByWorkspaceId(memberId, workspaceId);
+        UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(memberId, workspaceId);
 
         userWorkspaceRole.setRole(role);
         userWorkspaceRoleRepository.save(userWorkspaceRole);
@@ -92,11 +92,11 @@ public class MemberServiceImpl implements MemberService {
         User member = userRepository.findById(memberId).orElseThrow(() ->
                 new NotFoundException("Member with id " + memberId + " not found!")
         );
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(member.getId(), workspace.getId()))) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(member.getId(), workspace.getId()))) {
 
-            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.
-                        getAllUsersByWorkspaceId(memberId, workspaceId);
+                        findByUserIdAndWorkspaceId(memberId, workspaceId);
                 userWorkspaceRoleRepository.delete(userWorkspaceRole);
             } else {
                 throw new BadCredentialsException("You can't delete "

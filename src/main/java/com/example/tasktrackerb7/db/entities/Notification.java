@@ -2,12 +2,12 @@ package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static javax.persistence.CascadeType.*;
 
@@ -19,7 +19,7 @@ import static javax.persistence.CascadeType.*;
 public class Notification {
 
     @Id
-    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1)
+    @SequenceGenerator(name = "notification_gen", sequenceName = "notification_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "notification_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
@@ -27,7 +27,7 @@ public class Notification {
 
     private boolean status;
 
-    private LocalDate dateOfWrite;
+    private LocalDateTime dateOfWrite;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
