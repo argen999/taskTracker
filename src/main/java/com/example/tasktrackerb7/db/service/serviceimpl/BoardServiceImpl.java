@@ -156,9 +156,9 @@ public class BoardServiceImpl implements BoardService {
                 boardResponses.add(new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite));
             }
             return boardResponses;
-        } else {
-            throw new BadRequestException("you are not member in this workspace");
-        }
+
+        } else throw new BadRequestException("you are not member in this workspace");
+
 
     }
 
