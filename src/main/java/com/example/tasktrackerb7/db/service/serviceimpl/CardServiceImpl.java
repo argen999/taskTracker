@@ -132,5 +132,34 @@ public class CardServiceImpl implements CardService {
         return new SimpleResponse("Card with id: " + id + " deleted successfully");
     }
 
+    public CardInnerPageResponse archive(Long id) {
+        User user = getAuthenticateUser();
+        Card card = cardRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Card with id: " + id + " not found"));
+        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() ->
+                new NotFoundException("Column with id: " + card.getColumn().getId() + " not found"));
+        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            card.setArchive(!card.getArchive());
+            cardRepository.save(card);
+        } else {
+            throw new BadCredentialsException("You are not member in this workspace");
+        }
+        return converter.convertToCardInnerPageResponse(card);
+    }
 
+    public List<CardResponse> getAllArchivedCards(Long id) {
+        Board board = boardRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Board with id: " + id + " not found"));
+        List<CardResponse> cardResponses = new ArrayList<>();
+        for (Column column : board.getColumns()) {
+            for (Card card : column.getCards()) {
+                if (card.getArchive().equals(true)) {
+                    cardResponses.add(converter.convertToResponseForGetAllArchived(card));
+                }
+            }
+        }
+        return cardResponses;
+    }
 }
