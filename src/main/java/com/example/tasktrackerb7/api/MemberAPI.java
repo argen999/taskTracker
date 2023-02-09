@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.MemberService;
+import com.example.tasktrackerb7.dto.request.InvitationRequest;
 import com.example.tasktrackerb7.dto.response.ParticipantResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @RestController
@@ -19,21 +21,42 @@ public class MemberAPI {
 
     private final MemberService memberService;
 
-    @Operation(summary = "Delete member by ID from workspace", description = "Delete member by ID from workspace")
-    @DeleteMapping("/{workspaceID}/{memberID}")
-    SimpleResponse deleteMemberByIDFromWorkspace(@PathVariable Long workspaceID, @PathVariable Long memberID) {
-        return memberService.deleteMemberByIDFromWorkspace(workspaceID, memberID);
+    @Operation(summary = "Invite member to workspace", description = "Invite member to workspace")
+    @PostMapping("/inviteMemberToWorkspace")
+    public SimpleResponse inviteMemberToWorkspace(@RequestBody InvitationRequest invitationRequest) throws MessagingException {
+        return memberService.inviteMemberToWorkspace(invitationRequest);
     }
 
-    @Operation(summary = "Get all members by workspaceID", description = "Get all members by workspaceID")
-    @GetMapping("/getAllMembersByWorkspaceID/{workspaceID}")
-    public List<ParticipantResponse> getAllParticipantsByWorkspaceID(@PathVariable Long workspaceID) {
-        return memberService.getAllParticipantsByWorkspaceID(workspaceID);
+    @Operation(summary = "Delete member by ID from workspace", description = "Delete member by ID from workspace")
+    @DeleteMapping("/{workspaceId}/{memberId}")
+    SimpleResponse deleteMemberByIdFromWorkspace(@PathVariable Long workspaceId, @PathVariable Long memberId) {
+        return memberService.deleteMemberByIdFromWorkspace(workspaceId, memberId);
+    }
+
+    @Operation(summary = "Get all participants by workspace ID", description = "Get all participants by workspace ID")
+    @GetMapping("/getAllParticipantsByWorkspaceId/{workspaceId}")
+    public List<ParticipantResponse> getAllParticipantsByWorkspaceId(@PathVariable Long workspaceId) {
+        return memberService.getAllParticipantsByWorkspaceId(workspaceId);
+
+    }
+
+    @Operation(summary = "Get all admins by workspace ID", description = "Get all admins by workspace ID")
+    @GetMapping("/getAllAdminsByWorkspaceId/{workspaceId}")
+    public List<ParticipantResponse> getAllAdminsByWorkspaceId(@PathVariable Long workspaceId) {
+        return memberService.getAllAdminsByWorkspaceId(workspaceId);
+
+    }
+
+    @Operation(summary = "Get all members by workspace ID", description = "Get all members by workspace ID")
+    @GetMapping("/getAllMembersByWorkspaceId/{workspaceId}")
+    public List<ParticipantResponse> getAllMembersByWorkspaceId(@PathVariable Long workspaceId) {
+        return memberService.getAllMembersByWorkspaceId(workspaceId);
+
     }
 
     @Operation(summary = "Change role", description = "Change role")
-    @PutMapping("/{roleID}/{memberID}/{workspaceID}")
-    public void changeMemberRole(@PathVariable Long roleID, @PathVariable Long memberID, @PathVariable Long workspaceID) {
-        memberService.changeMemberRole(roleID, memberID, workspaceID);
+    @PutMapping("/{roleId}/{memberId}/{workspaceId}")
+    public void changeMemberRole(@PathVariable Long roleId, @PathVariable Long memberId, @PathVariable Long workspaceId) {
+        memberService.changeMemberRole(roleId, memberId, workspaceId);
     }
 }

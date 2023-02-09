@@ -6,23 +6,17 @@ import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
-import com.example.tasktrackerb7.dto.request.InvitationRequest;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
-import com.example.tasktrackerb7.dto.response.ParticipantResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,8 +62,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("workspace with id " + id + " not found"));
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
+            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 workspaceRepository.delete(workspace);
             } else {
                 throw new BadCredentialsException("you can't delete workspace with id: "
@@ -85,8 +79,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("workspace with id: " + id + " not found"));
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
+            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 workspace.setName(workspaceRequest.getName());
                 workspaceRepository.save(workspace);
             } else {

@@ -50,8 +50,8 @@ public class BoardServiceImpl implements BoardService {
         Workspace workspace = workspaceRepository.findById(boardRequest.getWorkspaceId()).orElseThrow(() -> {
             throw new NotFoundException("workspace not found");
         });
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
+            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 Board board = new Board(boardRequest);
                 workspace.addBoard(board);
                 board.setWorkspace(workspace);
@@ -86,8 +86,8 @@ public class BoardServiceImpl implements BoardService {
         if (!workspace.getBoards().contains(board)) {
             throw new NotFoundException("This board not found!");
         } else {
-            if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-                if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+            if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
+                if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                     if (!boardUpdateRequest.isBackground()) {
                         board.setName(boardUpdateRequest.getValue());
                     }
@@ -124,8 +124,8 @@ public class BoardServiceImpl implements BoardService {
         if (!workspace.getBoards().contains(board)) {
             throw new NotFoundException("we don't have this board in this workspace");
         } else {
-            if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-                if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+            if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
+                if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                     if (board.getFavourites() != null) {
                         for (Favourite f : board.getFavourites()) {
                             f.setBoard(null);
@@ -149,7 +149,7 @@ public class BoardServiceImpl implements BoardService {
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("workspace not found");
         });
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()))) {
             List<Board> boards = boardRepository.getAllBoards(workspace.getId());
             List<BoardResponse> boardResponses = new ArrayList<>();
             for (Board board : boards) {

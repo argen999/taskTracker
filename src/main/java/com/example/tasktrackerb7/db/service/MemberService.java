@@ -12,15 +12,15 @@ import java.util.List;
 public interface MemberService {
     SimpleResponse inviteMemberToWorkspace(InvitationRequest invitationRequest) throws MessagingException;
 
-    void changeMemberRole(Long roleID, Long memberID, Long workspaceID);
+    void changeMemberRole(Long roleId, Long memberId, Long workspaceId);
 
-    SimpleResponse deleteMemberByIDFromWorkspace(Long workspaceID, Long memberID);
+    SimpleResponse deleteMemberByIdFromWorkspace(Long workspaceId, Long memberId);
 
-    List<ParticipantResponse> getAllParticipantsByWorkspaceID(Long workspaceID);
+    List<ParticipantResponse> getAllParticipantsByWorkspaceId(Long workspaceId);
 
-    List<ParticipantResponse> getAllAdminsByWorkspaceID(Long workspaceID);
+    List<ParticipantResponse> getAllAdminsByWorkspaceId(Long workspaceId);
 
-    List<ParticipantResponse> getAllMembersByWorkspaceID(Long workspaceID);
+    List<ParticipantResponse> getAllMembersByWorkspaceId(Long workspaceId);
 
 
 }

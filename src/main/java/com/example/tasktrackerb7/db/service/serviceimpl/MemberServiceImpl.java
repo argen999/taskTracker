@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
-import com.example.tasktrackerb7.converter.MemberResponseConverter;
+import com.example.tasktrackerb7.converter.ParticipantResponseConverter;
 import com.example.tasktrackerb7.db.entities.Role;
 import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.entities.UserWorkspaceRole;
@@ -11,7 +11,6 @@ import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.MemberService;
 import com.example.tasktrackerb7.dto.request.InvitationRequest;
-import com.example.tasktrackerb7.dto.response.MembersResponse;
 import com.example.tasktrackerb7.dto.response.ParticipantResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
@@ -36,9 +35,8 @@ public class MemberServiceImpl implements MemberService {
     private final UserRepository userRepository;
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
     private final JavaMailSender javaMailSender;
-
-    private final MemberResponseConverter memberResponseConverter;
     private final RoleRepository roleRepository;
+    private final ParticipantResponseConverter participantResponseConverter;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -46,19 +44,21 @@ public class MemberServiceImpl implements MemberService {
         return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found!"));
     }
 
-
     @Override
     public SimpleResponse inviteMemberToWorkspace(InvitationRequest invitationRequest) throws MessagingException {
         User user;
+        Workspace workspace = workspaceRepository.findById(invitationRequest.getWorkspaceId()).orElseThrow(
+                () -> new NotFoundException("Workspace with ID: " + invitationRequest.getWorkspaceId() + " not found!")
+        );
         if (!userRepository.existsByEmail(invitationRequest.getEmail())) {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            mimeMessageHelper.setSubject("Invite member to workspace!");
+            mimeMessageHelper.setSubject("You have been invited to the workspace");
             mimeMessageHelper.setTo(invitationRequest.getEmail());
             if (invitationRequest.getRole().equals("ADMIN")) {
-                mimeMessageHelper.setText(invitationRequest.getInvitationLink() + "/" + invitationRequest.getRole() + "/workspaceID/" + invitationRequest.getWorkspaceID());
+                mimeMessageHelper.setText("Workspace ID : " + invitationRequest.getWorkspaceId() + "\nYour role : " + invitationRequest.getRole() + "\nLink to join : " + "/" + invitationRequest.getInvitationLink() + "/");
             } else if (invitationRequest.getRole().equals("USER")) {
-                mimeMessageHelper.setText(invitationRequest.getInvitationLink() + "/" + invitationRequest.getRole() + "/workspaceID/" + invitationRequest.getWorkspaceID());
+                mimeMessageHelper.setText("Workspace ID : " + invitationRequest.getWorkspaceId() + "\nYour role : " + invitationRequest.getRole() + "\nLink to join : " + "/" + invitationRequest.getInvitationLink() + "/");
             }
             javaMailSender.send(mimeMessage);
         } else {
@@ -66,9 +66,6 @@ public class MemberServiceImpl implements MemberService {
                     () -> new NotFoundException("Member with email: " + invitationRequest.getEmail() + " not found!")
             );
 
-            Workspace workspace = workspaceRepository.findById(invitationRequest.getWorkspaceID()).orElseThrow(
-                    () -> new NotFoundException("Workspace with ID: " + invitationRequest.getWorkspaceID() + " not found!")
-            );
             UserWorkspaceRole userWorkspaceRole = new UserWorkspaceRole(user, workspace, invitationRequest.getRole());
             userWorkspaceRoleRepository.save(userWorkspaceRole);
         }
@@ -76,60 +73,77 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void changeMemberRole(Long roleID, Long memberID, Long workspaceID) {
-        Role role = roleRepository.findById(roleID).orElseThrow(
-                () -> new NotFoundException("Role with id " + roleID + " not found!"));
-        UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(memberID, workspaceID);
+    public void changeMemberRole(Long roleId, Long memberId, Long workspaceId) {
+        Role role = roleRepository.findById(roleId).orElseThrow(
+                () -> new NotFoundException("Role with id " + roleId + " not found!"));
+        UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.getAllUsersByWorkspaceId(memberId, workspaceId);
 
         userWorkspaceRole.setRole(role);
         userWorkspaceRoleRepository.save(userWorkspaceRole);
-
+        new SimpleResponse("Role changed successfully!");
     }
 
     @Override
-    public SimpleResponse deleteMemberByIDFromWorkspace(Long workspaceID, Long memberID) {
+    public SimpleResponse deleteMemberByIdFromWorkspace(Long workspaceId, Long memberId) {
         User user = getAuthenticateUser();
-        Workspace workspace = workspaceRepository.findById(workspaceID).orElseThrow(() -> new NotFoundException("Workspace with id " + workspaceID + " not found!"));
-        User member = userRepository.findById(memberID).orElseThrow(() -> new NotFoundException("Member with id " + memberID + " not found!"));
-        UserWorkspaceRole userWorkspaceRoleRETURN;
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(member.getId(), workspace.getId()))) {
-            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-                UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(memberID, workspaceID);
-                userWorkspaceRoleRETURN = userWorkspaceRole;
+        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(() ->
+                new NotFoundException("Workspace with id " + workspaceId + " not found!"));
+
+        User member = userRepository.findById(memberId).orElseThrow(() ->
+                new NotFoundException("Member with id " + memberId + " not found!")
+        );
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.getAllUsersByWorkspaceId(member.getId(), workspace.getId()))) {
+
+            if (userWorkspaceRoleRepository.getAllUsersByWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+                UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.
+                        getAllUsersByWorkspaceId(memberId, workspaceId);
                 userWorkspaceRoleRepository.delete(userWorkspaceRole);
             } else {
-                throw new BadCredentialsException("You can't delete " + member.getName() + " " + member.getSurname() + " because you are not role ADMIN!");
+                throw new BadCredentialsException("You can't delete "
+                        + member.getName() + " " + member.getSurname() + " because you are not role ADMIN!");
             }
         } else {
-            throw new BadCredentialsException("Member with ID " + memberID + " does not exist from workspace " + workspace.getName());
+            throw new BadCredentialsException("Member with ID " + memberId + " not exist in workspace " + workspace.getName());
         }
-
-        if (userWorkspaceRoleRETURN.getRole().getId() == 1) {
-            return new SimpleResponse("ADMIN " + member.getName() + " " + member.getSurname() + " deleted successfully from workspace " + workspace.getName());
-        } else {
-            return new SimpleResponse("USER " + member.getName() + " " + member.getSurname() + " deleted successfully from workspace " + workspace.getName());
-        }
+        return new SimpleResponse(member.getName() + " " + member.getSurname() + " deleted successfully!");
     }
 
     @Override
-    public List<ParticipantResponse> getAllParticipantsByWorkspaceID(Long workspaceID) {
-        Workspace workspace = workspaceRepository.findById(workspaceID).orElseThrow(
+    public List<ParticipantResponse> getAllParticipantsByWorkspaceId(Long workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(
                 () -> new NotFoundException("Workspace with ID: "
-                        + workspaceID + " not found!")
+                        + workspaceId + " not found!")
 
         );
-        List<User> users = new ArrayList<>();
-        return memberResponseConverter.viewMembers(users);
-    }
+        List<UserWorkspaceRole> userWorkspaceRoles = new ArrayList<>(userWorkspaceRoleRepository.
+                getAllParticipantsByWorkspaceId(workspace.getId()));
 
-
-    @Override
-    public List<ParticipantResponse> getAllAdminsByWorkspaceID(Long workspaceID) {
-        return null;
+        return participantResponseConverter.viewAll(userWorkspaceRoles);
     }
 
     @Override
-    public List<ParticipantResponse> getAllMembersByWorkspaceID(Long workspaceID) {
-        return null;
+    public List<ParticipantResponse> getAllAdminsByWorkspaceId(Long workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(
+                () -> new NotFoundException("Workspace with ID: "
+                        + workspaceId + " not found!")
+
+        );
+        List<UserWorkspaceRole> userWorkspaceRoles = new ArrayList<>(userWorkspaceRoleRepository.
+                getAllParticipantsByWorkspaceId(workspace.getId()));
+
+        return participantResponseConverter.viewAllAdmins(userWorkspaceRoles);
+    }
+
+    @Override
+    public List<ParticipantResponse> getAllMembersByWorkspaceId(Long workspaceId) {
+        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(
+                () -> new NotFoundException("Workspace with ID: "
+                        + workspaceId + " not found!")
+
+        );
+        List<UserWorkspaceRole> userWorkspaceRoles = new ArrayList<>(userWorkspaceRoleRepository.
+                getAllParticipantsByWorkspaceId(workspace.getId()));
+
+        return participantResponseConverter.viewAllMembers(userWorkspaceRoles);
     }
 }

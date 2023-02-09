@@ -34,4 +34,8 @@ public class UserWorkspaceRole {
         this.workspace = workspace;
         this.role = role;
     }
+
+    public UserWorkspaceRole(User user, Workspace workspace, String role) {
+
+    }
 }
