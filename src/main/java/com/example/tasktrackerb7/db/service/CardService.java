@@ -24,7 +24,7 @@ public interface CardService {
 
     BoardInnerPageResponse getAll(Long id);
 
-    CardInnerPageResponse archive(Long id);
+    SimpleResponse archive(Long id);
 
     List<CardResponse> getAllArchivedCards(Long id);
 }

@@ -56,7 +56,7 @@ public class CardApi {
 
     @Operation(summary = "Archive", description = "Archive card by id")
     @PatchMapping("/{id}")
-    public CardInnerPageResponse archive(@PathVariable Long id) {
+    public SimpleResponse archive(@PathVariable Long id) {
         return cardService.archive(id);
     }
 

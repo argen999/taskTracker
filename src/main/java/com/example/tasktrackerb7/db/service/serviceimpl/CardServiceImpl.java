@@ -137,7 +137,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardInnerPageResponse archive(Long id) {
+    public SimpleResponse archive(Long id) {
         User user = getAuthenticateUser();
         Card card = cardRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Card with id: " + id + " not found"));
@@ -151,7 +151,7 @@ public class CardServiceImpl implements CardService {
         } else {
             throw new BadCredentialsException("You are not member in this workspace");
         }
-        return converter.convertToCardInnerPageResponse(card);
+        return new SimpleResponse("Card : " + card.getTitle() + " archive");
     }
 
     @Override
