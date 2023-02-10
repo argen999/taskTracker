@@ -41,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse saveComment(Long id,CommentRequest commentRequest) {
+    public CommentResponse saveComment(Long id, CommentRequest commentRequest) {
         User user = getAuthenticateUser();
         Card card = cardRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("card not found")
@@ -51,25 +51,24 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = new Comment();
         Notification notification = new Notification();
         for (User u : card.getUsers()) {
-            if(u != null) {
-                notification.setCard(card);
-                notification.setDateOfWrite(LocalDateTime.now());
-                notification.setText(commentRequest.getText());
-                notification.setFromUser(user);
-                notification.setUser(u);
-                u.getNotifications().add(notification);
-                notification.setStatus(false);
-                notification.setBoard(board);
-                notification.setColumn(column);
-                comment.setCard(card);
-                comment.setUser(user);
-                comment.setText(commentRequest.getText());
-                comment.setLocalDateTime(LocalDateTime.now());
-                card.addComment(comment);
-                notificationRepository.save(notification);
-                commentRepository.save(comment);
-            }
+            u.addComment(comment);
+            notification.addUser(u);
+            u.addNotification(notification);
+            notification.setStatus(false);
+            notification.setBoard(board);
+            notification.setColumn(column);
+            notification.setCard(card);
+            notification.setDateOfWrite(LocalDateTime.now());
+            notification.setText(commentRequest.getText());
+            notification.setFromUser(user);
+            comment.setText(commentRequest.getText());
+            comment.setLocalDateTime(LocalDateTime.now());
+            comment.setCard(card);
+            card.addComment(comment);
+            comment.setUser(user);
         }
+        notificationRepository.save(notification);
+        commentRepository.save(comment);
         return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getLocalDateTime(), comment.getUser().getPhotoLink());
     }
 

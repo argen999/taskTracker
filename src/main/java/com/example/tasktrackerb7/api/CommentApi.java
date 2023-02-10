@@ -23,8 +23,8 @@ public class CommentApi {
 
     @Operation(summary = "Create", description = "Create comment by cardId")
     @PostMapping("/{id}")
-    CommentResponse create(@PathVariable Long id,@RequestBody @Valid CommentRequest commentRequest) {
-        return commentService.saveComment(id,commentRequest);
+    CommentResponse create(@PathVariable Long id, @RequestBody @Valid CommentRequest commentRequest) {
+        return commentService.saveComment(id, commentRequest);
     }
 
     @Operation(summary = "Update", description = "Update comment")
