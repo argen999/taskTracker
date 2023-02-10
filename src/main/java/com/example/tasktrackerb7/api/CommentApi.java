@@ -7,7 +7,6 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,8 +23,8 @@ public class CommentApi {
 
     @Operation(summary = "Create", description = "Create comment by cardId")
     @PostMapping("/{id}")
-    CommentResponse create(@PathVariable Long id, @RequestBody @Valid CommentRequest commentRequest) {
-        return commentService.saveComment(id, commentRequest);
+    CommentResponse create(@PathVariable Long id,@RequestBody @Valid CommentRequest commentRequest) {
+        return commentService.saveComment(id,commentRequest);
     }
 
     @Operation(summary = "Update", description = "Update comment")
@@ -40,7 +39,7 @@ public class CommentApi {
         return commentService.deleteComment(id);
     }
 
-    @Operation(summary = "get all", description = "get all comment")
+    @Operation(summary = "Get all", description = "Get all comment")
     @PostMapping("/getAll/{id}")
     List<CommentResponse> getAll(@PathVariable Long id) {
         return commentService.getAllComments(id);

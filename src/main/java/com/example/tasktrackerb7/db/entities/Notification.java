@@ -1,12 +1,10 @@
 package com.example.tasktrackerb7.db.entities;
 
-import javax.persistence.*;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static javax.persistence.CascadeType.*;

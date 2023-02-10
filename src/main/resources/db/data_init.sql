@@ -58,7 +58,7 @@ values (1, '2023-01-15', '2023-01-02', 1),
        (4, '2023-02-26', '2023-02-13', 4),
        (5, '2023-03-12', '2023-02-27', 5);
 
-insert into comments(id, date_of_start, text, cards_id, user_id)
+insert into comments(id, local_date_time, text, card_id, user_id)
 values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1),
        (2, '2023-01-10', 'I will do it only in a week,after the vocation', 2, 2),
        (3, '2023-01-13', 'I will do it only in a week,after the vocation', 3, 3),
@@ -107,12 +107,6 @@ values (1, 1, 1, null,false),
        (5, 5, 5, null,false);
 
 
-insert into cards_labels(card_id, labels_id)
-values (1, 1),
-       (2, 2),
-       (3, 3),
-       (4, 4),
-       (5, 5);
 
 insert into cards_users(cards_id, users_id)
 values (1, 1),

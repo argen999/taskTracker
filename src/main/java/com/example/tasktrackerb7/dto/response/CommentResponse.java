@@ -1,9 +1,6 @@
 package com.example.tasktrackerb7.dto.response;
 
 import lombok.Getter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -13,21 +10,18 @@ import java.time.LocalDateTime;
 public class CommentResponse {
 
     private Long id;
-
     private String text;
-
+    private String name;
+    private String surname;
+    private String photoLink;
     private LocalDateTime localDateTime;
 
-    private String userName;
-
-
-    private String photoLinkUser;
-
-    public CommentResponse(Long id, String text, String firstNameUser,String photoLinkUser, LocalDateTime localDateTime) {
+    public CommentResponse(Long id, String text, String name, String surname, LocalDateTime localDateTime, String photoLink) {
         this.id = id;
         this.text = text;
-        this.userName = firstNameUser;
-        this.photoLinkUser = photoLinkUser;
+        this.name = name;
+        this.surname = surname;
         this.localDateTime = localDateTime;
+        this.photoLink = photoLink;
     }
 }
