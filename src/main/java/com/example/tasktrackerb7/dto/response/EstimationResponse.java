@@ -18,4 +18,6 @@ public class EstimationResponse {
 
     private LocalDateTime dateOfFinish;
 
+    private String reminder;
+
 }

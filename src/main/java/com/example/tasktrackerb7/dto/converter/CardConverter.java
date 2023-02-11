@@ -94,7 +94,7 @@ public class CardConverter {
     private EstimationResponse getEstimationByCardId(Long id) {
         Card card = cardRepository.findById(id).orElseThrow(() -> new NotFoundException("Card with id: " + " not found"));
         Estimation estimation = estimationRepository.findById(card.getEstimation().getId()).orElseThrow(() -> new NotFoundException("estimation with id: " + card.getEstimation().getId() + " not found"));
-        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish());
+        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish(), estimation.getReminder());
     }
 
     public List<CardResponse> convertToResponseForGetAll(List<Card> cards) {

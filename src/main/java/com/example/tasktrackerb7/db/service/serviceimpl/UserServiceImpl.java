@@ -13,10 +13,12 @@ import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
+import com.example.tasktrackerb7.dto.response.AuthWithGoogleResponse;
 import com.example.tasktrackerb7.dto.response.ProfileResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
+import com.example.tasktrackerb7.exceptions.ExceptionResponse;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -26,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -124,37 +127,74 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException {
-        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenFront);
-
-        Role role = roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("Not found!"));
-
-        if (!userRepository.existsByEmail(tokenFront)) {
-
-            String[] fullName = tokenFront.split(" ");
-
-            User newUser = new User();
-            newUser.setName(fullName[0]);
-            newUser.setSurname(fullName[1]);
-            newUser.setEmail(firebaseToken.getEmail());
-            newUser.setPassword(firebaseToken.getEmail());
-            newUser.addRole(role);
-
-            userRepository.save(newUser);
+    public AuthWithGoogleResponse registerAndAuthWithGoogle(String tokenId) throws ExceptionResponse {
+        FirebaseToken firebaseToken;
+        try {
+            firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
+        } catch (FirebaseAuthException firebaseAuthException) {
+            throw new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, firebaseAuthException.getClass().getSimpleName(), firebaseAuthException.getMessage());
         }
 
-        User user = userRepository.findByEmail(firebaseToken.getEmail())
-                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!", firebaseToken.getEmail())));
+        User user;
+        Role role = roleRepository.findById(2L).get();
+        if (userRepository.findByEmail(firebaseToken.getEmail()).isEmpty()) {
+            user = new User();
 
+            role.addUser(user);
+            user.addRole(role);
+            user.setPassword(passwordEncoder.encode(firebaseToken.getEmail()));
+            user.setName(firebaseToken.getName());
+            user.setEmail(firebaseToken.getEmail());
+
+            roleRepository.save(role);
+        }
+
+        user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> new NotFoundException(String.format("User %s not found!", firebaseToken.getEmail())));
         String token = jwtTokenUtil.generateToken(user.getEmail());
-        return new AuthResponse(
+        return new AuthWithGoogleResponse(
                 user.getId(),
-                user.getName(),
-                user.getSurname(),
-                user.getUsername(),
+                user.getEmail(),
                 role.getName(),
                 token);
     }
+
+//    @Override
+//    public AuthResponse registerAndAuthWithGoogle(String tokenFront) throws ExceptionResponse {
+//        FirebaseToken firebaseToken;
+//        try {
+//            firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenFront);
+//        } catch (FirebaseAuthException firebaseAuthException) {
+//            throw new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, firebaseAuthException.getClass().getSimpleName(), firebaseAuthException.getMessage());
+//        }
+//
+//        Role role = roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("Not found!"));
+//
+//        if (!userRepository.existsByEmail(tokenFront)) {
+//
+//            String[] fullName = tokenFront.split(" ");
+//
+//            User newUser = new User();
+//            newUser.setName(fullName[0]);
+//            newUser.setSurname(fullName[1]);
+//            newUser.setEmail(firebaseToken.getEmail());
+//            newUser.setPassword(passwordEncoder.encode(firebaseToken.getEmail()));
+//            newUser.addRole(role);
+//
+//            roleRepository.save(role);
+//        }
+//
+//        User user = userRepository.findByEmail(firebaseToken.getEmail())
+//                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!", firebaseToken.getEmail())));
+//
+//        String token = jwtTokenUtil.generateToken(user.getEmail());
+//        return new AuthResponse(
+//                user.getId(),
+//                user.getName(),
+//                user.getSurname(),
+//                user.getUsername(),
+//                role.getName(),
+//                token);
+//    }
 
     @Override
     public ProfileResponse updatingUserData(ProfileRequest profileRequest) {

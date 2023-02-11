@@ -35,8 +35,8 @@ public class Notification {
 
     @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, targetEntity = User.class)
     @JoinTable(name = "users_notifications",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "notification_id"))
+            joinColumns = @JoinColumn(name = "notification_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})

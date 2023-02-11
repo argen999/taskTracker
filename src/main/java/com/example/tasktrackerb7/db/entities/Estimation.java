@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.db.entities;
 
-import com.example.tasktrackerb7.db.enums.Reminder;
 import com.example.tasktrackerb7.dto.request.EstimationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +23,7 @@ public class Estimation {
     @GeneratedValue(generator = "estimation_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Reminder reminder;
+    private String reminder;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime dateOfStart;
@@ -36,6 +34,7 @@ public class Estimation {
     public Estimation(EstimationRequest estimationRequest){
         this.dateOfStart = estimationRequest.getDateOfStart();
         this.dateOfFinish = estimationRequest.getDateOfFinish();
+        this.reminder = estimationRequest.getReminderRequest();
     }
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
