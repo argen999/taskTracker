@@ -46,8 +46,8 @@ public class CommentServiceImpl implements CommentService {
         Card card = cardRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("card not found")
         );
-        Board board = boardRepository.findById(id).orElseThrow(() -> new NotFoundException("board not found!"));
-        Column column = columnRepository.findById(id).orElseThrow(() -> new NotFoundException("column bot found!"));
+        Board board = boardRepository.findById(card.getColumn().getBoard().getId()).orElseThrow(() -> new NotFoundException("board not found!"));
+        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() -> new NotFoundException("column bot found!"));
         Comment comment = new Comment();
         Notification notification = new Notification();
         for (User u : card.getUsers()) {
