@@ -52,11 +52,11 @@ values (1, false, '2023-01-28', '', 'Variables', 1),
        (5, false, '2023-01-28', '', 'long', 5);
 
 insert into estimations(id, date_of_finish, date_of_start, card_id, creator_id, reminder)
-values (1, '2023-01-15', '2023-01-02', 1, 1, 'NONE'),
-       (2, '2023-01-29', '2023-01-16', 2, 2, 'R5_MIN_BEFORE'),
-       (3, '2023-02-12', '2023-01-30', 3, 3, 'R15_MIN_BEFORE'),
-       (4, '2023-02-26', '2023-02-13', 4, 4, 'R30_MIN_BEFORE'),
-       (5, '2023-03-12', '2023-02-27', 5, 5, 'R1_HOUR_BEFORE');
+values (1, '2023-01-15', '2023-01-17', 1, 1, 'None'),
+       (2, '2023-01-08', '2023-01-16', 2, 2, '5 min. before'),
+       (3, '2023-02-06', '2023-01-30', 3, 3, '15 min. before'),
+       (4, '2023-02-09', '2023-02-13', 4, 4, '30 min. before'),
+       (5, '2023-03-11', '2023-02-27', 5, 5, '1 hour before');
 
 insert into comments(id, date_of_start, text, card_id, user_id)
 values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1),

@@ -8,4 +8,8 @@ public interface EstimationService {
 
     EstimationResponse createEstimation(Long id, EstimationRequest estimationRequest);
 
+    EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest);
+
+    EstimationResponse deleteEstimation(Long id);
+
 }

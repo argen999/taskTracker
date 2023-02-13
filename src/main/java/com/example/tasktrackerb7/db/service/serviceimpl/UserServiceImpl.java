@@ -158,44 +158,6 @@ public class UserServiceImpl implements UserService {
                 token);
     }
 
-//    @Override
-//    public AuthResponse registerAndAuthWithGoogle(String tokenFront) throws ExceptionResponse {
-//        FirebaseToken firebaseToken;
-//        try {
-//            firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenFront);
-//        } catch (FirebaseAuthException firebaseAuthException) {
-//            throw new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, firebaseAuthException.getClass().getSimpleName(), firebaseAuthException.getMessage());
-//        }
-//
-//        Role role = roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("Not found!"));
-//
-//        if (!userRepository.existsByEmail(tokenFront)) {
-//
-//            String[] fullName = tokenFront.split(" ");
-//
-//            User newUser = new User();
-//            newUser.setName(fullName[0]);
-//            newUser.setSurname(fullName[1]);
-//            newUser.setEmail(firebaseToken.getEmail());
-//            newUser.setPassword(passwordEncoder.encode(firebaseToken.getEmail()));
-//            newUser.addRole(role);
-//
-//            roleRepository.save(role);
-//        }
-//
-//        User user = userRepository.findByEmail(firebaseToken.getEmail())
-//                .orElseThrow(() -> new NotFoundException(String.format("User with %s not found!", firebaseToken.getEmail())));
-//
-//        String token = jwtTokenUtil.generateToken(user.getEmail());
-//        return new AuthResponse(
-//                user.getId(),
-//                user.getName(),
-//                user.getSurname(),
-//                user.getUsername(),
-//                role.getName(),
-//                token);
-//    }
-
     @Override
     public ProfileResponse updatingUserData(ProfileRequest profileRequest) {
         User user = getAuthenticateUser();

@@ -37,16 +37,17 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public EstimationResponse createEstimation(Long id, EstimationRequest estimationRequest) {
-        User fromUser = getAuthenticateUser();
+        User user = getAuthenticateUser();
 
         Card card = cardRepository.findById(id).orElseThrow(() -> new NotFoundException("Card not found!"));
 
-        User user = userRepository.findById(estimationRequest.getUserId()).orElseThrow(() -> new NotFoundException("User not found"));
+        Estimation estimation;
 
-        Estimation estimation = new Estimation(estimationRequest);
+        if (estimationRequest.getDateOfStart().isBefore(estimationRequest.getDateOfFinish())) {
+            estimation = new Estimation(estimationRequest);
+        } else throw new BadRequestException("The start date must not be before date finish!");
 
-        if (card.getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(fromUser.getId(), card.getColumn().getBoard().getWorkspace().getId()))
-                && card.getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), card.getColumn().getBoard().getWorkspace().getId()))) {
+        if (card.getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), card.getColumn().getBoard().getWorkspace().getId()))) {
 
             if (card.getEstimation() == null) {
 
@@ -57,6 +58,45 @@ public class EstimationServiceImpl implements EstimationService {
                 cardRepository.save(card);
 
             } else throw new BadRequestException("This card already has estimation!");
+
+        } else throw new BadRequestException("You are not a member of this workspace");
+
+        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish(), estimation.getReminder());
+    }
+
+    @Override
+    public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
+        User user = getAuthenticateUser();
+
+        Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> new NotFoundException("Estimation not found!"));
+
+        if (estimation.getCard().getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), estimation.getCard().getColumn().getBoard().getWorkspace().getId()))) {
+
+            if (estimationRequest.getDateOfStart().isBefore(estimationRequest.getDateOfFinish())) {
+
+                estimation.setReminder(estimationRequest.getReminderRequest());
+                estimation.setDateOfStart(estimationRequest.getDateOfStart());
+                estimation.setDateOfFinish(estimationRequest.getDateOfFinish());
+                estimationRepository.save(estimation);
+
+            } else throw new BadRequestException("The start date must not be before date finish!");
+
+        } else throw new BadRequestException("You are not a member of this workspace");
+
+        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish(), estimation.getReminder());
+    }
+
+    @Override
+    public EstimationResponse deleteEstimation(Long id) {
+        User user = getAuthenticateUser();
+
+        Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> new NotFoundException("Estimation not found!"));
+
+        Card card = cardRepository.findById(estimation.getCard().getId()).orElseThrow(() -> new NotFoundException("Card not found!"));
+
+        if (estimation.getCard().getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), estimation.getCard().getColumn().getBoard().getWorkspace().getId()))) {
+
+            estimationRepository.delete(estimation);
 
         } else throw new BadRequestException("You are not a member of this workspace");
 

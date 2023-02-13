@@ -52,9 +52,6 @@ public class Card {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "card")
     private List<Label> labels;
 
-    @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
-    private Notification notification;
-
     public Card(String title) {
         this.title = title;
     }
@@ -73,10 +70,9 @@ public class Card {
         users.add(user);
     }
 
-    public void addComment(Comment comment) {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-        comments.add(comment);
+    public void remove(User user){
+        this.users.remove(user);
+        user.getCards().remove(this);
     }
+
 }

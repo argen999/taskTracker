@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -45,6 +46,12 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Column column;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.LAZY)
     private Card card;
+
+    public void addUser(User user) {
+        if (users == null) users = new ArrayList<>();
+        users.add(user);
+    }
+
 }

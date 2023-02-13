@@ -128,10 +128,13 @@ public class User implements UserDetails {
         cards.add(card);
     }
 
-
-
     public void addFavourite(Favourite favourite) {
         if (favourite == null) favourites = new ArrayList<>();
         favourites.add(favourite);
+    }
+
+    public void remove(Card card){
+        this.cards.remove(card);
+        card.getUsers().remove(this);
     }
 }

@@ -1,10 +1,9 @@
 package com.example.tasktrackerb7.configs.schedule;
 
-import com.example.tasktrackerb7.db.entities.Estimation;
-import com.example.tasktrackerb7.db.entities.Notification;
-import com.example.tasktrackerb7.db.entities.User;
-import com.example.tasktrackerb7.db.repository.EstimationRepository;
-import com.example.tasktrackerb7.db.repository.NotificationRepository;
+import com.example.tasktrackerb7.db.entities.*;
+import com.example.tasktrackerb7.db.enums.Reminder;
+import com.example.tasktrackerb7.db.repository.*;
+import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -32,6 +31,14 @@ public class ScheduleConfiguration {
 
     private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
+    private final CardRepository cardRepository;
+
+    private final UserRepository userRepository;
+
+    private final BoardRepository boardRepository;
+
+    private final ColumnRepository columnRepository;
+
     private LocalDate parse(String value) {
         try {
             return DATE_FORMATTER.parse(value, LocalDate::from);
@@ -51,77 +58,82 @@ public class ScheduleConfiguration {
     @Transactional
     @Scheduled(cron = "0 0/1 * * * *")
     public void estimationWithReminder() {
-
         List<Estimation> estimations = estimationRepository.findAll();
-        System.out.println("0000000");
         if (!estimations.isEmpty()) {
             label:
             for (Estimation e : estimations) {
-                System.out.println("start");
-                if (e.getReminder() == null) {
-                    continue;
-                }
-                System.out.println("11111");
-                if (!e.getReminder().equals("none")) {
-                    System.out.println("222222");
+
+                if (!e.getReminder().equals("None")) {
+
                     LocalDateTime nowForParse = LocalDateTime.now(ZoneId.of("Asia/Almaty"));
                     LocalDate today = LocalDate.now(ZoneId.of("Asia/Almaty"));
                     LocalTime timeNow = nowForParse.toLocalTime();
                     String[] parseTime = timeNow.toString().split(":");
                     String parsed = today + " " + parseTime[0] + ":" + parseTime[1];
                     LocalDateTime now = parseToLocalDateTime(parsed);
-                    System.out.println("333333");
+
                     assert now != null;
 
                     if (e.getDateOfStart().isBefore(e.getDateOfFinish())) {
-                        System.out.println("444444");
+
                         Notification notification = new Notification();
 
-                        notification.setFromUser(e.getCreator());
-                        notification.setUsers(e.getCard().getUsers());
-                        notification.setBoard(e.getCard().getColumn().getBoard());
-                        notification.setColumn(e.getCard().getColumn());
-                        notification.setCard(e.getCard());
-                        notification.setDateOfWrite(LocalDate.now());
-                        notification.setDateOfWrite(LocalDate.now(ZoneId.of("Asia/Almaty")));
-                        for (User user : e.getCard().getUsers()) {
+                        User creator = userRepository.findById(e.getCreator().getId())
+                                .orElseThrow(() -> new NotFoundException("Creator not found!"));
+                        notification.setFromUser(creator);
+
+                        Board board = boardRepository.findById(e.getCard().getColumn().getBoard().getId())
+                                .orElseThrow(() -> new NotFoundException("Board not found!"));
+                        notification.setBoard(board);
+
+                        Column column = columnRepository.findById(e.getCard().getColumn().getId())
+                                .orElseThrow(() -> new NotFoundException("Column not found!"));
+                        notification.setColumn(column);
+
+                        Card card = cardRepository.findById(e.getCard().getId())
+                                .orElseThrow(() -> new NotFoundException("Card not found!"));
+                        notification.setCard(card);
+
+                        for (User user : card.getUsers()) {
+                            if (user.equals(creator)) {
+                                continue;
+                            }
                             user.addNotification(notification);
-                            System.out.println("555555");
+                            notification.addUser(user);
                         }
-                        System.out.println("666666");
+
                         e.getCreator().addNotification(notification);
-                        e.getCard().setNotification(notification);
-                        System.out.println("7777777");
+                        notification.setDateOfWrite(LocalDate.now(ZoneId.of("Asia/Almaty")));
+
                         switch (e.getReminder()) {
-                            case "5 min before" -> {
+                            case "5 min. before" -> {
                                 if (e.getDateOfFinish().minusMinutes(5).isEqual(now)) {
                                     notification.setText(": timeout expires in 5 minutes!");
                                     notificationRepository.save(notification);
-                                    System.out.println("888888");
                                     break label;
                                 }
                             }
-                            case "15 min before" -> {
-                                if (e.getDateOfFinish().minusMinutes(15).isEqual(e.getDateOfFinish())) {
-                                    notification.setText(": timeout expires in 30 minutes!");
-                                    notificationRepository.save(notification);
-                                    System.out.println("9999999");
-                                    break label;
-                                }
-                            }
-                            case "30 min before" -> {
-                                if (e.getDateOfFinish().minusMinutes(30).isEqual(e.getDateOfFinish())) {
+
+                            case "15 min. before" -> {
+                                if (e.getDateOfFinish().minusMinutes(15).isEqual(now)) {
                                     notification.setText(": timeout expires in 15 minutes!");
                                     notificationRepository.save(notification);
-                                    System.out.println("1010101");
                                     break label;
                                 }
                             }
+
+                            case "30 min. before" -> {
+                                if (e.getDateOfFinish().minusMinutes(30).isEqual(now)) {
+                                    notification.setText(": timeout expires in 30 minutes!");
+                                    notificationRepository.save(notification);
+                                    break label;
+                                }
+                            }
+
                             case "1 hour before" -> {
-                                if (e.getDateOfFinish().minusHours(1).isEqual(e.getDateOfFinish())) {
+                                if (e.getDateOfFinish().minusHours(1).isEqual(now)) {
                                     notification.setText(": timeout expires in 1 hour!");
                                     notificationRepository.save(notification);
-                                    System.out.println("12121212");
                                     break label;
                                 }
                             }

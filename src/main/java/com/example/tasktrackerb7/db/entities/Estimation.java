@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
+import com.example.tasktrackerb7.db.enums.Reminder;
 import com.example.tasktrackerb7.dto.request.EstimationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
