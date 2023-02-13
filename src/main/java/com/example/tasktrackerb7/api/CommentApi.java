@@ -21,27 +21,27 @@ public class CommentApi {
 
     private final CommentServiceImpl commentService;
 
-    @Operation(summary = "Create", description = "Create comment by cardId")
+    @Operation(summary = "Create", description = "Create new comment to card")
     @PostMapping()
-    CommentResponse create(@RequestBody @Valid CommentRequest commentRequest) {
+    public CommentResponse create(@RequestBody @Valid CommentRequest commentRequest) {
         return commentService.saveComment(commentRequest);
     }
 
     @Operation(summary = "Update", description = "Update comment")
-    @PutMapping("/comment/{id}")
-    CommentResponse edit(@RequestBody @Valid CommentRequest commentRequest) {
+    @PutMapping("/{id}")
+    public CommentResponse edit(@RequestBody @Valid CommentRequest commentRequest) {
         return commentService.editComment(commentRequest);
     }
 
     @Operation(summary = "Delete", description = "Delete comment")
-    @DeleteMapping("/delete/{id}")
-    SimpleResponse delete(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public SimpleResponse delete(@PathVariable Long id) {
         return commentService.deleteComment(id);
     }
 
     @Operation(summary = "Get all", description = "Get all comment")
-    @GetMapping("/getAll/{id}")
-    List<CommentResponse> getAll(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public List<CommentResponse> getAll(@PathVariable Long id) {
         return commentService.getAllComments(id);
     }
 }
