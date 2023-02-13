@@ -41,9 +41,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse saveComment(Long id, CommentRequest commentRequest) {
+    public CommentResponse saveComment(CommentRequest commentRequest) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(id).orElseThrow(
+        Card card = cardRepository.findById(commentRequest.getId()).orElseThrow(
                 () -> new NotFoundException("card not found")
         );
         Board board = boardRepository.findById(card.getColumn().getBoard().getId()).orElseThrow(() -> new NotFoundException("board not found!"));
@@ -73,9 +73,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse editComment(Long id, CommentRequest commentRequest) {
+    public CommentResponse editComment(CommentRequest commentRequest) {
         User user = getAuthenticateUser();
-        Comment comment = commentRepository.findById(id).orElseThrow(
+        Comment comment = commentRepository.findById(commentRequest.getId()).orElseThrow(
                 () -> new NotFoundException("comment not found!!")
 
         );

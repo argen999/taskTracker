@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public interface CommentService {
 
-    CommentResponse saveComment(Long id,CommentRequest commentRequest);
+    CommentResponse saveComment(CommentRequest commentRequest);
 
-    CommentResponse editComment(Long id, CommentRequest commentRequest);
+    CommentResponse editComment(CommentRequest commentRequest);
 
     SimpleResponse deleteComment(Long id);
 

@@ -10,7 +10,9 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class CommentRequest {
 
-   @NotNull(message = "Comment cannot be empty!")
-   @NotBlank(message = "Name cannot be empty!")
-   private String text;
+    private Long id;
+
+    @NotNull(message = "Comment cannot be empty!")
+    @NotBlank(message = "Name cannot be empty!")
+    private String text;
 }
