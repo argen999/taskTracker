@@ -13,6 +13,7 @@ import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
+import com.example.tasktrackerb7.dto.response.MemberResponse;
 import com.example.tasktrackerb7.dto.response.ProfileResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
@@ -219,5 +220,12 @@ public class UserServiceImpl implements UserService {
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String
                         .format("!%s not found!", username)));
+    }
+
+    @Override
+    public List<MemberResponse> search(Long id, String email_name) {
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Workspace with id: " + id + " nont found"));
+        return userRepository.searchByEmailOrName(email_name, workspace.getId());
     }
 }
