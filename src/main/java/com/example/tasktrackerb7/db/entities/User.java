@@ -137,4 +137,9 @@ public class User implements UserDetails {
         this.cards.remove(card);
         card.getUsers().remove(this);
     }
+
+    public void remove(Notification notification){
+        this.notifications.remove(notification);
+        notification.getUsers().remove(this);
+    }
 }

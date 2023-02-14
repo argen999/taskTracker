@@ -2,14 +2,13 @@ package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.Card;
 import com.example.tasktrackerb7.db.entities.Estimation;
+import com.example.tasktrackerb7.db.entities.Notification;
 import com.example.tasktrackerb7.db.entities.User;
-import com.example.tasktrackerb7.db.repository.CardRepository;
-import com.example.tasktrackerb7.db.repository.EstimationRepository;
-import com.example.tasktrackerb7.db.repository.UserRepository;
-import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
+import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.EstimationService;
 import com.example.tasktrackerb7.dto.request.EstimationRequest;
 import com.example.tasktrackerb7.dto.response.EstimationResponse;
+import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -87,21 +86,17 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
-    public EstimationResponse deleteEstimation(Long id) {
+    public SimpleResponse deleteEstimation(Long id) {
         User user = getAuthenticateUser();
-
         Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> new NotFoundException("Estimation not found!"));
-
-        Card card = cardRepository.findById(estimation.getCard().getId()).orElseThrow(() -> new NotFoundException("Card not found!"));
-
         if (estimation.getCard().getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), estimation.getCard().getColumn().getBoard().getWorkspace().getId()))) {
 
+            System.out.println("Delete");
             estimationRepository.delete(estimation);
+            System.out.println("DDelete");
+            return new SimpleResponse("Deleted successfully!");
 
         } else throw new BadRequestException("You are not a member of this workspace");
-
-        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish(), estimation.getReminder());
     }
-
 
 }

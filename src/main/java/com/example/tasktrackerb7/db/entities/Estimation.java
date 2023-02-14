@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.db.entities;
 
-import com.example.tasktrackerb7.db.enums.Reminder;
 import com.example.tasktrackerb7.dto.request.EstimationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,16 +31,16 @@ public class Estimation {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime dateOfFinish;
 
-    public Estimation(EstimationRequest estimationRequest){
+    public Estimation(EstimationRequest estimationRequest) {
         this.dateOfStart = estimationRequest.getDateOfStart();
         this.dateOfFinish = estimationRequest.getDateOfFinish();
         this.reminder = estimationRequest.getReminderRequest();
     }
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE})
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH},fetch = FetchType.LAZY)
     private User creator;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH})
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH},fetch = FetchType.LAZY)
     private Card card;
 
 }

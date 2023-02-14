@@ -54,4 +54,9 @@ public class Notification {
         users.add(user);
     }
 
+    public void remove(User user){
+        this.users.remove(user);
+        user.getNotifications().remove(this);
+    }
+
 }
