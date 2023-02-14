@@ -27,6 +27,12 @@ public class MemberAPI {
         return memberService.inviteMemberToWorkspace(invitationRequest);
     }
 
+    @Operation(summary = "Change member role", description = "Change member role")
+    @PutMapping("/{roleId}/{memberId}/{workspaceId}")
+    public void changeMemberRole(@PathVariable Long roleId, @PathVariable Long memberId, @PathVariable Long workspaceId) {
+        memberService.changeMemberRole(roleId, memberId, workspaceId);
+    }
+
     @Operation(summary = "Delete member by ID from workspace", description = "Delete member by ID from workspace")
     @DeleteMapping("/{workspaceId}/{memberId}")
     SimpleResponse deleteMemberByIdFromWorkspace(@PathVariable Long workspaceId, @PathVariable Long memberId) {
@@ -54,9 +60,4 @@ public class MemberAPI {
 
     }
 
-    @Operation(summary = "Change role", description = "Change role")
-    @PutMapping("/{roleId}/{memberId}/{workspaceId}")
-    public void changeMemberRole(@PathVariable Long roleId, @PathVariable Long memberId, @PathVariable Long workspaceId) {
-        memberService.changeMemberRole(roleId, memberId, workspaceId);
-    }
 }

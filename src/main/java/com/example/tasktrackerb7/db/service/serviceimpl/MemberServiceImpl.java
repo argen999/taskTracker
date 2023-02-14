@@ -80,32 +80,29 @@ public class MemberServiceImpl implements MemberService {
 
         userWorkspaceRole.setRole(role);
         userWorkspaceRoleRepository.save(userWorkspaceRole);
-        new SimpleResponse("Role changed successfully!");
     }
 
     @Override
-    public SimpleResponse deleteMemberByIdFromWorkspace(Long workspaceId, Long memberId) {
+    public SimpleResponse deleteMemberByIdFromWorkspace(Long workspaceID, Long memberID) {
         User user = getAuthenticateUser();
-        Workspace workspace = workspaceRepository.findById(workspaceId).orElseThrow(() ->
-                new NotFoundException("Workspace with id " + workspaceId + " not found!"));
-
-        User member = userRepository.findById(memberId).orElseThrow(() ->
-                new NotFoundException("Member with id " + memberId + " not found!")
-        );
-        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(member.getId(), workspace.getId()))) {
-
+        Workspace workspace = workspaceRepository.findById(workspaceID).
+                orElseThrow(() ->
+                        new NotFoundException("Workspace with ID " + workspaceID + " not found!"));
+        User member = userRepository.findById(memberID).
+                orElseThrow(() ->
+                        new NotFoundException("Member with ID " + memberID + " not found!"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 UserWorkspaceRole userWorkspaceRole = userWorkspaceRoleRepository.
-                        findByUserIdAndWorkspaceId(memberId, workspaceId);
+                        findByUserIdAndWorkspaceId(memberID, workspaceID);
                 userWorkspaceRoleRepository.delete(userWorkspaceRole);
             } else {
-                throw new BadCredentialsException("You can't delete "
-                        + member.getName() + " " + member.getSurname() + " because you are not role ADMIN!");
+                throw new BadCredentialsException("You can't delete " + member.getName() + " " + member.getSurname() + " because you are not role ADMIN!");
             }
         } else {
-            throw new BadCredentialsException("Member with ID " + memberId + " not exist in workspace " + workspace.getName());
+            throw new BadCredentialsException("Member not exist!");
         }
-        return new SimpleResponse(member.getName() + " " + member.getSurname() + " deleted successfully!");
+        return new SimpleResponse(member.getName() + " " + member.getSurname() + " deleted successfully from workspace " + workspace.getName());
     }
 
     @Override
