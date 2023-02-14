@@ -67,10 +67,10 @@ public class FavouriteServiceImpl implements FavouriteService {
                 user.addFavourite(newFavourite);
                 favouriteRepository.save(newFavourite);
             }
+            return new SimpleResponse("make favourite board successfully!!");
         } else {
             throw new NotFoundException("user not found this board");
         }
-        return new SimpleResponse("make favourite  board  successfully!!");
     }
 
     @Override

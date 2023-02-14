@@ -55,7 +55,7 @@ public class BoardServiceImpl implements BoardService {
             boolean isFavourite = false;
             if (board.getFavourites() != null) {
                 for (Favourite favorite : user.getFavourites()) {
-                    if (user.getFavourites().contains(favorite)) {
+                    if (board.getFavourites().contains(favorite)) {
                         isFavourite = true;
                         break;
                     }
@@ -90,7 +90,7 @@ public class BoardServiceImpl implements BoardService {
                 boolean isFavourite = false;
                 if (board.getFavourites() != null) {
                     for (Favourite favorite : user.getFavourites()) {
-                        if (user.getFavourites().contains(favorite)) {
+                        if (board.getFavourites().contains(favorite)) {
                             isFavourite = true;
                             break;
                         }
@@ -144,7 +144,7 @@ public class BoardServiceImpl implements BoardService {
                 boolean isFavourite = false;
                 if (board.getFavourites() != null) {
                     for (Favourite favorite : user.getFavourites()) {
-                        if (user.getFavourites().contains(favorite)) {
+                        if (board.getFavourites().contains(favorite)) {
                             isFavourite = true;
                             break;
                         }
@@ -167,7 +167,7 @@ public class BoardServiceImpl implements BoardService {
         boolean isFavourite = false;
         if (board.getFavourites() != null) {
             for (Favourite favorite : user.getFavourites()) {
-                if (user.getFavourites().contains(favorite)) {
+                if (board.getFavourites().contains(favorite)) {
                     isFavourite = true;
                     break;
                 }
