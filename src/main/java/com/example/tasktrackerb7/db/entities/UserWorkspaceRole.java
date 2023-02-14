@@ -29,12 +29,6 @@ public class UserWorkspaceRole {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Role role;
 
-    public UserWorkspaceRole(User user, Workspace workspace, Role role) {
-        this.user = user;
-        this.workspace = workspace;
-        this.role = role;
-    }
-
     public UserWorkspaceRole(User user, Workspace workspace, String role) {
 
     }

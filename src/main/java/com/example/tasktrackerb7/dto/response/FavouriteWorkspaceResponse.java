@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
