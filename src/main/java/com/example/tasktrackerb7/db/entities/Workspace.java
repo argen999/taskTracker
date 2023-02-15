@@ -52,11 +52,5 @@ public class Workspace {
         }
         members.add(userWorkspaceRole);
     }
-    public void addFavourite(Favourite favourite) {
-        if(favourite == null) {
-            favourites = new ArrayList<>();
-        }
-        favourites.add(favourite);
-    }
 }
 

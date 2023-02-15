@@ -29,9 +29,4 @@ public class Item {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Checklist checklist;
 
-    public Item(String text, boolean done) {
-        this.text = text;
-        this.isDone = done;
-    }
-
 }
