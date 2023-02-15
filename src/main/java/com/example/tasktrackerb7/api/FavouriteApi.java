@@ -1,7 +1,6 @@
 package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.FavouriteService;
-import com.example.tasktrackerb7.db.service.serviceimpl.FavouriteServiceImpl;
 import com.example.tasktrackerb7.dto.response.FavouriteResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
