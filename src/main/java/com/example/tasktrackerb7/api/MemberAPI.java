@@ -35,7 +35,7 @@ public class MemberAPI {
 
     @Operation(summary = "Delete member by ID from workspace", description = "Delete member by ID from workspace")
     @DeleteMapping("/{workspaceId}/{memberId}")
-    SimpleResponse deleteMemberByIdFromWorkspace(@PathVariable Long workspaceId, @PathVariable Long memberId) {
+    public SimpleResponse deleteMemberByIdFromWorkspace(@PathVariable Long workspaceId, @PathVariable Long memberId) {
         return memberService.deleteMemberByIdFromWorkspace(workspaceId, memberId);
     }
 
