@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
         }
         notificationRepository.save(notification);
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
 
 
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponse> getAllComments(Long id) {
         List<Comment> comments = commentRepository.getAllComments(id);
         List<CommentResponse> commentResponses = comments.stream().map(c -> new
-                CommentResponse(c.getId(), c.getText(), c.getLocalDateTime(),
+                CommentResponse(c.getId(), c.getText(), c.getLocalDateTime(),true,
                 new UserResponse(c.getUser().getId(), c.getUser().getName() + " " +
                         c.getUser().getSurname(), c.getUser().getPhotoLink()), c.getUser())).toList();
         for (CommentResponse c : commentResponses) {

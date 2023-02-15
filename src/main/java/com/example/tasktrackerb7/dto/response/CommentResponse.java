@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Component
 public class CommentResponse {
 
@@ -22,10 +21,11 @@ public class CommentResponse {
     @JsonIgnore
     private User user;
 
-    public CommentResponse(Long id, String text, LocalDateTime localDateTime,  UserResponse userResponse, User user) {
+    public CommentResponse(Long id, String text, LocalDateTime localDateTime, Boolean isMine, UserResponse userResponse, User user) {
         this.id = id;
         this.text = text;
         this.localDateTime = localDateTime;
+        this.isMine = isMine;
         this.userResponse = userResponse;
         this.user = user;
     }
