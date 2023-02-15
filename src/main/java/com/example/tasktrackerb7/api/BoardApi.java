@@ -23,7 +23,7 @@ public class BoardApi {
 
     private final BoardService boardServiceImpl;
 
-    @Operation(summary = "Create", description = "Create board")
+    @Operation(summary = "Create board", description = "Create new board by workspace id")
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public BoardResponse create(@RequestBody BoardRequest boardRequest) {
@@ -33,11 +33,13 @@ public class BoardApi {
     @Operation(summary = "Update name", description = "Update board name")
     @PatchMapping
     @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Update board", description = "Update board(if background = true - update background, if background = false - update name)")
+    @PutMapping
     public BoardResponse update(@RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return boardServiceImpl.update(boardUpdateRequest);
     }
 
-    @Operation(summary = "Delete", description = "Delete board by board id")
+    @Operation(summary = "Delete board", description = "Delete board by id")
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public SimpleResponse delete(@PathVariable Long id) {
@@ -47,11 +49,13 @@ public class BoardApi {
     @Operation(summary = "Get all", description = "Get all boards")
     @GetMapping("/workspace/{id}")
     @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Get all boards", description = "Get all boards by workspace id")
+    @GetMapping("/all/{id}")
     public List<BoardResponse> getAll(@PathVariable Long id) {
         return boardServiceImpl.getAllByWorkspaceId(id);
     }
 
-    @Operation(summary = "Get by id", description = "Get board by id")
+    @Operation(summary = "Get board", description = "Get board by id")
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public BoardResponse getById(@PathVariable Long id) {

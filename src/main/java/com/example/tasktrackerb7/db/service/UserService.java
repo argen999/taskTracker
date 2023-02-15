@@ -4,7 +4,9 @@ import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
 import com.example.tasktrackerb7.dto.response.*;
+
 import com.example.tasktrackerb7.exceptions.ExceptionResponse;
+
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,4 +29,5 @@ public interface UserService {
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
+    List<MemberResponse> search(Long id, String email_name);
 }

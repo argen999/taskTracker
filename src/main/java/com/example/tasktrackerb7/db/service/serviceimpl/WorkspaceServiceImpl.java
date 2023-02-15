@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -94,12 +95,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
         for (Workspace w : user.getWorkspaces()) {
-            if (w.getId() == id) {
+            if (Objects.equals(w.getId(), id)) {
                 workspace = w;
             }
         }
 
-        if (workspace.getId() != id) {
+        if (!Objects.equals(workspace.getId(), id)) {
             throw new BadCredentialsException("you can't do update, because you are not admin in workspace with id: " + id);
         } else {
             return convertToResponse(workspace);
@@ -127,7 +128,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         boolean isFavourite = false;
         if (workspace.getFavourites() != null) {
             for (Favourite favorite : workspace.getFavourites()) {
-                if (user.getFavourites().contains(favorite)) {
+                if (workspace.getFavourites().contains(favorite)) {
                     isFavourite = true;
                     break;
                 }

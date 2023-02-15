@@ -1,7 +1,6 @@
 package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.FavouriteService;
-import com.example.tasktrackerb7.db.service.serviceimpl.FavouriteServiceImpl;
 import com.example.tasktrackerb7.dto.response.FavouriteResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,19 +18,19 @@ public class FavouriteApi {
     private final FavouriteService favouriteService;
 
 
-    @Operation(summary = "Make favourite board", description = "Make favourite board")
+    @Operation(summary = "Make favourite board", description = "Make favourite and not a favourite board by id")
     @PostMapping("/{id}")
     public SimpleResponse makeFavouriteBoard(@PathVariable Long id) {
         return favouriteService.makeFavouriteBoard(id);
     }
 
-    @Operation(summary = "Make favourite workspace", description = "Make favourite workspace")
+    @Operation(summary = "Make favourite workspace", description = "Make favourite and not a favourite workspace by id")
     @PostMapping("/workspace/{id}")
     public SimpleResponse makeFavouriteWorkspace(@PathVariable Long id) {
         return favouriteService.makeFavouriteWorkspace(id);
     }
 
-    @Operation(summary = "Get all", description = "Get all favourite")
+    @Operation(summary = "Get all", description = "Get all favourite workspaces and boards")
     @GetMapping("/getAll")
     FavouriteResponse getAll() {
         return favouriteService.getAllFavourite();

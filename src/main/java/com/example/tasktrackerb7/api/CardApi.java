@@ -5,6 +5,7 @@ import com.example.tasktrackerb7.dto.request.CardRequest;
 import com.example.tasktrackerb7.dto.request.UpdateCardRequest;
 import com.example.tasktrackerb7.dto.response.BoardInnerPageResponse;
 import com.example.tasktrackerb7.dto.response.CardInnerPageResponse;
+import com.example.tasktrackerb7.dto.response.CardResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,19 +24,19 @@ public class CardApi {
 
     private final CardService cardService;
 
-    @Operation(summary = "Create", description = "Create card")
+    @Operation(summary = "Create card", description = "Create new card")
     @PostMapping
     public CardInnerPageResponse create(@RequestBody CardRequest cardRequest) {
         return cardService.create(cardRequest);
     }
 
-    @Operation(summary = "Update", description = "Update card(if isName = true - update title, id isNam = false = update description")
-    @PatchMapping
+    @Operation(summary = "Update card", description = "Update card(if isName = true - update title, if isName = false - update description")
+    @PutMapping
     public CardInnerPageResponse update(@RequestBody @Valid UpdateCardRequest updateCardRequest) {
         return cardService.update(updateCardRequest);
     }
 
-    @Operation(summary = "Get by id", description = "Get card by id")
+    @Operation(summary = "Get card", description = "Get card by id")
     @GetMapping("/{id}")
     public CardInnerPageResponse getById(@PathVariable Long id) {
         return cardService.getById(id);
@@ -52,4 +54,15 @@ public class CardApi {
         return cardService.delete(id);
     }
 
+    @Operation(summary = "Archive", description = "Archiving and unarchiving the card by id")
+    @PutMapping("/{id}")
+    public SimpleResponse archive(@PathVariable Long id) {
+        return cardService.archive(id);
+    }
+
+    @Operation(summary = "Get all archived cards", description = "Get all archived cards by board id")
+    @GetMapping("/archive/{id}")
+    public List<CardResponse> getAllArchiveCards(@PathVariable Long id) {
+        return cardService.getAllArchivedCards(id);
+    }
 }

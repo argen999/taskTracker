@@ -175,5 +175,7 @@ public class BoardServiceImpl implements BoardService {
         }
         return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
     }
-
 }
+
+
+

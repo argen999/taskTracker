@@ -43,15 +43,11 @@ public class Board {
         this.name = boardRequest.getName();
         this.background = boardRequest.getBackground();
     }
+
     public void addFavourite(Favourite favourite) {
         if(favourite == null) {
             favourites = new ArrayList<>();
         }
         favourites.add(favourite);
     }
-
-    public void remove(Board board){
-        workspace.getBoards().remove(board);
-    }
-
 }

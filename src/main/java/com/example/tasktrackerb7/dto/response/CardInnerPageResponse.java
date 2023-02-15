@@ -19,6 +19,8 @@ public class CardInnerPageResponse {
 
     private String description;
 
+    private Boolean isArchive;
+
     private List<LabelResponse> labelResponses;
 
     private EstimationResponse estimationResponse;
