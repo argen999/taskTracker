@@ -33,7 +33,7 @@ public class EstimationApi {
 
     @Operation(summary = "Delete estimation", description = "Delete estimation with id")
     @DeleteMapping("/{id}")
-    public SimpleResponse deleteEstimation(@PathVariable Long id) {
+    SimpleResponse deleteEstimation(@PathVariable Long id) {
         return estimationService.deleteEstimation(id);
     }
 

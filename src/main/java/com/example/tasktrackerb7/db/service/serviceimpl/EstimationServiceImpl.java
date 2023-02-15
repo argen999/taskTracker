@@ -89,12 +89,18 @@ public class EstimationServiceImpl implements EstimationService {
     public SimpleResponse deleteEstimation(Long id) {
         User user = getAuthenticateUser();
         Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> new NotFoundException("Estimation not found!"));
+        Card card = cardRepository.findById(estimation.getCard().getId()).orElseThrow(() -> new NotFoundException("Card not found!"));
         if (estimation.getCard().getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), estimation.getCard().getColumn().getBoard().getWorkspace().getId()))) {
 
-            System.out.println("Delete");
-            estimationRepository.delete(estimation);
-            System.out.println("DDelete");
-            return new SimpleResponse("Deleted successfully!");
+            SimpleResponse simpleResponse;
+            if (card.getUsers().contains(user)) {
+
+                estimationRepository.delete(estimation);
+                simpleResponse = new SimpleResponse("Deleted successfully!");
+
+            } else throw new BadRequestException("You are not a member in this card!");
+
+            return simpleResponse;
 
         } else throw new BadRequestException("You are not a member of this workspace");
     }
