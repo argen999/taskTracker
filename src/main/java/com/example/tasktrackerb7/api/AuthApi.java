@@ -45,7 +45,7 @@ public class AuthApi {
     }
 
     @Operation(summary = "Update", description = "Updating user data")
-    @PostMapping("/update")
+    @PutMapping("/update")
     @PreAuthorize("isAuthenticated()")
     public ProfileResponse updatingUserData(@RequestBody @Valid ProfileRequest profileRequest) {
         return userService.updatingUserData(profileRequest);

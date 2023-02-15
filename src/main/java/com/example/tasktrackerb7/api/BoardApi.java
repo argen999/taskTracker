@@ -29,7 +29,7 @@ public class BoardApi {
     }
 
     @Operation(summary = "Update board", description = "Update board(if background = true - update background, if background = false - update name)")
-    @PatchMapping
+    @PutMapping
     public BoardResponse update(@RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return boardServiceImpl.update(boardUpdateRequest);
     }

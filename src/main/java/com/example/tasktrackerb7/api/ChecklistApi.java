@@ -22,25 +22,25 @@ public class ChecklistApi {
 
     private final ChecklistService checklistService;
 
-    @Operation(summary = "Create", description = "Create checklist")
+    @Operation(summary = "Create checklist", description = "Create new checklist")
     @PostMapping("/{id}")
     public ChecklistResponse create(@PathVariable Long id, @RequestBody ChecklistRequest checklistRequest) {
         return checklistService.create(id, checklistRequest);
     }
 
-    @Operation(summary = "Update", description = "Update checklist title")
-    @PatchMapping("/{id}")
+    @Operation(summary = "Update checklist", description = "Update checklist title")
+    @PutMapping
     public ChecklistResponse update(@RequestBody @Valid UpdateChecklistRequest updateChecklistRequest) {
         return checklistService.update(updateChecklistRequest);
     }
 
-    @Operation(summary = "Find all", description = "Get all checklists by card is")
+    @Operation(summary = "Get all checklists", description = "Get all checklists by card id")
     @GetMapping("/{id}")
     public List<ChecklistResponse> getAll(@PathVariable Long id) {
         return checklistService.findAllChecklistsByCardId(id);
     }
 
-    @Operation(summary = "Delete", description = "Delete checklist")
+    @Operation(summary = "Delete checklist", description = "Delete checklist by id")
     @DeleteMapping("/{id}")
     public SimpleResponse delete(@PathVariable Long id) {
         return checklistService.delete(id);

@@ -31,7 +31,7 @@ public class CardApi {
     }
 
     @Operation(summary = "Update card", description = "Update card(if isName = true - update title, if isName = false - update description")
-    @PatchMapping
+    @PutMapping
     public CardInnerPageResponse update(@RequestBody @Valid UpdateCardRequest updateCardRequest) {
         return cardService.update(updateCardRequest);
     }
@@ -55,7 +55,7 @@ public class CardApi {
     }
 
     @Operation(summary = "Archive", description = "Archiving and unarchiving the card by id")
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public SimpleResponse archive(@PathVariable Long id) {
         return cardService.archive(id);
     }

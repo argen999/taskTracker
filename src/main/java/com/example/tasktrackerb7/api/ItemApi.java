@@ -17,13 +17,13 @@ public class ItemApi {
 
     private final ItemService itemService;
 
-    @Operation(summary = "Create", description = "Create item")
+    @Operation(summary = "Create item", description = "Create new item")
     @PostMapping("/{id}")
     public ItemResponse create(@PathVariable Long id, @RequestBody ItemRequest itemRequest) {
         return itemService.create(id, itemRequest);
     }
 
-    @Operation(summary = "Make done", description = "Make item done or not done")
+    @Operation(summary = "Make done", description = "Make item done and not done by id")
     @PatchMapping("/{id}")
     public ItemResponse makeDone(@PathVariable Long id) {
         return itemService.makeDone(id);
