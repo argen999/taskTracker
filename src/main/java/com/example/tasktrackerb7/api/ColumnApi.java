@@ -23,25 +23,25 @@ public class ColumnApi {
     private final ColumnService columnService;
 
 
-    @Operation(summary = "Create", description = "Create column by boardId")
+    @Operation(summary = "Create column", description = "Create new column by boardId")
     @PostMapping("/{boardId}")
     ColumnResponse create(@PathVariable Long boardId, @RequestBody @Valid ColumnRequest columnRequest) {
         return columnService.create(boardId, columnRequest);
     }
 
-    @Operation(summary = "Update", description = "Update column by id")
+    @Operation(summary = "Update column", description = "Update column name by id")
     @PutMapping("/{id}")
     ColumnResponse update(@PathVariable Long id, @RequestBody @Valid ColumnRequest columnRequest) {
         return columnService.update(id, columnRequest);
     }
 
-    @Operation(summary = "Delete", description = "Delete column by id")
+    @Operation(summary = "Delete column", description = "Delete column by id")
     @DeleteMapping("/{id}")
     SimpleResponse delete(@PathVariable Long id) {
         return columnService.delete(id);
     }
 
-    @Operation(summary = "Get all", description = "Get all column by boardId")
+    @Operation(summary = "Get all columns", description = "Get all columns by board id")
     @GetMapping("/{boardId}")
     @PreAuthorize("isAuthenticated()")
     List<ColumnResponse> getAll(@PathVariable Long boardId) {

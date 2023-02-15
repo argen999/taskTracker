@@ -27,6 +27,4 @@ public class Item {
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Checklist checklist;
-
-
 }
