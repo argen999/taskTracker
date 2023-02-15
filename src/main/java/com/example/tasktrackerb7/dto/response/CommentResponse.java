@@ -1,27 +1,32 @@
 package com.example.tasktrackerb7.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.tasktrackerb7.db.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Component
 public class CommentResponse {
 
     private Long id;
     private String text;
-    private String name;
-    private String surname;
-    private String photoLink;
     private LocalDateTime localDateTime;
+    private Boolean isMine;
+    private UserResponse userResponse;
+    @JsonIgnore
+    private User user;
 
-    public CommentResponse(Long id, String text, String name, String surname, LocalDateTime localDateTime, String photoLink) {
+    public CommentResponse(Long id, String text, LocalDateTime localDateTime,  UserResponse userResponse, User user) {
         this.id = id;
         this.text = text;
-        this.name = name;
-        this.surname = surname;
         this.localDateTime = localDateTime;
-        this.photoLink = photoLink;
+        this.userResponse = userResponse;
+        this.user = user;
     }
 }

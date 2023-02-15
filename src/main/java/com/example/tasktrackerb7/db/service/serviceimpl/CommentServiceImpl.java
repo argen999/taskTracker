@@ -6,7 +6,7 @@ import com.example.tasktrackerb7.db.service.CommentService;
 import com.example.tasktrackerb7.dto.request.CommentRequest;
 import com.example.tasktrackerb7.dto.response.CommentResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
-import com.example.tasktrackerb7.exceptions.BadCredentialsException;
+import com.example.tasktrackerb7.dto.response.UserResponse;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
         }
         notificationRepository.save(notification);
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getLocalDateTime(), comment.getUser().getPhotoLink());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     @Override
@@ -80,12 +79,14 @@ public class CommentServiceImpl implements CommentService {
 
         );
         if (!user.equals(comment.getUser())) {
-            throw new BadCredentialsException("You cannot edit this comments!!");
+            throw new NotFoundException("You cannot edit this comments!!");
         }
         comment.setText(commentRequest.getText());
         comment.setLocalDateTime(LocalDateTime.now());
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getLocalDateTime(), comment.getUser().getPhotoLink());
+
+
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     @Override
@@ -95,19 +96,27 @@ public class CommentServiceImpl implements CommentService {
                 () -> new NotFoundException("comment not found")
         );
         if (!user.equals(comment.getUser())) {
-            throw new BadCredentialsException("You can't delete this comment");
+            throw new NotFoundException("You can't delete this comment");
+        } else {
+            commentRepository.delete(comment);
+
         }
-        commentRepository.delete(comment);
         return new SimpleResponse("Comment delete successfully!!!");
     }
 
     @Override
     public List<CommentResponse> getAllComments(Long id) {
         List<Comment> comments = commentRepository.getAllComments(id);
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        for (Comment comment : comments) {
-            commentResponses.add(new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(), comment.getUser().getSurname(), comment.getLocalDateTime(), comment.getUser().getPhotoLink()));
-
+        List<CommentResponse> commentResponses = comments.stream().map(c -> new
+                CommentResponse(c.getId(), c.getText(), c.getLocalDateTime(),
+                new UserResponse(c.getUser().getId(), c.getUser().getName() + " " +
+                        c.getUser().getSurname(), c.getUser().getPhotoLink()), c.getUser())).toList();
+        for (CommentResponse c : commentResponses) {
+            if (c.getUser() == getAuthenticateUser()) {
+                c.setIsMine(true);
+            } else {
+                c.setIsMine(false);
+            }
         }
         return commentResponses;
     }

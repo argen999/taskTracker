@@ -11,7 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +30,7 @@ public class CardConverter {
     private final ChecklistRepository checklistRepository;
 
     private final ChecklistServiceImpl checklistService;
+
 
 
     private User getAuthenticateUser() {
@@ -76,7 +76,7 @@ public class CardConverter {
 
     private CommentResponse convertCommentToResponse(Comment comment) {
         User user = getAuthenticateUser();
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getUser().getName(),comment.getUser().getSurname(),comment.getLocalDateTime(),comment.getUser().getPhotoLink());
+        return new CommentResponse(comment.getId(), comment.getText(),comment.getLocalDateTime(),new UserResponse(getAuthenticateUser().getId(),getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(),getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     private List<ChecklistResponse> getChecklistResponses(List<Checklist> checklists) {
