@@ -31,11 +31,8 @@ public class Comment {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Card card;
 
-
     public Comment(String text, LocalDateTime localDateTime) {
         this.text = text;
         this.localDateTime = localDateTime;
     }
-
-
 }
