@@ -7,6 +7,7 @@ import com.example.tasktrackerb7.dto.response.AllIssuesResponse;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponseForGetAll;
 import com.example.tasktrackerb7.dto.response.CardMemberResponse;
 import com.example.tasktrackerb7.dto.response.LabelResponse;
+import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,25 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
 
         return allIssuesResponseForGetAll;
+    }
+
+    public AllIssuesResponseForGetAll filterByDateOfStart(Long id, LocalDate from, LocalDate to) {
+        AllIssuesResponseForGetAll response = new AllIssuesResponseForGetAll();
+        if (from != null && to != null) {
+            if (from.isAfter(to)) {
+                throw new BadCredentialsException("date of start need to be after date of finish");
+            }
+            response.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
+        }
+        return response;
+    }
+
+    private List<AllIssuesResponse> allIssuesResponses(List<Card> cards) {
+        List<AllIssuesResponse> responses = new ArrayList<>();
+        for (Card card : cards) {
+            responses.add(convertToResponse(card));
+        }
+        return responses;
     }
 
     private AllIssuesResponse convertToResponse(Card card) {
