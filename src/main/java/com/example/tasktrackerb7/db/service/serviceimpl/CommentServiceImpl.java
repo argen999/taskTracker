@@ -7,6 +7,7 @@ import com.example.tasktrackerb7.dto.request.CommentRequest;
 import com.example.tasktrackerb7.dto.response.CommentResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.dto.response.UserResponse;
+import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -68,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
         }
         notificationRepository.save(notification);
         commentRepository.save(comment);
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(),true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     @Override
@@ -79,14 +80,14 @@ public class CommentServiceImpl implements CommentService {
 
         );
         if (!user.equals(comment.getUser())) {
-            throw new NotFoundException("You cannot edit this comments!!");
+            throw new BadCredentialsException("You cannot edit this comments!!");
         }
         comment.setText(commentRequest.getText());
         comment.setLocalDateTime(LocalDateTime.now());
         commentRepository.save(comment);
 
 
-        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(),true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     @Override
@@ -96,7 +97,7 @@ public class CommentServiceImpl implements CommentService {
                 () -> new NotFoundException("comment not found")
         );
         if (!user.equals(comment.getUser())) {
-            throw new NotFoundException("You can't delete this comment");
+            throw new BadCredentialsException("You can't delete this comment");
         } else {
             commentRepository.delete(comment);
 
