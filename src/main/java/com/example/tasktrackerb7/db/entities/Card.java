@@ -55,6 +55,9 @@ public class Card {
     @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
     private Notification notification;
 
+    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    private User creator;
+
     public Card(String title) {
         this.title = title;
     }
