@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 
@@ -25,12 +23,19 @@ public class Comment {
 
     private String text;
 
-    private LocalDateTime dateOfStart;
+    private LocalDateTime localDateTime;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User user;
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Card card;
+
+
+    public Comment(String text, LocalDateTime localDateTime) {
+        this.text = text;
+        this.localDateTime = localDateTime;
+    }
+
 
 }
