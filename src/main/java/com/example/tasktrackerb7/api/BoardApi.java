@@ -22,31 +22,31 @@ public class BoardApi {
 
     private final BoardService boardServiceImpl;
 
-    @Operation(summary = "Create", description = "Create board")
+    @Operation(summary = "Create board", description = "Create new board by workspace id")
     @PostMapping
     public BoardResponse create(@RequestBody BoardRequest boardRequest) {
         return boardServiceImpl.create(boardRequest);
     }
 
-    @Operation(summary = "Update name", description = "Update board name")
-    @PatchMapping
+    @Operation(summary = "Update board", description = "Update board(if background = true - update background, if background = false - update name)")
+    @PutMapping
     public BoardResponse update(@RequestBody @Valid BoardUpdateRequest boardUpdateRequest) {
         return boardServiceImpl.update(boardUpdateRequest);
     }
 
-    @Operation(summary = "Delete", description = "Delete board by board id")
+    @Operation(summary = "Delete board", description = "Delete board by id")
     @DeleteMapping("/{id}")
     public SimpleResponse delete(@PathVariable Long id) {
         return boardServiceImpl.delete(id);
     }
 
-    @Operation(summary = "Get all", description = "Get all boards")
-    @GetMapping("/workspace/{id}")
+    @Operation(summary = "Get all boards", description = "Get all boards by workspace id")
+    @GetMapping("/all/{id}")
     public List<BoardResponse> getAll(@PathVariable Long id) {
         return boardServiceImpl.getAllByWorkspaceId(id);
     }
 
-    @Operation(summary = "Get by id", description = "Get board by id")
+    @Operation(summary = "Get board", description = "Get board by id")
     @GetMapping("/{id}")
     public BoardResponse getById(@PathVariable Long id) {
         return boardServiceImpl.getById(id);

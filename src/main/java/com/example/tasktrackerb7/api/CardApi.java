@@ -24,19 +24,19 @@ public class CardApi {
 
     private final CardService cardService;
 
-    @Operation(summary = "Create", description = "Create card")
+    @Operation(summary = "Create card", description = "Create new card")
     @PostMapping
     public CardInnerPageResponse create(@RequestBody CardRequest cardRequest) {
         return cardService.create(cardRequest);
     }
 
-    @Operation(summary = "Update", description = "Update card(if isName = true - update title, id isNam = false = update description")
-    @PatchMapping
+    @Operation(summary = "Update card", description = "Update card(if isName = true - update title, if isName = false - update description")
+    @PutMapping
     public CardInnerPageResponse update(@RequestBody @Valid UpdateCardRequest updateCardRequest) {
         return cardService.update(updateCardRequest);
     }
 
-    @Operation(summary = "Get by id", description = "Get card by id")
+    @Operation(summary = "Get card", description = "Get card by id")
     @GetMapping("/{id}")
     public CardInnerPageResponse getById(@PathVariable Long id) {
         return cardService.getById(id);
@@ -54,8 +54,8 @@ public class CardApi {
         return cardService.delete(id);
     }
 
-    @Operation(summary = "Archive", description = "Archive card by id")
-    @PatchMapping("/{id}")
+    @Operation(summary = "Archive", description = "Archiving and unarchiving the card by id")
+    @PutMapping("/{id}")
     public SimpleResponse archive(@PathVariable Long id) {
         return cardService.archive(id);
     }

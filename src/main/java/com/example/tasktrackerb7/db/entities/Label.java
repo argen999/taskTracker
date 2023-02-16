@@ -28,8 +28,4 @@ public class Label {
     @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private Card card;
 
-    public Label(String description, String colorLink) {
-        this.description = description;
-        this.color = colorLink;
-    }
 }
