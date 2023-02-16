@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.dto.request;
 
-import com.example.tasktrackerb7.validations.Password;
 import lombok.Getter;
 import lombok.Setter;
 

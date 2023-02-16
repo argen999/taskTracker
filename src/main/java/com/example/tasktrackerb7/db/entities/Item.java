@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
 
 import static javax.persistence.CascadeType.*;
 
@@ -28,10 +27,4 @@ public class Item {
 
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private Checklist checklist;
-
-    public Item(String text, boolean done) {
-        this.text = text;
-        this.isDone = done;
-    }
-
 }

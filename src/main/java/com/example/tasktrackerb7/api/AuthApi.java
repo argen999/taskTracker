@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "Auth Api", description = "Authentication Api")
+@Tag(name = "Auth Api", description = "Authentication and Authorization")
 public class AuthApi {
 
     private final UserService userService;
@@ -45,7 +45,7 @@ public class AuthApi {
     }
 
     @Operation(summary = "Update", description = "Updating user data")
-    @PostMapping("/update")
+    @PutMapping("/update")
     @PreAuthorize("isAuthenticated()")
     public ProfileResponse updatingUserData(@RequestBody @Valid ProfileRequest profileRequest) {
         return userService.updatingUserData(profileRequest);

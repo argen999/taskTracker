@@ -33,10 +33,6 @@ public class Checklist {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Card card;
 
-    public Checklist(String name) {
-        this.title = name;
-    }
-
     public void addItem(Item item) {
         if (items == null) {
             items = new ArrayList<>();

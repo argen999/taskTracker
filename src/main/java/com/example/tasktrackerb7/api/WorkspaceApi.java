@@ -21,31 +21,31 @@ public class WorkspaceApi {
 
     private final WorkspaceService workspaceService;
 
-    @Operation(summary = "Create", description = "Create workspace")
+    @Operation(summary = "Create workspace", description = "Create new workspace")
     @PostMapping
     public WorkspaceResponse create(@RequestBody WorkspaceRequest workspaceRequest) {
         return workspaceService.create(workspaceRequest);
     }
 
-    @Operation(summary = "Delete", description = "Delete workspace")
+    @Operation(summary = "Delete workspace", description = "Delete workspace by id")
     @DeleteMapping("/{id}")
     public SimpleResponse delete(@PathVariable Long id) {
         return workspaceService.delete(id);
     }
 
-    @Operation(summary = "Update", description = "Update workspace name")
+    @Operation(summary = "Update workspace", description = "Update workspace name by id")
     @PatchMapping("/{id}")
     public WorkspaceResponse update(@PathVariable Long id, @RequestBody @Valid WorkspaceRequest workspaceRequest) {
         return workspaceService.update(id, workspaceRequest);
     }
 
-    @Operation(summary = "Get all", description = "Get all workspaces in which the user consists")
+    @Operation(summary = "Get all workspaces", description = "Get all workspaces in which the user consists")
     @GetMapping
     public List<WorkspaceResponse> getAll() {
         return workspaceService.getAll();
     }
 
-    @Operation(summary = "Get by id", description = "Get workspace by id in which the user consists")
+    @Operation(summary = "Get workspace by id", description = "Get workspace by id in which the user consists")
     @GetMapping("/{id}")
     public WorkspaceResponse getById(@PathVariable Long id) {
         return workspaceService.getById(id);

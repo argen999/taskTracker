@@ -25,7 +25,7 @@ public class Workspace {
 
     private String name;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "workspace")
     private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
@@ -51,12 +51,6 @@ public class Workspace {
             members = new ArrayList<>();
         }
         members.add(userWorkspaceRole);
-    }
-    public void addFavourite(Favourite favourite) {
-        if(favourite == null) {
-            favourites = new ArrayList<>();
-        }
-        favourites.add(favourite);
     }
 }
 
