@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 
@@ -31,8 +34,11 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
 
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
-    private User user;
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, targetEntity = User.class)
+    @JoinTable(name = "users_notifications",
+            joinColumns = @JoinColumn(name = "notification_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Board board;
@@ -42,4 +48,12 @@ public class Notification {
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST}, fetch = FetchType.LAZY)
     private Card card;
+
+
+    public void addUser(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+        users.add(user);
+    }
 }

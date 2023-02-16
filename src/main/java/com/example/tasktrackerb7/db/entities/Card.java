@@ -79,5 +79,11 @@ public class Card {
         }
         users.add(user);
     }
+    public void addComment(Comment comment) {
+        if (comment == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
 
 }

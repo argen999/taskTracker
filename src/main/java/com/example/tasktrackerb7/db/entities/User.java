@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import javax.persistence.Column;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,8 +39,8 @@ public class User implements UserDetails {
     @Column(length = 1000)
     private String photoLink;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "user")
-    private List<Notification> notification;
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "users")
+    private List<Notification> notifications;
 
     @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
     private List<Workspace> workspaces;
@@ -124,9 +124,18 @@ public class User implements UserDetails {
     }
 
 
-
     public void addFavourite(Favourite favourite) {
         if (favourite == null) favourites = new ArrayList<>();
         favourites.add(favourite);
+    }
+
+    public void addNotification(Notification notification) {
+        if (notification == null) notifications = new ArrayList<>();
+        notifications.add(notification);
+    }
+
+    public void addComment(Comment comment) {
+        if (comment == null) comments = new ArrayList<>();
+        comments.add(comment);
     }
 }

@@ -48,16 +48,18 @@ public class FavouriteServiceImpl implements FavouriteService {
                     throw new NotFoundException("board not found");
                 });
         int count = 0;
+        SimpleResponse favourite = null;
         if (board.getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), board.getWorkspace().getId()))) {
             if (user.getFavourites() != null) {
                 for (Favourite f : board.getFavourites()) {
                     if (Objects.equals(f.getBoard().getId(), id)) {
                         favouriteRepository.delete(f);
                         count++;
+                        favourite = new SimpleResponse("delete favourite board successfully!");
                         break;
+
                     }
                 }
-
             }
             if (count < 1) {
                 Favourite newFavourite = new com.example.tasktrackerb7.db.entities.Favourite();
@@ -66,11 +68,13 @@ public class FavouriteServiceImpl implements FavouriteService {
                 newFavourite.setUser(user);
                 user.addFavourite(newFavourite);
                 favouriteRepository.save(newFavourite);
+                favourite = new SimpleResponse("make favourite  board  successfully!!");
             }
+
         } else {
             throw new NotFoundException("user not found this board");
         }
-        return new SimpleResponse("make favourite  board  successfully!!");
+        return favourite;
     }
 
     @Override
@@ -81,12 +85,14 @@ public class FavouriteServiceImpl implements FavouriteService {
                     throw new NotFoundException("Workspace  not found");
                 });
         int count = 0;
+        SimpleResponse favourite1 = null;
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             if (user.getFavourites() != null) {
                 for (Favourite favourite : workspace.getFavourites()) {
                     if (Objects.equals(favourite.getWorkspace().getId(), id)) {
                         favouriteRepository.delete(favourite);
                         count++;
+                        favourite1 = new SimpleResponse("delete favourite workspace successfully!");
                         break;
                     }
                 }
@@ -100,12 +106,13 @@ public class FavouriteServiceImpl implements FavouriteService {
                 favourite.setUser(user);
                 user.addFavourite(favourite);
                 favouriteRepository.save(favourite);
+                favourite1 = new SimpleResponse("make favourite workspace successfully!!");
 
             }
         } else {
             throw new NotFoundException("user not found this workspace!!");
         }
-        return new SimpleResponse("make favourite workspace successfully!!");
+        return favourite1;
     }
 
     @Override
