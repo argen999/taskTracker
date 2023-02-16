@@ -58,6 +58,10 @@ public class Card {
     @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
     private User creator;
 
+    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    private Workspace workspace;
+
+
     public Card(String title) {
         this.title = title;
     }

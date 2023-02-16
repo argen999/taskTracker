@@ -44,12 +44,12 @@ values (1, 1, 1, 1),
        (4, 1, 4, 4),
        (5, 1, 5, 5);
 
-insert into cards(id, archive, created, description, title, column_id)
-values (1, false, '2023-01-28', '', 'Variables', 1),
-       (2, false, '2023-01-28', '', 'byte', 2),
-       (3, false, '2023-01-28', '', 'short', 3),
-       (4, false, '2023-01-28', '', 'int', 4),
-       (5, false, '2023-01-28', '', 'long', 5);
+insert into cards(id, archive, created, description, title, column_id, creator_id, workspace_id)
+values (1, false, '2023-01-28', '', 'Variables', 1, 1, 1),
+       (2, false, '2023-01-28', '', 'byte', 2, 2, 2),
+       (3, false, '2023-01-28', '', 'short', 3, 3, 3),
+       (4, false, '2023-01-28', '', 'int', 4, 4, 4),
+       (5, false, '2023-01-28', '', 'long', 5, 5, 5);
 
 insert into estimations(id, date_of_finish, date_of_start, card_id)
 values (1, '2023-01-15', '2023-01-02', 1),
