@@ -20,15 +20,15 @@ public class EstimationApi {
     private final EstimationService estimationService;
 
     @Operation(summary = "Create estimation", description = "Create estimation with card id")
-    @PostMapping("/{id}")
-    public EstimationResponse createEstimation(@PathVariable Long id, @RequestBody EstimationRequest estimationRequest) {
-        return estimationService.createEstimation(id, estimationRequest);
+    @PostMapping
+    public EstimationResponse createEstimation(@RequestBody EstimationRequest estimationRequest) {
+        return estimationService.createEstimation(estimationRequest);
     }
 
     @Operation(summary = "Update estimation", description = "Update estimation with id")
-    @PutMapping("/{id}")
-    public EstimationResponse updateEstimation(@PathVariable Long id, @RequestBody EstimationRequest estimationRequest) {
-        return estimationService.updateEstimation(id, estimationRequest);
+    @PutMapping
+    public EstimationResponse updateEstimation(@RequestBody EstimationRequest estimationRequest) {
+        return estimationService.updateEstimation(estimationRequest);
     }
 
     @Operation(summary = "Delete estimation", description = "Delete estimation with id")
