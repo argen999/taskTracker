@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("api/members")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Member API", description = "Member API")
-public class MemberAPI {
+public class MemberApi {
 
     private final MemberService memberService;
 

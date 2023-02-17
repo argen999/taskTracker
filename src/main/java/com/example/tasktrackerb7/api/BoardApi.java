@@ -30,8 +30,6 @@ public class BoardApi {
         return boardServiceImpl.create(boardRequest);
     }
 
-    @Operation(summary = "Update name", description = "Update board name")
-    @PatchMapping
     @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Update board", description = "Update board(if background = true - update background, if background = false - update name)")
     @PutMapping
@@ -46,8 +44,6 @@ public class BoardApi {
         return boardServiceImpl.delete(id);
     }
 
-    @Operation(summary = "Get all", description = "Get all boards")
-    @GetMapping("/workspace/{id}")
     @PreAuthorize("isAuthenticated()")
     @Operation(summary = "Get all boards", description = "Get all boards by workspace id")
     @GetMapping("/all/{id}")

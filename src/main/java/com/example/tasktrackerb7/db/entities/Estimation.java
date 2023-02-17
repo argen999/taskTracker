@@ -31,16 +31,16 @@ public class Estimation {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime dateOfFinish;
 
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.LAZY)
+    private User creator;
+
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.LAZY)
+    private Card card;
+
     public Estimation(EstimationRequest estimationRequest) {
         this.dateOfStart = estimationRequest.getDateOfStart();
         this.dateOfFinish = estimationRequest.getDateOfFinish();
         this.reminder = estimationRequest.getReminderRequest();
     }
-
-    @ManyToOne(cascade = {DETACH, MERGE, REFRESH},fetch = FetchType.LAZY)
-    private User creator;
-
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH},fetch = FetchType.LAZY)
-    private Card card;
 
 }

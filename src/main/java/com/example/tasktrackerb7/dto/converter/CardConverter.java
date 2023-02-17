@@ -145,7 +145,7 @@ public class CardConverter {
         cardResponse.setName(card.getTitle());
         cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
         if (card.getEstimation() != null) {
-            int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+            int between = Period.between(card.getEstimation().getDateOfStart().toLocalDate(), card.getEstimation().getDateOfFinish().toLocalDate()).getDays();
             cardResponse.setDuration(" " + between + " days");
         }
 

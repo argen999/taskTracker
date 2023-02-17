@@ -2,9 +2,11 @@ package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.Card;
 import com.example.tasktrackerb7.db.entities.Estimation;
-import com.example.tasktrackerb7.db.entities.Notification;
 import com.example.tasktrackerb7.db.entities.User;
-import com.example.tasktrackerb7.db.repository.*;
+import com.example.tasktrackerb7.db.repository.CardRepository;
+import com.example.tasktrackerb7.db.repository.EstimationRepository;
+import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.service.EstimationService;
 import com.example.tasktrackerb7.dto.request.EstimationRequest;
 import com.example.tasktrackerb7.dto.response.EstimationResponse;
@@ -35,10 +37,10 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
-    public EstimationResponse createEstimation(Long id, EstimationRequest estimationRequest) {
+    public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         User user = getAuthenticateUser();
 
-        Card card = cardRepository.findById(id).orElseThrow(() -> new NotFoundException("Card not found!"));
+        Card card = cardRepository.findById(estimationRequest.getId()).orElseThrow(() -> new NotFoundException("Card not found!"));
 
         Estimation estimation;
 
@@ -64,10 +66,10 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
-    public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
+    public EstimationResponse updateEstimation(EstimationRequest estimationRequest) {
         User user = getAuthenticateUser();
 
-        Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> new NotFoundException("Estimation not found!"));
+        Estimation estimation = estimationRepository.findById(estimationRequest.getId()).orElseThrow(() -> new NotFoundException("Estimation not found!"));
 
         if (estimation.getCard().getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), estimation.getCard().getColumn().getBoard().getWorkspace().getId()))) {
 

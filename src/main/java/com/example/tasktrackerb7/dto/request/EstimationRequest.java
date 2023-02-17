@@ -22,4 +22,6 @@ public class EstimationRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime dateOfFinish;
 
+    private Long id;
+
 }

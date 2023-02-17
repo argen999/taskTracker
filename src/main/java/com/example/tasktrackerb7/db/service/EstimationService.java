@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EstimationService {
 
-    EstimationResponse createEstimation(Long id, EstimationRequest estimationRequest);
+    EstimationResponse createEstimation(EstimationRequest estimationRequest);
 
-    EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest);
+    EstimationResponse updateEstimation(EstimationRequest estimationRequest);
 
     SimpleResponse deleteEstimation(Long id);
 
