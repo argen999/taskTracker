@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
 import javax.persistence.Column;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -142,4 +142,15 @@ public class User implements UserDetails {
         this.notifications.remove(notification);
         notification.getUsers().remove(this);
     }
+    
+    public void addNotification(Notification notification) {
+        if (notification == null) notifications = new ArrayList<>();
+        notifications.add(notification);
+    }
+
+    public void addComment(Comment comment) {
+        if (comment == null) comments = new ArrayList<>();
+        comments.add(comment);
+    }
+    
 }
