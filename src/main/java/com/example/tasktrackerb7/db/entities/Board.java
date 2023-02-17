@@ -45,9 +45,10 @@ public class Board {
     }
 
     public void addFavourite(Favourite favourite) {
-        if(favourite == null) {
+        if (favourite == null) {
             favourites = new ArrayList<>();
         }
         favourites.add(favourite);
     }
+    
 }
