@@ -4,9 +4,8 @@ import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
-import com.example.tasktrackerb7.dto.response.AuthResponse;
-import com.example.tasktrackerb7.dto.response.ProfileResponse;
-import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
+import com.example.tasktrackerb7.dto.request.ResetPasswordRequest;
+import com.example.tasktrackerb7.dto.response.*;
 import com.google.firebase.auth.FirebaseAuthException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -56,6 +56,13 @@ public class AuthApi {
     @PreAuthorize("isAuthenticated()")
     public List<WorkspaceResponse> getAllWorkspaceOwnedByUser() {
         return userService.getAllWorkspaceOwnedByUser();
+    }
+
+    @Operation(summary = "Forgot password", description = "If the user has forgotten the password")
+    @PostMapping("forgot/password")
+    public ResetPasswordResponse forgotPassword(@RequestParam String email,
+                                         @RequestBody @Valid ResetPasswordRequest request)throws MessagingException{
+        return userService.forgotPassword(email, request);
     }
 
 }

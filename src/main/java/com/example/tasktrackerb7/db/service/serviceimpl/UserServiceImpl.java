@@ -12,10 +12,8 @@ import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
-import com.example.tasktrackerb7.dto.response.AuthResponse;
-import com.example.tasktrackerb7.dto.response.MemberResponse;
-import com.example.tasktrackerb7.dto.response.ProfileResponse;
-import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
+import com.example.tasktrackerb7.dto.request.ResetPasswordRequest;
+import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
@@ -27,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +36,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -56,6 +59,8 @@ public class UserServiceImpl implements UserService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final WorkspaceRepository workspaceRepository;
+
+    private final JavaMailSender mailSender;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -228,4 +233,81 @@ public class UserServiceImpl implements UserService {
                 () -> new NotFoundException("Workspace with id: " + id + " nont found"));
         return userRepository.searchByEmailOrName(email_name, workspace.getId());
     }
+
+    @Override
+    public ResetPasswordResponse forgotPassword(String email, ResetPasswordRequest request) throws MessagingException{
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User with email: " + email + "not found!")
+        );
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        helper.setSubject("Task tracker");
+        helper.setTo(email);
+        helper.setText("Your password has been changed" + "/" + user.getId(), true);
+        mailSender.send(mimeMessage);
+        String oldPassword = user.getPassword();
+        String newPassword = passwordEncoder.encode(request.getNewPassword());
+        if (!oldPassword.equals(newPassword)){
+            user.setPassword(newPassword);
+        }
+        String jwt = jwtTokenUtil.generateToken(user.getEmail());
+        return new ResetPasswordResponse(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getEmail(),
+                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
+                jwt,
+                "Password updated!");
+    }
+
+
+//    public ResetPasswordResponse resetPassword(ResetPasswordRequest request){
+//        User user = userRepository.findById(request.getUserId()).orElseThrow(
+//                () -> new NotFoundException("user with id: "+ request.getUserId()+ "not found!")
+//        );
+//        String oldPassword = user.getPassword();
+//        String newPassword = passwordEncoder.encode(request.getNewPassword());
+//        if (!oldPassword.equals(newPassword)){
+//            user.setPassword(newPassword);
+//        }
+//        String jwt = jwtTokenUtil.generateToken(user.getEmail());
+//        return new ResetPasswordResponse(
+//                user.getId(),
+//                user.getName(),
+//                user.getSurname(),
+//                user.getEmail(),
+//                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
+//                jwt,
+//                "Password updated!");
+//    }
+
+//
+//    public ResetPasswordResponse forgotPassword(String email, ResetPasswordRequest request) throws MessagingException{
+//        User user = userRepository.findByEmail(email).orElseThrow(
+//                () -> new NotFoundException("User with email: " + email + "not found!")
+//        );
+//        MimeMessage mimeMessage = mailSender.createMimeMessage();
+//        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+//        helper.setSubject("Task tracker");
+//        helper.setTo(email);
+//        helper.setText("Your password has been changed" + "/" + user.getId(), true);
+//        mailSender.send(mimeMessage);
+//        String oldPassword = user.getPassword();
+//        String newPassword = passwordEncoder.encode(request.getNewPassword());
+//        if (!oldPassword.equals(newPassword)){
+//            user.setPassword(newPassword);
+//        }
+//        String jwt = jwtTokenUtil.generateToken(user.getEmail());
+//        return new ResetPasswordResponse(
+//                user.getId(),
+//                user.getName(),
+//                user.getSurname(),
+//                user.getEmail(),
+//                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
+//                jwt,
+//                "Password updated!");
+//    }
+
+
 }
