@@ -239,17 +239,19 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("User with email: " + email + "not found!")
         );
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-        helper.setSubject("Task tracker");
-        helper.setTo(email);
-        helper.setText("Your password has been changed" + "/" + user.getId(), true);
-        mailSender.send(mimeMessage);
+
         String oldPassword = user.getPassword();
         String newPassword = passwordEncoder.encode(request.getNewPassword());
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         if (!oldPassword.equals(newPassword)){
             user.setPassword(newPassword);
+            helper.setSubject("Task tracker");
+            helper.setTo(email);
+            helper.setText("Your password has been successfully changed", true);
         }
+        mailSender.send(mimeMessage);
+        userRepository.save(user);
         String jwt = jwtTokenUtil.generateToken(user.getEmail());
         return new ResetPasswordResponse(
                 user.getId(),
@@ -262,52 +264,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//    public ResetPasswordResponse resetPassword(ResetPasswordRequest request){
-//        User user = userRepository.findById(request.getUserId()).orElseThrow(
-//                () -> new NotFoundException("user with id: "+ request.getUserId()+ "not found!")
-//        );
-//        String oldPassword = user.getPassword();
-//        String newPassword = passwordEncoder.encode(request.getNewPassword());
-//        if (!oldPassword.equals(newPassword)){
-//            user.setPassword(newPassword);
-//        }
-//        String jwt = jwtTokenUtil.generateToken(user.getEmail());
-//        return new ResetPasswordResponse(
-//                user.getId(),
-//                user.getName(),
-//                user.getSurname(),
-//                user.getEmail(),
-//                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
-//                jwt,
-//                "Password updated!");
-//    }
 
-//
-//    public ResetPasswordResponse forgotPassword(String email, ResetPasswordRequest request) throws MessagingException{
-//        User user = userRepository.findByEmail(email).orElseThrow(
-//                () -> new NotFoundException("User with email: " + email + "not found!")
-//        );
-//        MimeMessage mimeMessage = mailSender.createMimeMessage();
-//        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-//        helper.setSubject("Task tracker");
-//        helper.setTo(email);
-//        helper.setText("Your password has been changed" + "/" + user.getId(), true);
-//        mailSender.send(mimeMessage);
-//        String oldPassword = user.getPassword();
-//        String newPassword = passwordEncoder.encode(request.getNewPassword());
-//        if (!oldPassword.equals(newPassword)){
-//            user.setPassword(newPassword);
-//        }
-//        String jwt = jwtTokenUtil.generateToken(user.getEmail());
-//        return new ResetPasswordResponse(
-//                user.getId(),
-//                user.getName(),
-//                user.getSurname(),
-//                user.getEmail(),
-//                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
-//                jwt,
-//                "Password updated!");
-//    }
+
 
 
 }
