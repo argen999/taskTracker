@@ -1,9 +1,6 @@
 package com.example.tasktrackerb7.db.service;
 
-import com.example.tasktrackerb7.dto.request.AuthRequest;
-import com.example.tasktrackerb7.dto.request.ProfileRequest;
-import com.example.tasktrackerb7.dto.request.RegisterRequest;
-import com.example.tasktrackerb7.dto.request.ResetPasswordRequest;
+import com.example.tasktrackerb7.dto.request.*;
 import com.example.tasktrackerb7.dto.response.*;
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +27,7 @@ public interface UserService {
 
     List<MemberResponse> search(Long id, String email_name);
 
-    ResetPasswordResponse forgotPassword(String email,ResetPasswordRequest request) throws MessagingException;
+    SimpleResponse forgotPassword(String email, String link) throws MessagingException;
 
-//    ResetPasswordResponse resetPassword(ResetPasswordRequest request);
+    ResetPasswordResponse resetPassword(ResetPasswordRequest request);
 }

@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.dto.request;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class AuthRequest {
 
     @NotNull

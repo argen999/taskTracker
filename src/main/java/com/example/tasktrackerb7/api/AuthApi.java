@@ -60,9 +60,15 @@ public class AuthApi {
 
     @Operation(summary = "Forgot password", description = "If the user has forgotten the password")
     @PostMapping("forgot/password")
-    public ResetPasswordResponse forgotPassword(@RequestParam String email,
-                                         @RequestBody @Valid ResetPasswordRequest request)throws MessagingException{
-        return userService.forgotPassword(email, request);
+    public SimpleResponse forgotPassword(@RequestParam String email,
+                                         @RequestParam String link)throws MessagingException{
+        return userService.forgotPassword(email,link);
+    }
+
+    @Operation(summary = "Reset password", description = "Allows you to reset the user's password")
+    @PutMapping("reset/password")
+    public ResetPasswordResponse resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        return userService.resetPassword(request);
     }
 
 }

@@ -9,10 +9,7 @@ import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.UserService;
-import com.example.tasktrackerb7.dto.request.AuthRequest;
-import com.example.tasktrackerb7.dto.request.ProfileRequest;
-import com.example.tasktrackerb7.dto.request.RegisterRequest;
-import com.example.tasktrackerb7.dto.request.ResetPasswordRequest;
+import com.example.tasktrackerb7.dto.request.*;
 import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
@@ -235,24 +232,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResetPasswordResponse forgotPassword(String email, ResetPasswordRequest request) throws MessagingException{
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException("User with email: " + email + "not found!")
-        );
-
-        String oldPassword = user.getPassword();
-        String newPassword = passwordEncoder.encode(request.getNewPassword());
+    public SimpleResponse forgotPassword(String email, String link) throws MessagingException {
+       User user = userRepository.findByEmail(email).orElseThrow(
+               ()-> new NotFoundException("with email:" + email + "not found!")
+       );
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-        if (!oldPassword.equals(newPassword)){
-            user.setPassword(newPassword);
-            helper.setSubject("Task tracker");
-            helper.setTo(email);
-            helper.setText("Your password has been successfully changed", true);
-        }
+        helper.setSubject("Task Tracker");
+        helper.setTo(email);
+        helper.setText("To get a new password reset link visit: " + link + " " + "/" +  user.getId());
         mailSender.send(mimeMessage);
-        userRepository.save(user);
+        return new SimpleResponse("email send");
+    }
+
+    @Override
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
+                () -> new NotFoundException("user with id: " + request.getUserId() + " not found")
+        );
+        String oldPassword = user.getPassword();
+        String newPassword = passwordEncoder.encode(request.getNewPassword());
+        if (!oldPassword.equals(newPassword)) {
+            user.setPassword(newPassword);
+            userRepository.save(user);
+        }
         String jwt = jwtTokenUtil.generateToken(user.getEmail());
+
         return new ResetPasswordResponse(
                 user.getId(),
                 user.getName(),
@@ -262,10 +267,6 @@ public class UserServiceImpl implements UserService {
                 jwt,
                 "Password updated!");
     }
-
-
-
-
 
 
 }
