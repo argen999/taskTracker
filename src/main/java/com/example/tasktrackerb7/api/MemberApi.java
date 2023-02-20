@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.api;
 
+
 import com.example.tasktrackerb7.db.service.MemberService;
 import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.InvitationRequest;
@@ -25,12 +26,6 @@ public class MemberApi {
 
     private final UserService userService;
 
-    @GetMapping("/search/{id}")
-    @Operation(summary = "Search users", description = "Search users by name, surname and email in this workspace")
-    public List<MemberResponse> search(@PathVariable Long id, @RequestParam String email) {
-        return userService.search(id, email);
-    }
-
     @Operation(summary = "Invite member to workspace", description = "Invite member to workspace")
     @PostMapping("/inviteMemberToWorkspace")
     public SimpleResponse inviteMemberToWorkspace(@RequestBody InvitationRequest invitationRequest) throws MessagingException {
@@ -53,18 +48,27 @@ public class MemberApi {
     @GetMapping("/getAllParticipantsByWorkspaceId/{workspaceId}")
     public List<ParticipantResponse> getAllParticipantsByWorkspaceId(@PathVariable Long workspaceId) {
         return memberService.getAllParticipantsByWorkspaceId(workspaceId);
+
     }
 
     @Operation(summary = "Get all admins by workspace ID", description = "Get all admins by workspace ID")
     @GetMapping("/getAllAdminsByWorkspaceId/{workspaceId}")
     public List<ParticipantResponse> getAllAdminsByWorkspaceId(@PathVariable Long workspaceId) {
         return memberService.getAllAdminsByWorkspaceId(workspaceId);
+
     }
 
     @Operation(summary = "Get all members by workspace ID", description = "Get all members by workspace ID")
     @GetMapping("/getAllMembersByWorkspaceId/{workspaceId}")
     public List<ParticipantResponse> getAllMembersByWorkspaceId(@PathVariable Long workspaceId) {
         return memberService.getAllMembersByWorkspaceId(workspaceId);
+
+    }
+
+    @GetMapping("/search/{id}")
+    @Operation(summary = "Search users", description = "Search users by name, surname and email in this workspace")
+    public List<MemberResponse> search(@PathVariable Long id, @RequestParam String email) {
+        return userService.search(id, email);
     }
 
 }
