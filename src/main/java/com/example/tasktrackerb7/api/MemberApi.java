@@ -57,7 +57,6 @@ public class MemberApi {
         return memberService.getAllAdminsByWorkspaceId(workspaceId);
 
     }
-
     @Operation(summary = "Get all members by workspace ID", description = "Get all members by workspace ID")
     @GetMapping("/getAllMembersByWorkspaceId/{workspaceId}")
     public List<ParticipantResponse> getAllMembersByWorkspaceId(@PathVariable Long workspaceId) {
