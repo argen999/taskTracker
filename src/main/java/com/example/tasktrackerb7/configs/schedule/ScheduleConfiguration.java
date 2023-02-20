@@ -1,7 +1,6 @@
 package com.example.tasktrackerb7.configs.schedule;
 
 import com.example.tasktrackerb7.db.entities.*;
-import com.example.tasktrackerb7.db.enums.Reminder;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
