@@ -2,14 +2,17 @@ package com.example.tasktrackerb7.db.entities;
 
 import javax.persistence.*;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import static javax.persistence.CascadeType.*;
 
@@ -29,7 +32,7 @@ public class Notification {
 
     private boolean status;
 
-    private LocalDateTime dateOfWrite;
+    private LocalDate dateOfWrite;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
@@ -46,14 +49,17 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Column column;
 
-    @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.LAZY)
     private Card card;
 
-
     public void addUser(User user) {
-        if (users == null) {
-            users = new ArrayList<>();
-        }
+        if (users == null) users = new ArrayList<>();
         users.add(user);
     }
+
+    public void remove(User user){
+        this.users.remove(user);
+        user.getNotifications().remove(this);
+    }
+
 }
