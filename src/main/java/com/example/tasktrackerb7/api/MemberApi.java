@@ -1,7 +1,9 @@
 package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.MemberService;
+import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.InvitationRequest;
+import com.example.tasktrackerb7.dto.response.MemberResponse;
 import com.example.tasktrackerb7.dto.response.ParticipantResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,8 @@ import java.util.List;
 public class MemberApi {
 
     private final MemberService memberService;
+
+    private final UserService userService;
 
     @Operation(summary = "Invite member to workspace", description = "Invite member to workspace")
     @PostMapping("/inviteMemberToWorkspace")
@@ -58,6 +62,12 @@ public class MemberApi {
     public List<ParticipantResponse> getAllMembersByWorkspaceId(@PathVariable Long workspaceId) {
         return memberService.getAllMembersByWorkspaceId(workspaceId);
 
+    }
+
+    @GetMapping("/search/{id}")
+    @Operation(summary = "Search users", description = "Search users by name, surname and email in this workspace")
+    public List<MemberResponse> search(@PathVariable Long id, @RequestParam String email) {
+        return userService.search(id, email);
     }
 
 }
