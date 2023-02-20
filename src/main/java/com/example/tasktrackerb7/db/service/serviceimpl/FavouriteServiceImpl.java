@@ -74,12 +74,6 @@ public class FavouriteServiceImpl implements FavouriteService {
         } else {
             throw new NotFoundException("user not found this board");
         }
-
-
-        } else {
-            throw new NotFoundException("user not found this board");
-        }
-        return favourite;
     }
 
     @Override

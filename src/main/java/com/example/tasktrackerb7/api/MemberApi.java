@@ -1,7 +1,9 @@
 package com.example.tasktrackerb7.api;
 
 import com.example.tasktrackerb7.db.service.MemberService;
+import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.InvitationRequest;
+import com.example.tasktrackerb7.dto.response.MemberResponse;
 import com.example.tasktrackerb7.dto.response.ParticipantResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +19,7 @@ import java.util.List;
 @RequestMapping("api/members")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Member API", description = "Member API")
-public class MemberAPI {
+public class MemberApi {
 
     private final MemberService memberService;
 

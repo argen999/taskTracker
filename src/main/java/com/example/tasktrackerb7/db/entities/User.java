@@ -142,11 +142,6 @@ public class User implements UserDetails {
         this.notifications.remove(notification);
         notification.getUsers().remove(this);
     }
-    
-    public void addNotification(Notification notification) {
-        if (notification == null) notifications = new ArrayList<>();
-        notifications.add(notification);
-    }
 
     public void addComment(Comment comment) {
         if (comment == null) comments = new ArrayList<>();
