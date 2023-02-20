@@ -10,10 +10,13 @@ import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final FavouriteRepository favouriteRepository;
 
+    private final JavaMailSender mailSender;
+
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
@@ -42,9 +47,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public WorkspaceResponse create(WorkspaceRequest workspaceRequest) {
+    public WorkspaceResponse create(WorkspaceRequest workspaceRequest)  throws MessagingException {
         User user = getAuthenticateUser();
-        Workspace workspace = new Workspace();
+        Workspace workspace = inviteToWorkspace(workspaceRequest);
         Role role = roleRepository.findById(1L).orElseThrow(() ->
                 new NotFoundException("role is not found"));
         UserWorkspaceRole userWorkspaceRole = new UserWorkspaceRole();
@@ -141,6 +146,27 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 user.getUsername(),
                 isFavourite
         );
+    }
+    public Workspace inviteToWorkspace(WorkspaceRequest workspaceRequest) {
+        Workspace workspace = new Workspace();
+        workspace.setName(workspaceRequest.getName());
+        if (workspaceRequest.getEmails().isEmpty() || workspaceRequest.getEmails().get(0).equals("") || workspaceRequest.getEmails().get(0).isBlank()) {
+            throw new BadRequestException("This email is empty");
+        } else {
+            for (String email : workspaceRequest.getEmails()) {
+                boolean exists = userRepository.existsByEmail(email);
+                if (!exists) {
+                    SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                    simpleMailMessage.setFrom("tasktracker.java7@gmail.com");
+                    simpleMailMessage.setTo(email);
+                    simpleMailMessage.setSubject("[Task tracker] invitation to my workspace");
+                    simpleMailMessage.setText(workspaceRequest.getLink());
+
+                    this.mailSender.send(simpleMailMessage);
+                }
+            }
+        }
+        return workspace;
     }
 
 }
