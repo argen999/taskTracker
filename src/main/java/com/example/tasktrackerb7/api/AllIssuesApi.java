@@ -5,7 +5,10 @@ import com.example.tasktrackerb7.dto.response.AllIssuesResponseForGetAll;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +23,13 @@ public class AllIssuesApi {
     @GetMapping("/{id}")
     public AllIssuesResponseForGetAll getAll(@PathVariable Long id) {
         return allIssuesService.getAll(id);
+    }
+
+    @Operation(summary = "Filter by date", description = "Filter by date of start or date of finish")
+    @GetMapping("/date/{id}")
+    public AllIssuesResponseForGetAll filterByDateOfStart(@PathVariable Long id,
+                                                          @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+                                                          @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
+        return allIssuesService.filterByDateOfStart(id, from, to);
     }
 }
