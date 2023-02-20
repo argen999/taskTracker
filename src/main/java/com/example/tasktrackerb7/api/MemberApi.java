@@ -21,6 +21,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Member API", description = "Member API")
 public class MemberApi {
+
     private final MemberService memberService;
 
     private final UserService userService;
