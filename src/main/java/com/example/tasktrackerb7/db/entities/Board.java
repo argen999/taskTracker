@@ -50,5 +50,5 @@ public class Board {
         }
         favourites.add(favourite);
     }
-
+    
 }

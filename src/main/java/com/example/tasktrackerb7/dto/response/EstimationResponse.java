@@ -2,20 +2,22 @@ package com.example.tasktrackerb7.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
 public class EstimationResponse {
 
     private Long id;
 
-    private LocalDate dateOfWrite;
+    private LocalDateTime dateOfStart;
 
-    private LocalDate dateOfFinish;
+    private LocalDateTime dateOfFinish;
+
+    private String reminder;
+
 }

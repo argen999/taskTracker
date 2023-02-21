@@ -2,6 +2,9 @@ package com.example.tasktrackerb7.db.service;
 
 import com.example.tasktrackerb7.dto.request.*;
 import com.example.tasktrackerb7.dto.response.*;
+
+import com.example.tasktrackerb7.exceptions.ExceptionResponse;
+
 import com.google.firebase.auth.FirebaseAuthException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +20,7 @@ public interface UserService {
 
     AuthResponse login(AuthRequest authRequest);
 
-    AuthResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException;
+    AuthWithGoogleResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException, ExceptionResponse;
 
     ProfileResponse updatingUserData(ProfileRequest profileRequest);
 
