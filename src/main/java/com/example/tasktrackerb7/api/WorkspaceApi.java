@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class WorkspaceApi {
     @Operation(summary = "Create workspace", description = "Create new workspace")
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public WorkspaceResponse create(@RequestBody WorkspaceRequest workspaceRequest) {
+    public WorkspaceResponse create(@RequestBody WorkspaceRequest workspaceRequest) throws MessagingException {
         return workspaceService.create(workspaceRequest);
     }
 
