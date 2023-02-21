@@ -5,6 +5,7 @@ import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
+import com.example.tasktrackerb7.dto.response.WorkspaceInnerPageResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
@@ -47,7 +48,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public WorkspaceResponse create(WorkspaceRequest workspaceRequest)  throws MessagingException {
+    public WorkspaceResponse create(WorkspaceRequest workspaceRequest) throws MessagingException {
         User user = getAuthenticateUser();
         Workspace workspace = inviteToWorkspace(workspaceRequest);
         Role role = roleRepository.findById(1L).orElseThrow(() ->
@@ -128,6 +129,27 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         return workspaceResponses;
     }
 
+    @Override
+    public WorkspaceInnerPageResponse getWorkspaceInnerPageById(Long id) {
+        User user = getAuthenticateUser();
+
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found this workspace!"));
+
+        WorkspaceInnerPageResponse workspaceInnerPageResponse = new WorkspaceInnerPageResponse();
+        workspaceInnerPageResponse.setWorkspaceName(workspace.getName());
+        workspaceInnerPageResponse.setFavoritesCount(workspaceInnerPageResponse.getFavoritesCount());
+        workspaceInnerPageResponse.setCardsCount(workspace.getCreator().getCards().size());
+        workspaceInnerPageResponse.setParticipantsCount(workspaceInnerPageResponse.getParticipantsCount());
+
+        UserWorkspaceRole userRole = userWorkspaceRoleRepository.getUser(user.getId());
+
+        if (userRole.getRole().getName().equals("ADMIN")) {
+            workspaceInnerPageResponse.setAdmin(true);
+        } else workspaceInnerPageResponse.setAdmin(false);
+
+        return workspaceInnerPageResponse;
+    }
+
     private WorkspaceResponse convertToResponse(Workspace workspace) {
         User user = getAuthenticateUser();
         boolean isFavourite = false;
@@ -147,7 +169,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 isFavourite
         );
     }
-   private Workspace inviteToWorkspace(WorkspaceRequest workspaceRequest) {
+
+    private Workspace inviteToWorkspace(WorkspaceRequest workspaceRequest) {
         Workspace workspace = new Workspace();
         workspace.setName(workspaceRequest.getName());
         if (workspaceRequest.getEmails().isEmpty() || workspaceRequest.getEmails().get(0).equals("") || workspaceRequest.getEmails().get(0).isBlank()) {
