@@ -39,12 +39,17 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public List<LabelResponse> getAllLabelsByCardId(Long cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new NotFoundException("Card with ID " + cardId + " not found!")
+        );
         return labelResponseConverter.viewAll(labelRepository.getAllLabelsByCardId(cardId));
     }
 
     @Override
-    public LabelResponse updateLabel(LabelRequest labelRequest, Long id) {
-        Label label = labelRepository.getById(id);
+    public LabelResponse updateLabel(LabelRequest labelRequest, Long labelId) {
+        Label label = labelRepository.findById(labelId).orElseThrow(
+                () -> new NotFoundException("Label with ID " + labelId + " not found!")
+        );
         labelRequestConverter.updateLabel(label, labelRequest);
         labelRepository.save(label);
         return labelResponseConverter.viewLabel(label);

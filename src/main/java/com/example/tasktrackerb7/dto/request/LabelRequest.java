@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LabelRequest {
-//    private Long cardId;
     private String description;
     private String color;
 }

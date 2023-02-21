@@ -26,7 +26,7 @@ public class LabelAPI {
         return labelService.createLabel(cardId, labelRequest);
     }
 
-    @Operation(summary = "Get all labels by card ID", description = "Get all labels by card ID")
+    @Operation(summary = "Get all labels by cardId", description = "Get all labels by cardId")
     @GetMapping("/getAllLabelsByCardId/{cardId}")
     public List<LabelResponse> getAllLabelsByCardId(@PathVariable Long cardId) {
         return labelService.getAllLabelsByCardId(cardId);
@@ -38,7 +38,7 @@ public class LabelAPI {
         return labelService.updateLabel(labelRequest, id);
     }
 
-    @Operation(summary = "Delete label", description = "Delete label")
+    @Operation(summary = "Delete label by ID from card", description = "Delete label by ID from card")
     @DeleteMapping("/deleteLabelByIdFromCard/{id}")
     public SimpleResponse deleteLabelByIdFromCard(@PathVariable Long id) {
         return labelService.deleteLabelByIdFromCard(id);
