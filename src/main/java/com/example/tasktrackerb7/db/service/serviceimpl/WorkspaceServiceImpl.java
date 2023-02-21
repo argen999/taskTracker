@@ -147,7 +147,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 isFavourite
         );
     }
-    public Workspace inviteToWorkspace(WorkspaceRequest workspaceRequest) {
+   private Workspace inviteToWorkspace(WorkspaceRequest workspaceRequest) {
         Workspace workspace = new Workspace();
         workspace.setName(workspaceRequest.getName());
         if (workspaceRequest.getEmails().isEmpty() || workspaceRequest.getEmails().get(0).equals("") || workspaceRequest.getEmails().get(0).isBlank()) {
