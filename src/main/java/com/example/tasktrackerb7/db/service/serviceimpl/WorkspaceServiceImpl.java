@@ -136,18 +136,24 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found this workspace!"));
 
         WorkspaceInnerPageResponse workspaceInnerPageResponse = new WorkspaceInnerPageResponse();
-        workspaceInnerPageResponse.setWorkspaceName(workspace.getName());
-        workspaceInnerPageResponse.setFavoritesCount(workspaceInnerPageResponse.getFavoritesCount());
-        workspaceInnerPageResponse.setCardsCount(workspace.getCreator().getCards().size());
-        workspaceInnerPageResponse.setParticipantsCount(workspaceInnerPageResponse.getParticipantsCount());
 
-        UserWorkspaceRole userRole = userWorkspaceRoleRepository.getUser(user.getId());
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
-        if (userRole.getRole().getName().equals("ADMIN")) {
-            workspaceInnerPageResponse.setAdmin(true);
-        } else workspaceInnerPageResponse.setAdmin(false);
+            workspaceInnerPageResponse.setWorkspaceName(workspace.getName());
+            workspaceInnerPageResponse.setFavoritesCount(workspaceRepository.getCountFavorite(user.getId()));
+            workspaceInnerPageResponse.setCardsCount(workspace.getCreator().getCards().size());
 
-        return workspaceInnerPageResponse;
+            if (workspaceRepository.getCountParticipants(workspace.getId()) != 1L) {
+                workspaceInnerPageResponse.setParticipantsCount(workspaceRepository.getCountParticipants(workspace.getId()) - 1L);
+            }
+
+            if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+                workspaceInnerPageResponse.setAdmin(true);
+            }
+
+            return workspaceInnerPageResponse;
+
+        } else throw new BadRequestException("You can't do update, because you are not member in workspace with id: " + id);
     }
 
     private WorkspaceResponse convertToResponse(Workspace workspace) {

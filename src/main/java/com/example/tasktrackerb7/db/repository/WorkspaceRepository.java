@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
 
-    @Query(value = "select count(*) from favourites where is_board = true", nativeQuery = true)
-    long getCountFavorite();
+    @Query(value = "select count(*) from favourites where user_id = :id", nativeQuery = true)
+    long getCountFavorite(Long id);
 
-    @Query(value = "select count(*) from user_workspace_roles where workspace_id = :id;", nativeQuery = true)
+    @Query(value = "select count(*) from user_workspace_roles where workspace_id = :id", nativeQuery = true)
     long getCountParticipants(Long id);
 
 }
