@@ -14,4 +14,6 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
     @Query("select new com.example.tasktrackerb7.dto.response.LabelResponse(l.id, l.description, l.color) from Label l where l.card.id = ?1")
     List<LabelResponse> getAllLabelResponse(Long id); //cardId
 
+    @Query(value = "select l from Label l where l.card.id=:cardId")
+    List<Label> getAllLabelsByCardId(Long cardId);
 }
