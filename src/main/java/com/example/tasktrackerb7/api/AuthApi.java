@@ -4,6 +4,8 @@ import com.example.tasktrackerb7.db.service.UserService;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
+import com.example.tasktrackerb7.dto.request.ResetPasswordRequest;
+import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.dto.response.AuthResponse;
 import com.example.tasktrackerb7.dto.response.AuthWithGoogleResponse;
 import com.example.tasktrackerb7.dto.response.ProfileResponse;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -58,6 +61,19 @@ public class AuthApi {
     @PreAuthorize("isAuthenticated()")
     public List<WorkspaceResponse> getAllWorkspaceOwnedByUser() {
         return userService.getAllWorkspaceOwnedByUser();
+    }
+
+    @Operation(summary = "Forgot password", description = "If the user has forgotten the password")
+    @PostMapping("forgot/password")
+    public SimpleResponse forgotPassword(@RequestParam String email,
+                                         @RequestParam String link)throws MessagingException{
+        return userService.forgotPassword(email,link);
+    }
+
+    @Operation(summary = "Reset password", description = "Allows you to reset the user's password")
+    @PutMapping("reset/password")
+    public ResetPasswordResponse resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        return userService.resetPassword(request);
     }
 
 }
