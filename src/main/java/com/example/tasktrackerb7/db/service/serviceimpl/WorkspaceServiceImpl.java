@@ -49,7 +49,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     @Override
     public WorkspaceResponse create(WorkspaceRequest workspaceRequest)  throws MessagingException {
         User user = getAuthenticateUser();
-        Workspace workspace = inviteToWorkspace(workspaceRequest);
+        Workspace workspace;
+        if (workspaceRequest.getEmails() == null || workspaceRequest.getEmails().equals("") && workspaceRequest.getLink().equals("")) {
+            workspace = new Workspace();
+        } else {
+            workspace = inviteToWorkspace(workspaceRequest);
+        }
         Role role = roleRepository.findById(1L).orElseThrow(() ->
                 new NotFoundException("role is not found"));
         UserWorkspaceRole userWorkspaceRole = new UserWorkspaceRole();
