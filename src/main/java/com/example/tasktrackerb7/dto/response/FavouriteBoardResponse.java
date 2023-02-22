@@ -10,6 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FavouriteBoardResponse {
 
+    private Long id;
+
     private String boardName;
 
     private String photoLinkBoard;

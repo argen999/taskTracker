@@ -7,9 +7,12 @@ import lombok.Setter;
 @Setter
 public class FavouriteWorkspaceResponse {
 
+    private Long id;
+
     private String workspaceName;
 
-    public FavouriteWorkspaceResponse(String workspaceName) {
+    public FavouriteWorkspaceResponse(Long id,String workspaceName) {
         this.workspaceName = workspaceName;
+        this.id = id;
     }
 }
