@@ -34,7 +34,7 @@ public class Card {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.EAGER)
     private Column column;
 
-    @OneToOne(cascade = ALL, mappedBy = "card")
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private Estimation estimation;
 
     @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
@@ -54,13 +54,6 @@ public class Card {
 
     @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
     private Notification notification;
-
-    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private User creator;
-
-    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private Workspace workspace;
-
 
     public Card(String title) {
         this.title = title;

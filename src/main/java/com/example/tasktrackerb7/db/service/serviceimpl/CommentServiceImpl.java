@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
             notification.setBoard(board);
             notification.setColumn(column);
             notification.setCard(card);
-            notification.setDateOfWrite(LocalDateTime.now());
+            notification.setDateOfWrite(LocalDate.now());
             notification.setText(commentRequest.getText());
             notification.setFromUser(user);
             comment.setText(commentRequest.getText());
