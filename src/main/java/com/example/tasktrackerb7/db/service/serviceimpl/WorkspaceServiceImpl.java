@@ -143,17 +143,23 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             workspaceInnerPageResponse.setFavoritesCount(workspaceRepository.getCountFavorite(user.getId()));
             workspaceInnerPageResponse.setCardsCount(workspace.getCreator().getCards().size());
 
-            if (workspaceRepository.getCountParticipants(workspace.getId()) != 1L) {
-                workspaceInnerPageResponse.setParticipantsCount(workspaceRepository.getCountParticipants(workspace.getId()) - 1L);
+            long counter = 0;
+
+            for (UserWorkspaceRole u : workspace.getMembers()) {
+                if (u.getRole().getName().equals("ADMIN")) {
+                    counter++;
+                }
             }
 
             if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
                 workspaceInnerPageResponse.setAdmin(true);
             }
 
+            workspaceInnerPageResponse.setParticipantsCount(workspaceRepository.getCountParticipants(workspace.getId()) - counter);
+
             return workspaceInnerPageResponse;
 
-        } else throw new BadRequestException("You can't do update, because you are not member in workspace with id: " + id);
+        } else throw new BadRequestException("You can't do get, because you are not member in workspace with id: " + id);
     }
 
     private WorkspaceResponse convertToResponse(Workspace workspace) {
