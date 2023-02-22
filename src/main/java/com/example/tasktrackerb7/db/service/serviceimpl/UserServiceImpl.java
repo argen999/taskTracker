@@ -251,7 +251,7 @@ public class UserServiceImpl implements UserService {
         helper.setTo(email);
         helper.setText("To get a new password reset link visit: " + link + " " + "/" +  user.getId());
         mailSender.send(mimeMessage);
-        return new SimpleResponse("email send");
+        return new SimpleResponse("email has been send");
     }
 
     @Override
