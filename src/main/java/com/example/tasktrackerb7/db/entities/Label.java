@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 import static javax.persistence.CascadeType.*;
 
 @Entity
@@ -25,7 +27,7 @@ public class Label {
 
     private String color;
 
-    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private Card card;
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
+    private List<Card> cards;
 
 }
