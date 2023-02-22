@@ -91,8 +91,8 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int isDoneItems = 0;
         int allItems = 0;
 
-        int period = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
-        response.setPeriod(period);
+//        int period = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+//        response.setPeriod(period);
 
         for (User user : card.getUsers()) {
             cardMemberResponses.add(new CardMemberResponse(user));
