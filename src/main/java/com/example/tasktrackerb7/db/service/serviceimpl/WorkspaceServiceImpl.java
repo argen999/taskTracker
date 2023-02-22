@@ -50,7 +50,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     public WorkspaceResponse create(WorkspaceRequest workspaceRequest)  throws MessagingException {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
-        if (workspaceRequest.getEmails() != null && !workspaceRequest.getLink().equals("")) {
+        if (workspaceRequest.getEmails() != null && !workspaceRequest.getLink().equals("") && workspaceRequest.getLink() != null) {
              inviteToWorkspace(workspaceRequest);
         }
         Role role = roleRepository.findById(1L).orElseThrow(() ->
