@@ -48,11 +48,7 @@ public class Card {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private List<Attachment> attachments;
-
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
-    @JoinTable(name = "cards_labels",
-            joinColumns = @JoinColumn(name = "card_id"),
-            inverseJoinColumns = @JoinColumn(name = "label_id"))
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "card")
     private List<Label> labels;
 
     @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
