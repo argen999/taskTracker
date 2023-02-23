@@ -77,6 +77,32 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         return response;
     }
 
+    @Override
+    public AllIssuesResponseForGetAll filterByMembers(Long id, Long memberId) {
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + id + " not  found"));
+        User user = userRepository.findById(memberId).get();
+        List<Card> cards = workspace.getAllIssues();
+        AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
+        List<AllIssuesResponse> memberAssignedCards = new ArrayList<>();
+        for (Card card : cards) {
+            for (User member : card.getUsers()) {
+                if (member.equals(user)) {
+                    memberAssignedCards.add(convertToResponse(card));
+                }
+            }
+        }
+
+        Boolean isAdmin = false;
+        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+            isAdmin = true;
+        }
+
+        allIssuesResponseForGetAll.setIsAdmin(isAdmin);
+        allIssuesResponseForGetAll.setAllIssuesResponses(memberAssignedCards);
+        return allIssuesResponseForGetAll;
+    }
+
     private List<AllIssuesResponse> allIssuesResponses(List<Card> cards) {
         List<AllIssuesResponse> responses = new ArrayList<>();
         for (Card card : cards) {
@@ -91,8 +117,11 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int isDoneItems = 0;
         int allItems = 0;
 
-//        int period = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
-//        response.setPeriod(period);
+        int dateOfStart = card.getEstimation().getDateOfStart().getDayOfMonth();
+        int dateOfFinish = card.getEstimation().getDateOfFinish().getDayOfMonth();
+        int period = dateOfFinish - dateOfStart;
+
+        response.setPeriod(period);
 
         for (User user : card.getUsers()) {
             cardMemberResponses.add(new CardMemberResponse(user));

@@ -32,4 +32,10 @@ public class AllIssuesApi {
                                                           @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
         return allIssuesService.filterByDateOfStart(id, from, to);
     }
+
+    @Operation(summary = "Filter by members", description = "Filter cards by members")
+    @GetMapping("/{id}/{memberId}")
+    public AllIssuesResponseForGetAll filterByMembers(@PathVariable Long id, @PathVariable Long memberId) {
+        return allIssuesService.filterByMembers(id, memberId);
+    }
 }
