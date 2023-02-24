@@ -59,7 +59,7 @@ public class WorkspaceApi {
         return workspaceService.getById(id);
     }
 
-    @Operation(summary = "", description = "")
+    @Operation(summary = "Get workspace inner page by id", description = "Get from the workspace how many participants are in it, the number of favorites, etc.")
     @GetMapping("/getWorkspaceInnerPage/{id}")
     @PreAuthorize("isAuthenticated()")
     public WorkspaceInnerPageResponse getWorkspaceInnerPageByIdyId(@PathVariable Long id) {
