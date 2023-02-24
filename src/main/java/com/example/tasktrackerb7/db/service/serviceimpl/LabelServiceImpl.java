@@ -26,13 +26,8 @@ public class LabelServiceImpl implements LabelService {
     private final LabelResponseConverter labelResponseConverter;
 
     @Override
-    public LabelResponse createLabel(Long cardId, LabelRequest labelRequest) {
-        Card card = cardRepository.findById(cardId).orElseThrow(
-                () -> new NotFoundException("Card with ID " + cardId + " not found!")
-        );
+    public LabelResponse createLabel(LabelRequest labelRequest) {
         Label label = labelRequestConverter.createLabel(labelRequest);
-        card.addLabel(label);
-        label.setCard(card);
         labelRepository.save(label);
         return labelResponseConverter.viewLabel(label);
     }
@@ -60,10 +55,6 @@ public class LabelServiceImpl implements LabelService {
         Label label = labelRepository.findById(labelId).orElseThrow(
                 () -> new NotFoundException("Label with ID " + labelId + " not found!")
         );
-        Card card = label.getCard();
-        if (!card.getLabels().contains(label)) {
-            throw new NotFoundException("We dont have this label in this card!");
-        }
         labelRepository.delete(label);
         return new SimpleResponse("Label with ID " + labelId + " deleted successfully!");
     }
@@ -76,9 +67,8 @@ public class LabelServiceImpl implements LabelService {
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new NotFoundException("Card with ID " + cardId + " not found!")
         );
-
-        label.getCard().getLabels().remove(label);
-        label.setCard(card);
+//        label.addCard(card);
+//        card.addLabel(label);
         card.assignLabel(label);
         labelRepository.save(label);
         cardRepository.save(card);

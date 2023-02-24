@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -27,7 +28,14 @@ public class Label {
 
     private String color;
 
-    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private Card card;
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "labels")
+    private List<Card> cards;
+
+    public void addCard(Card card) {
+        if (cards == null) {
+            cards = new ArrayList<>();
+        }
+        cards.add(card);
+    }
 
 }

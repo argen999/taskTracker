@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface LabelService {
 
-    LabelResponse createLabel(Long cardId, LabelRequest labelRequest);
+    LabelResponse createLabel(LabelRequest labelRequest);
 
     List<LabelResponse> getAllLabelsByCardId(Long cardId);
 

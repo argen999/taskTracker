@@ -21,9 +21,9 @@ public class LabelAPI {
     private final LabelService labelService;
 
     @Operation(summary = "Create label", description = "Create label")
-    @PostMapping("/createLabel/{cardId}")
-    public LabelResponse createLabel(@PathVariable Long cardId, @RequestBody LabelRequest labelRequest) {
-        return labelService.createLabel(cardId, labelRequest);
+    @PostMapping("/createLabel")
+    public LabelResponse createLabel(@RequestBody LabelRequest labelRequest) {
+        return labelService.createLabel(labelRequest);
     }
 
     @Operation(summary = "Get all labels by cardId", description = "Get all labels by cardId")

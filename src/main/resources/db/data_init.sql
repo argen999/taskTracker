@@ -1,9 +1,15 @@
 insert into users(id, name, surname, email, password, photo_link)
-values (1, 'Kerezbek', 'Aibekov', 'kerezbek@gmail.com', '$2a$12$Kzwf20Tt.RqrbCjvljxSKeS0ajkjHmswyZPB0jJ1GDkcS3I4jhj1i', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (2, 'Aruuke', 'Sartbaeva', 'aruuke@gmail.com', '$2a$12$axNSZ2ekesrc4cNDzxxlUuiElncsMs91KJd325HBREw5SNl0.Clxe', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (3, 'Mahamatjan', 'Islamidinov', 'mahamatjan@gmail.com', '$2a$12$634QZhZUKhhIkaPexme/wOeRDnvZBLbqV.EAAh0Jy8RCPlDiWrX2K', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (4, 'Argen', 'Abdymomunov', 'argen@gmail.com', '$2a$12$cVTaN/z9ZWlkhm3d.7Xemea11Og6MeooUWm8//PNuKQKJc6XxQ24y', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (5, 'Nurislam', 'Bakytov' , 'nurislam@gmail.com', '$2a$12$xINOT3UG0ubHqO9RsSk5hOsc4ywAjJynkBWByhoWPIbbJ5T2Hxexu', 'https://ru.pinterest.com/pin/907686499876044855/');
+values (1, 'Kerezbek', 'Aibekov', 'kerezbek@gmail.com', '$2a$12$Kzwf20Tt.RqrbCjvljxSKeS0ajkjHmswyZPB0jJ1GDkcS3I4jhj1i',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (2, 'Aruuke', 'Sartbaeva', 'aruuke@gmail.com', '$2a$12$axNSZ2ekesrc4cNDzxxlUuiElncsMs91KJd325HBREw5SNl0.Clxe',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (3, 'Mahamatjan', 'Islamidinov', 'mahamatjan@gmail.com',
+        '$2a$12$634QZhZUKhhIkaPexme/wOeRDnvZBLbqV.EAAh0Jy8RCPlDiWrX2K',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (4, 'Argen', 'Abdymomunov', 'argen@gmail.com', '$2a$12$cVTaN/z9ZWlkhm3d.7Xemea11Og6MeooUWm8//PNuKQKJc6XxQ24y',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (5, 'Nurislam', 'Bakytov', 'nurislam@gmail.com', '$2a$12$xINOT3UG0ubHqO9RsSk5hOsc4ywAjJynkBWByhoWPIbbJ5T2Hxexu',
+        'https://ru.pinterest.com/pin/907686499876044855/');
 
 insert into roles(id, name)
 values (1, 'ADMIN'),
@@ -24,11 +30,11 @@ values (1, false, 'Peaksoft House', 1),
        (5, false, 'MegaCom', 5);
 
 insert into boards(id, archive, background, name, workspace_id)
-values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1),
-       (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 2),
-       (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 3),
-       (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 4),
-       (5, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Kotlin', 5);
+values (1, false, 'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg', 'Java', 1),
+       (2, false, 'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg', 'JavaScript', 2),
+       (3, false, 'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg', 'Python', 3),
+       (4, false, 'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg', 'C++', 4),
+       (5, false, 'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg', 'Kotlin', 5);
 
 insert into columns(id, name, board_id)
 values (1, 'TO DO', 1),
@@ -65,12 +71,12 @@ values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1)
        (4, '2023-01-05', 'I will do it only in a week,after the vocation', 4, 4),
        (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5, 4);
 
-insert into label(id, color, description, card_id)
-values (1, 'Gray', 'TO DO', 1),
-       (2, 'Red', 'IN PROGRESS', 2),
-       (3, 'Orange', 'KICK BACK', 3),
-       (4, 'Blue', 'FINAL REVIEW', 4),
-       (5, 'Green', 'COMPLETE', 5);
+insert into label(id, color, description)
+values (1, 'Gray', 'TO DO'),
+       (2, 'Red', 'IN PROGRESS'),
+       (3, 'Orange', 'KICK BACK'),
+       (4, 'Blue', 'FINAL REVIEW'),
+       (5, 'Green', 'COMPLETE');
 
 insert into checklists(id, percent, title, card_id)
 values (1, 0, 'Auth with GOOGLE', 1),
@@ -99,12 +105,12 @@ values (1, '2023-01-09', false, 'Appointed you  as an admin to workspace Peaksof
        (3, '2023-01-09', false, 'My God,let me not burn out on this task', 3, 3, 3, 3),
        (4, '2023-01-09', false, 'Added you to the board C', 4, 4, 4, 4);
 
-insert into favourites(id, user_id, board_id, workspace_id,is_board)
-values (1, 1, 1, null,false),
-       (2, 2, null, 2,true),
-       (3, 3, 3, null,false),
-       (4, 4, null, 4,true),
-       (5, 5, 5, null,false);
+insert into favourites(id, user_id, board_id, workspace_id, is_board)
+values (1, 1, 1, null, false),
+       (2, 2, null, 2, true),
+       (3, 3, 3, null, false),
+       (4, 4, null, 4, true),
+       (5, 5, 5, null, false);
 
 
 
@@ -119,6 +125,13 @@ insert into users_notifications(user_id, notification_id)
 values (4, 1),
        (3, 2),
        (2, 3),
-       (1, 4)
+       (1, 4);
+
+insert into cards_labels(card_id, label_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
 
