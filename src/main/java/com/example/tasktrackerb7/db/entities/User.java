@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Column(length = 1000)
     private String photoLink;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "users")
+    @OneToMany(cascade = {DETACH,REMOVE, MERGE, REFRESH}, mappedBy = "user")
     private List<Notification> notifications;
 
     @OneToMany(cascade = {DETACH, REFRESH, MERGE, PERSIST}, mappedBy = "creator")
@@ -138,10 +138,10 @@ public class User implements UserDetails {
         card.getUsers().remove(this);
     }
 
-    public void remove(Notification notification){
-        this.notifications.remove(notification);
-        notification.getUsers().remove(this);
-    }
+//    public void remove(Notification notification){
+//        this.notifications.remove(notification);
+//        notification.getUser().remove(notification.getUser());
+//    }
 
     public void addComment(Comment comment) {
         if (comment == null) comments = new ArrayList<>();

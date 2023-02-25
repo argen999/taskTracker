@@ -98,7 +98,8 @@ public class ScheduleConfiguration {
                                 continue;
                             }
                             user.addNotification(notification);
-                            notification.addUser(user);
+                            notification.setUser(user);
+//                            notification.addUser(user);
                         }
 
                         e.getCreator().addNotification(notification);

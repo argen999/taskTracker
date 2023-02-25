@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,25 +52,35 @@ public class CommentServiceImpl implements CommentService {
         Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() -> new NotFoundException("column bot found!"));
         Comment comment = new Comment();
         Notification notification = new Notification();
-        for (User u : card.getUsers()) {
-            u.addComment(comment);
-            notification.addUser(u);
-            u.addNotification(notification);
-            notification.setStatus(false);
-            notification.setBoard(board);
-            notification.setColumn(column);
-            notification.setCard(card);
-            notification.setDateOfWrite(LocalDate.now());
-            notification.setText(commentRequest.getText());
-            notification.setFromUser(user);
-            comment.setText(commentRequest.getText());
-            comment.setLocalDateTime(LocalDateTime.now());
-            comment.setCard(card);
-            card.addComment(comment);
-            comment.setUser(user);
-        }
-        notificationRepository.save(notification);
+
+        comment.setUser(user);
+        comment.setText(commentRequest.getText());
+        comment.setLocalDateTime(LocalDateTime.now());
+        comment.setCard(card);
+        card.addComment(comment);
+
         commentRepository.save(comment);
+
+        for (User u : userRepository.findAll()) {
+            if (u == null) continue;
+
+            if (card.getUsers().contains(u)) {
+                u.addComment(comment);
+                notification.setUser(u);
+                u.addNotification(notification);
+                notification.setStatus(false);
+                notification.setBoard(board);
+                notification.setColumn(column);
+                notification.setCard(card);
+                notification.setDateOfWrite(LocalDate.now());
+                notification.setText(commentRequest.getText());
+                notification.setFromUser(user);
+            }
+
+        }
+
+        notificationRepository.save(notification);
+
         return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(),true,new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 

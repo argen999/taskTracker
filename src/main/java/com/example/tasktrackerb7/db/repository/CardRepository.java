@@ -11,4 +11,8 @@ import java.util.List;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
+
+    @Query(value = "select users_id from cards_users where cards_id = :id;", nativeQuery = true)
+    List<Long> getAllId(Long id);
+
 }
