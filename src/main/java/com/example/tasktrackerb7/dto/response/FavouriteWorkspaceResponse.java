@@ -9,10 +9,13 @@ public class FavouriteWorkspaceResponse {
 
     private Long id;
 
+    private Long workspaceId;
+
     private String workspaceName;
 
-    public FavouriteWorkspaceResponse(Long id,String workspaceName) {
+    public FavouriteWorkspaceResponse(Long id, Long workspaceId,String workspaceName) {
         this.workspaceName = workspaceName;
         this.id = id;
+        this.workspaceId = workspaceId;
     }
 }

@@ -12,6 +12,8 @@ public class FavouriteBoardResponse {
 
     private Long id;
 
+    private  Long boardId;
+
     private String boardName;
 
     private String photoLinkBoard;
