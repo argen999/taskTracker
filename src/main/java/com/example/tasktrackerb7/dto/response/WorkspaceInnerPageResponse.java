@@ -9,11 +9,11 @@ public class WorkspaceInnerPageResponse {
 
     private String workspaceName;
 
-    private long favoritesCount = 0;
+    private long favoritesCount;
 
-    private int cardsCount = 0;
+    private int cardsCount;
 
-    private long participantsCount = 0;
+    private long participantsCount;
 
     private boolean isAdmin = false;
 
