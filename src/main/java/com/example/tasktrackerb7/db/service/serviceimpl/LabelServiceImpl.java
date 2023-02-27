@@ -10,7 +10,7 @@ import com.example.tasktrackerb7.db.service.LabelService;
 import com.example.tasktrackerb7.dto.request.LabelRequest;
 import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
-import com.example.tasktrackerb7.exceptions.NotFoundException;
+import com.example.tasktrackerb7.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,9 @@ public class LabelServiceImpl implements LabelService {
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new NotFoundException("Card with ID " + cardId + " not found!")
         );
-        return labelResponseConverter.viewAll(labelRepository.getAllLabelsByCardId(cardId));
+        List<LabelResponse> labelResponses = card.getLabels().stream().map(l -> new LabelResponse(l.getId(), l.getDescription(), l.getColor())).toList();
+        return labelResponses;
+
     }
 
     @Override
@@ -51,12 +53,26 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
-    public SimpleResponse deleteLabelByIdFromCard(Long labelId) {
+    public SimpleResponse deleteLabelById(Long id) {
+        Label label = labelRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Label wit ID " + id + " not found!")
+        );
+        labelRepository.delete(label);
+        return new SimpleResponse("Label with ID " + id + " deleted successfully!");
+    }
+
+    @Override
+    public SimpleResponse deleteLabelByIdFromCard(Long cardId, Long labelId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(
+                () -> new NotFoundException("Card with ID " + cardId + " not found!")
+        );
         Label label = labelRepository.findById(labelId).orElseThrow(
                 () -> new NotFoundException("Label with ID " + labelId + " not found!")
         );
-        labelRepository.delete(label);
-        return new SimpleResponse("Label with ID " + labelId + " deleted successfully!");
+        if (card.getLabels().contains(label)) {
+            card.getLabels().remove(label);
+        }
+        return new SimpleResponse("Label with ID " + labelId + " deleted successfully from card " + card.getDescription());
     }
 
     @Override
@@ -67,10 +83,11 @@ public class LabelServiceImpl implements LabelService {
         Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new NotFoundException("Card with ID " + cardId + " not found!")
         );
-//        label.addCard(card);
-//        card.addLabel(label);
+        if (card.getLabels().contains(label)) {
+            throw new BadRequestException("Label already exists!");
+        }
         card.assignLabel(label);
         labelRepository.save(label);
-        cardRepository.save(card);
+//        cardRepository.save(card);
     }
 }

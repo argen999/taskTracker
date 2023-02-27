@@ -20,13 +20,13 @@ public class LabelAPI {
 
     private final LabelService labelService;
 
-    @Operation(summary = "Create label", description = "Create label")
+    @Operation(summary = "Create new label", description = "Create new label")
     @PostMapping("/createLabel")
     public LabelResponse createLabel(@RequestBody LabelRequest labelRequest) {
         return labelService.createLabel(labelRequest);
     }
 
-    @Operation(summary = "Get all labels by cardId", description = "Get all labels by cardId")
+    @Operation(summary = "Get all labels by card ID", description = "Get all labels by cardID")
     @GetMapping("/getAllLabelsByCardId/{cardId}")
     public List<LabelResponse> getAllLabelsByCardId(@PathVariable Long cardId) {
         return labelService.getAllLabelsByCardId(cardId);
@@ -38,10 +38,16 @@ public class LabelAPI {
         return labelService.updateLabel(labelRequest, id);
     }
 
+    @Operation(summary = "Delete label by ID", description = "Delete label by ID")
+    @DeleteMapping("/deleteLabelById/{id}")
+    public SimpleResponse deleteLabelById(@PathVariable Long id) {
+        return labelService.deleteLabelById(id);
+    }
+
     @Operation(summary = "Delete label by ID from card", description = "Delete label by ID from card")
-    @DeleteMapping("/deleteLabelByIdFromCard/{id}")
-    public SimpleResponse deleteLabelByIdFromCard(@PathVariable Long id) {
-        return labelService.deleteLabelByIdFromCard(id);
+    @DeleteMapping("/deleteLabelByIdFromCard/{cardId}/{labelId}")
+    public SimpleResponse deleteLabelByIdFromCard(@PathVariable Long cardId, @PathVariable Long labelId) {
+        return labelService.deleteLabelByIdFromCard(cardId, labelId);
     }
 
     @Operation(summary = "Assign label to card", description = "Assign label to card")
