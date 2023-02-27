@@ -49,6 +49,12 @@ public class AuthApi {
         return userService.registerAndAuthWithGoogle(tokenId);
     }
 
+    @Operation(summary = "Get my profile", description = "Get my profile by authenticate")
+    @GetMapping("/profile")
+    public ProfileInnerPageResponse profileInnerPageResponse() {
+        return userService.getProfile();
+    }
+
     @Operation(summary = "Update", description = "Updating user data")
     @PutMapping("/update")
     @PreAuthorize("isAuthenticated()")
