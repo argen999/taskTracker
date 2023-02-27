@@ -3,6 +3,7 @@ package com.example.tasktrackerb7.api;
 import com.example.tasktrackerb7.db.service.WorkspaceService;
 import com.example.tasktrackerb7.dto.request.WorkspaceRequest;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
+import com.example.tasktrackerb7.dto.response.WorkspaceInnerPageResponse;
 import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,5 +59,11 @@ public class WorkspaceApi {
         return workspaceService.getById(id);
     }
 
-
+    @Operation(summary = "Get workspace inner page by id", description = "Get from the workspace how many participants are in it, the number of favorites, etc.")
+    @GetMapping("/get/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public WorkspaceInnerPageResponse getWorkspaceInnerPageByIdyId(@PathVariable Long id) {
+        return workspaceService.getWorkspaceInnerPageById(id);
+    }
+    
 }
