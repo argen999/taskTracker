@@ -61,11 +61,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public SimpleResponse markAsRead() {
         User user = getAuthenticateUser();
-        List<Notification> getAllNotification = notificationRepository.getAllNotification(user.getId());
-        for (Notification notification : user.getNotifications()){
-            if (notification.isStatus()){
+        List<Notification> notifications = notificationRepository.getAllNotification(user.getId());
+        for (Notification notification : notifications){
                 notification.setStatus(true);
-            }
             notificationRepository.save(notification);
         }
         return new SimpleResponse(" Mark as read successfully!");
