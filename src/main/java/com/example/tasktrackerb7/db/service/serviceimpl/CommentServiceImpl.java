@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
                 notification.setBoard(board);
                 notification.setColumn(column);
                 notification.setCard(card);
-                notification.setDateOfWrite(LocalDate.now());
+                notification.setDateOfWrite(LocalDateTime.now());
                 notification.setText(commentRequest.getText());
                 notification.setFromUser(user);
                 notification.setStatus(false);

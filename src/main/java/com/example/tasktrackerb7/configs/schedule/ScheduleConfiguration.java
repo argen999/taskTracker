@@ -97,7 +97,7 @@ public class ScheduleConfiguration {
                                             continue;
                                         }
                                         notification.setCard(card);
-                                        notification.setDateOfWrite(LocalDate.now(ZoneId.of("Asia/Almaty")));
+                                        notification.setDateOfWrite(LocalDateTime.from(LocalDate.now(ZoneId.of("Asia/Almaty"))));
                                         notification.setColumn(column);
                                         notification.setBoard(board);
                                         notification.setFromUser(creator);
@@ -119,7 +119,7 @@ public class ScheduleConfiguration {
                                             continue;
                                         }
                                         notification.setCard(card);
-                                        notification.setDateOfWrite(LocalDate.now(ZoneId.of("Asia/Almaty")));
+                                        notification.setDateOfWrite(LocalDateTime.from(LocalDate.now(ZoneId.of("Asia/Almaty"))));
                                         notification.setColumn(column);
                                         notification.setBoard(board);
                                         notification.setFromUser(creator);
@@ -141,7 +141,7 @@ public class ScheduleConfiguration {
                                             continue;
                                         }
                                         notification.setCard(card);
-                                        notification.setDateOfWrite(LocalDate.now(ZoneId.of("Asia/Almaty")));
+                                        notification.setDateOfWrite(LocalDateTime.from(LocalDate.now(ZoneId.of("Asia/Almaty"))));
                                         notification.setColumn(column);
                                         notification.setBoard(board);
                                         notification.setFromUser(creator);
@@ -163,7 +163,7 @@ public class ScheduleConfiguration {
                                             continue;
                                         }
                                         notification.setCard(card);
-                                        notification.setDateOfWrite(LocalDate.now(ZoneId.of("Asia/Almaty")));
+                                        notification.setDateOfWrite(LocalDateTime.from(LocalDate.now(ZoneId.of("Asia/Almaty"))));
                                         notification.setColumn(column);
                                         notification.setBoard(board);
                                         notification.setFromUser(creator);
