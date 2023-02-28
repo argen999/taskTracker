@@ -255,7 +255,7 @@ public class UserServiceImpl implements UserService {
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         helper.setSubject("Task Tracker");
         helper.setTo(email);
-        helper.setText("To get a new password reset link visit: " + link + " " + "/" +  user.getId());
+        helper.setText("To get a new password reset link visit: " + link +"/" +  user.getId());
         mailSender.send(mimeMessage);
         return new SimpleResponse("email has been send");
     }
