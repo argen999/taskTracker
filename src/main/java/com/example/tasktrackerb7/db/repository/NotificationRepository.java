@@ -15,5 +15,13 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             (select id from cards where column_id in
             (select id from columns where board_id in (select id from boards where workspace_id = :id)))
             """, nativeQuery = true)
-    List<Notification> getAll(Long id);
+    List<Notification> getAllByWorkspaceId(Long id);
+
+    @Query(value = """
+            select * from notifications where card_id in
+            (select id from cards where column_id in
+            (select id from columns where board_id = :id))
+            """, nativeQuery = true)
+    List<Notification> getAllByBoardId(Long id);
+
 }

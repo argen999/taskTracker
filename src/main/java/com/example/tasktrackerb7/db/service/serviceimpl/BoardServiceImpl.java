@@ -1,10 +1,7 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
-import com.example.tasktrackerb7.db.repository.BoardRepository;
-import com.example.tasktrackerb7.db.repository.UserRepository;
-import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
-import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
+import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.BoardService;
 import com.example.tasktrackerb7.dto.request.BoardRequest;
 import com.example.tasktrackerb7.dto.request.BoardUpdateRequest;
@@ -33,6 +30,7 @@ public class BoardServiceImpl implements BoardService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -122,6 +120,7 @@ public class BoardServiceImpl implements BoardService {
                     }
                 }
                 board.setFavourites(null);
+                notificationRepository.deleteAll(notificationRepository.getAllByBoardId(id));
                 boardRepository.delete(board);
                 return new SimpleResponse("board deleted with id: " + id + " successfully");
 

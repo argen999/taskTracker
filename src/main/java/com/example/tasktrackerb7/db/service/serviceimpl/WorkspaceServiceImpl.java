@@ -36,11 +36,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final RoleRepository roleRepository;
 
-    private final FavouriteRepository favouriteRepository;
-
     private final JavaMailSender mailSender;
 
     private final NotificationRepository notificationRepository;
+
     private final LabelRepository labelRepository;
 
     private User getAuthenticateUser() {
@@ -80,7 +79,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
-            notificationRepository.deleteAll(notificationRepository.getAll(id));
+            notificationRepository.deleteAll(notificationRepository.getAllByWorkspaceId(id));
             labelRepository.deletes(id);
             workspaceRepository.delete(workspace);
 
