@@ -35,7 +35,7 @@ public class LabelAPI {
     @Operation(summary = "Update label", description = "Update label")
     @PutMapping("/updateLabel/{id}")
     public LabelResponse updateLabel(@RequestBody LabelRequest labelRequest, @PathVariable Long id) {
-        return labelService.updateLabel(labelRequest, id);
+        return labelService.updateLabel(id, labelRequest);
     }
 
     @Operation(summary = "Delete label by ID", description = "Delete label by ID")

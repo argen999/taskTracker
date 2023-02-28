@@ -13,10 +13,13 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class LabelServiceImpl implements LabelService {
 
@@ -43,9 +46,9 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
-    public LabelResponse updateLabel(LabelRequest labelRequest, Long labelId) {
-        Label label = labelRepository.findById(labelId).orElseThrow(
-                () -> new NotFoundException("Label with ID " + labelId + " not found!")
+    public LabelResponse updateLabel(Long id, LabelRequest labelRequest) {
+        Label label = labelRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Label with ID " + id + " not found!")
         );
         labelRequestConverter.updateLabel(label, labelRequest);
         labelRepository.save(label);
@@ -70,7 +73,7 @@ public class LabelServiceImpl implements LabelService {
                 () -> new NotFoundException("Label with ID " + labelId + " not found!")
         );
         if (card.getLabels().contains(label)) {
-            card.getLabels().remove(label);
+            labelRepository.deleteLabel(label.getId());
         }
         return new SimpleResponse("Label with ID " + labelId + " deleted successfully from card " + card.getDescription());
     }
@@ -88,6 +91,5 @@ public class LabelServiceImpl implements LabelService {
         }
         card.assignLabel(label);
         labelRepository.save(label);
-//        cardRepository.save(card);
     }
 }

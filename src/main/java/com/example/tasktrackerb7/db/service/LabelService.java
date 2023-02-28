@@ -14,7 +14,7 @@ public interface LabelService {
 
     List<LabelResponse> getAllLabelsByCardId(Long cardId);
 
-    LabelResponse updateLabel(LabelRequest labelRequest, Long labelId);
+    LabelResponse updateLabel(Long id,LabelRequest labelRequest);
 
     SimpleResponse deleteLabelById(Long id);
 
