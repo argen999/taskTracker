@@ -37,11 +37,14 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;
 
-    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, targetEntity = User.class)
-    @JoinTable(name = "users_notifications",
-            joinColumns = @JoinColumn(name = "notification_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> users;
+//    @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, targetEntity = User.class)
+//    @JoinTable(name = "users_notifications",
+//            joinColumns = @JoinColumn(name = "notification_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private List<User> users;
+
+    @ManyToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
+    private User user;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private Board board;
@@ -52,14 +55,16 @@ public class Notification {
     @OneToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.LAZY)
     private Card card;
 
-    public void addUser(User user) {
-        if (users == null) users = new ArrayList<>();
-        users.add(user);
-    }
+//    public void addUser(User user) {
+//        if (user == null) {
+//            user = new ArrayList<>();
+//        }
+//        user.add(user);
+//    }
 
-    public void remove(User user){
-        this.users.remove(user);
-        user.getNotifications().remove(this);
-    }
+//    public void remove(User user){
+//        this.users.remove(user);
+//        user.getNotifications().remove(this);
+//    }
 
 }

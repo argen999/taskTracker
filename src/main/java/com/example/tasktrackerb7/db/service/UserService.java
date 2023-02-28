@@ -1,8 +1,6 @@
 package com.example.tasktrackerb7.db.service;
 
-import com.example.tasktrackerb7.dto.request.AuthRequest;
-import com.example.tasktrackerb7.dto.request.ProfileRequest;
-import com.example.tasktrackerb7.dto.request.RegisterRequest;
+import com.example.tasktrackerb7.dto.request.*;
 import com.example.tasktrackerb7.dto.response.*;
 
 import com.example.tasktrackerb7.exceptions.ExceptionResponse;
@@ -12,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @Service
@@ -23,6 +22,8 @@ public interface UserService {
 
     AuthWithGoogleResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException, ExceptionResponse;
 
+    ProfileInnerPageResponse getProfile();
+
     ProfileResponse updatingUserData(ProfileRequest profileRequest);
 
     List<WorkspaceResponse> getAllWorkspaceOwnedByUser();
@@ -30,4 +31,8 @@ public interface UserService {
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
     List<MemberResponse> search(Long id, String email_name);
+
+    SimpleResponse forgotPassword(String email, String link) throws MessagingException;
+
+    ResetPasswordResponse resetPassword(ResetPasswordRequest request);
 }
