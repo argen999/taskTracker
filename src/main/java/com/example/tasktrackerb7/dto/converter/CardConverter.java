@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import java.time.Period;
 import java.util.ArrayList;
@@ -49,8 +48,17 @@ public class CardConverter {
         response.setName(card.getTitle());
         response.setDescription(card.getDescription());
         response.setIsArchive(card.getArchive());
+        List<LabelResponse> list = new ArrayList<>();
         if (card.getLabels() != null) {
-            response.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+            for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+                LabelResponse labelResponse = new LabelResponse();
+                labelResponse.setId(l.getId());
+                labelResponse.setId(l.getId());
+                labelResponse.setDescription(l.getDescription());
+                labelResponse.setColorLink(l.getColor());
+                list.add(labelResponse);
+            }
+            response.setLabelResponses(list);
         }
 
         if (card.getEstimation() != null) {
@@ -108,9 +116,18 @@ public class CardConverter {
         } else {
             for (Card card : cards) {
                 CardResponse cardResponse = new CardResponse();
+                List<LabelResponse> list = new ArrayList<>();
                 cardResponse.setId(card.getId());
                 cardResponse.setName(card.getTitle());
-                cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+                for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+                    LabelResponse labelResponse = new LabelResponse();
+                    labelResponse.setId(l.getId());
+                    labelResponse.setId(l.getId());
+                    labelResponse.setDescription(l.getDescription());
+                    labelResponse.setColorLink(l.getColor());
+                    list.add(labelResponse);
+                }
+                cardResponse.setLabelResponses(list);
 
                 if (card.getEstimation() != null) {
                     int between = Period.between(LocalDate.from(card.getEstimation().getDateOfStart()), LocalDate.from(card.getEstimation().getDateOfFinish())).getDays();
@@ -146,7 +163,16 @@ public class CardConverter {
         CardResponse cardResponse = new CardResponse();
         cardResponse.setId(card.getId());
         cardResponse.setName(card.getTitle());
-        cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+        List<LabelResponse> list = new ArrayList<>();
+        for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+            LabelResponse labelResponse = new LabelResponse();
+            labelResponse.setId(l.getId());
+            labelResponse.setId(l.getId());
+            labelResponse.setDescription(l.getDescription());
+            labelResponse.setColorLink(l.getColor());
+            list.add(labelResponse);
+        }
+        cardResponse.setLabelResponses(list);
         if (card.getEstimation() != null) {
             int between = Period.between(card.getEstimation().getDateOfStart().toLocalDate(), card.getEstimation().getDateOfFinish().toLocalDate()).getDays();
             cardResponse.setDuration(" " + between + " days");
