@@ -25,4 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "on w.workspace.id=:id and w.user.id=u.id " +
             "where concat(u.name, u.surname, u.email) like concat('%', :email, '%') ")
     List<MemberResponse> searchByEmailOrName(@Param("email") String email, @Param("id") Long id);
+
+    @Query(value = "select * from users where id in (select users_id from cards_users where cards_id = :id)", nativeQuery = true)
+    List<User> getAll(Long id);
 }
