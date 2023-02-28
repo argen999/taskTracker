@@ -22,6 +22,8 @@ public interface UserService {
 
     AuthWithGoogleResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException, ExceptionResponse;
 
+    ProfileInnerPageResponse getProfile();
+
     ProfileResponse updatingUserData(ProfileRequest profileRequest);
 
     List<WorkspaceResponse> getAllWorkspaceOwnedByUser();

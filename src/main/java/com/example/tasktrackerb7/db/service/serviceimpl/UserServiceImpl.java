@@ -169,6 +169,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ProfileInnerPageResponse getProfile() {
+        User user = getAuthenticateUser();
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), getAllWorkspaceOwnedByUser());
+    }
+
+    @Override
     public ProfileResponse updatingUserData(ProfileRequest profileRequest) {
         User user = getAuthenticateUser();
 
