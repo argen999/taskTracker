@@ -9,6 +9,8 @@ import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.UserService;
+import com.example.tasktrackerb7.dto.request.*;
+import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
@@ -29,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,6 +43,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -59,6 +66,8 @@ public class UserServiceImpl implements UserService {
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
 
     private final WorkspaceRepository workspaceRepository;
+
+    private final JavaMailSender mailSender;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -160,6 +169,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ProfileInnerPageResponse getProfile() {
+        User user = getAuthenticateUser();
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), getAllWorkspaceOwnedByUser());
+    }
+
+    @Override
     public ProfileResponse updatingUserData(ProfileRequest profileRequest) {
         User user = getAuthenticateUser();
 
@@ -230,4 +245,43 @@ public class UserServiceImpl implements UserService {
                 () -> new NotFoundException("Workspace with id: " + id + " nont found"));
         return userRepository.searchByEmailOrName(email_name, workspace.getId());
     }
+
+    @Override
+    public SimpleResponse forgotPassword(String email, String link) throws MessagingException {
+       User user = userRepository.findByEmail(email).orElseThrow(
+               ()-> new NotFoundException("with email:" + email + "not found!")
+       );
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        helper.setSubject("Task Tracker");
+        helper.setTo(email);
+        helper.setText("To get a new password reset link visit: " + link +"/" +  user.getId());
+        mailSender.send(mimeMessage);
+        return new SimpleResponse("email has been send");
+    }
+
+    @Override
+    public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
+        User user = userRepository.findById(request.getUserId()).orElseThrow(
+                () -> new NotFoundException("user with id: " + request.getUserId() + " not found")
+        );
+        String oldPassword = user.getPassword();
+        String newPassword = passwordEncoder.encode(request.getNewPassword());
+        if (!oldPassword.equals(newPassword)) {
+            user.setPassword(newPassword);
+            userRepository.save(user);
+        }
+        String jwt = jwtTokenUtil.generateToken(user.getEmail());
+
+        return new ResetPasswordResponse(
+                user.getId(),
+                user.getName(),
+                user.getSurname(),
+                user.getEmail(),
+                roleRepository.findById(2L).orElseThrow(() -> new NotFoundException("role cannot be send to response")).getName(),
+                jwt,
+                "Password updated!");
+    }
+
+
 }
