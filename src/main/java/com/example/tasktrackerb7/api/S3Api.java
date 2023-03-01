@@ -26,4 +26,9 @@ private final S3Service s3Service;
     public Map<String, String> uploadFile(@RequestParam(name = "file",required = false)  MultipartFile file) throws IOException {
         return s3Service.upload(file);
     }
+    @Operation(summary = "Delete file", description = "Delete file from database")
+    @DeleteMapping
+    public Map<String, String> deleteFile(@RequestParam String fileLink) {
+        return s3Service.delete(fileLink);
+    }
 }
