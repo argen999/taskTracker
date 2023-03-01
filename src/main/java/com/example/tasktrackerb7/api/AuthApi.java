@@ -51,8 +51,14 @@ public class AuthApi {
 
     @Operation(summary = "Get my profile", description = "Get my profile by authenticate")
     @GetMapping("/profile")
-    public ProfileInnerPageResponse profileInnerPageResponse() {
-        return userService.getProfile();
+    public ProfileInnerPageResponse getMyProfile() {
+        return userService.getMyProfile();
+    }
+
+    @Operation(summary = "Get profile", description = "Get profile by id")
+    @GetMapping("/{id}")
+    public ProfileInnerPageResponse getProfileById(@PathVariable Long id) {
+        return userService.getProfileById(id);
     }
 
     @Operation(summary = "Update", description = "Updating user data")
