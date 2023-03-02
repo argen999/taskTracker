@@ -17,12 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class LabelServiceImpl implements LabelService {
-
     private final LabelRepository labelRepository;
     private final CardRepository cardRepository;
     private final LabelRequestConverter labelRequestConverter;
@@ -60,7 +58,7 @@ public class LabelServiceImpl implements LabelService {
         Label label = labelRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Label wit ID " + id + " not found!")
         );
-        labelRepository.delete(label);
+        labelRepository.deleteLabelById(id);
         return new SimpleResponse("Label with ID " + id + " deleted successfully!");
     }
 
@@ -73,9 +71,11 @@ public class LabelServiceImpl implements LabelService {
                 () -> new NotFoundException("Label with ID " + labelId + " not found!")
         );
         if (card.getLabels().contains(label)) {
-            labelRepository.deleteLabel(label.getId());
+            card.deleteLabel(label);
+        } else {
+            throw new NotFoundException("Label with ID " + labelId + " is not present in card with ID " + cardId);
         }
-        return new SimpleResponse("Label with ID " + labelId + " deleted successfully from card " + card.getDescription());
+        return new SimpleResponse("Label with ID " + labelId + " deleted successfully from card with ID " + cardId);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class LabelServiceImpl implements LabelService {
                 () -> new NotFoundException("Card with ID " + cardId + " not found!")
         );
         if (card.getLabels().contains(label)) {
-            throw new BadRequestException("Label already exists!");
+            throw new BadRequestException("Label already exists on this card!");
         }
         card.assignLabel(label);
         labelRepository.save(label);

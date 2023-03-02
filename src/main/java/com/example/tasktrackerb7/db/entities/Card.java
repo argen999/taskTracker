@@ -88,4 +88,7 @@ public class Card {
         }
         labels.add(label);
     }
+    public void deleteLabel(Label label){
+        labels.remove(label);
+    }
 }
