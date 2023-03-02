@@ -11,6 +11,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +98,7 @@ public class CardConverter {
     private EstimationResponse getEstimationByCardId(Long id) {
         Card card = cardRepository.findById(id).orElseThrow(() -> new NotFoundException("Card with id: " + " not found"));
         Estimation estimation = estimationRepository.findById(card.getEstimation().getId()).orElseThrow(() -> new NotFoundException("estimation with id: " + card.getEstimation().getId() + " not found"));
-        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish());
+        return new EstimationResponse(estimation.getId(), estimation.getDateOfStart(), estimation.getDateOfFinish(), estimation.getReminder());
     }
 
     public List<CardResponse> convertToResponseForGetAll(List<Card> cards) {
@@ -107,8 +111,9 @@ public class CardConverter {
                 cardResponse.setId(card.getId());
                 cardResponse.setName(card.getTitle());
                 cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
+
                 if (card.getEstimation() != null) {
-                    int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+                    int between = Period.between(LocalDate.from(card.getEstimation().getDateOfStart()), LocalDate.from(card.getEstimation().getDateOfFinish())).getDays();
                     cardResponse.setDuration(" " + between + " days");
                 }
 
@@ -143,7 +148,7 @@ public class CardConverter {
         cardResponse.setName(card.getTitle());
         cardResponse.setLabelResponses(labelRepository.getAllLabelResponse(card.getId()));
         if (card.getEstimation() != null) {
-            int between = Period.between(card.getEstimation().getDateOfStart(), card.getEstimation().getDateOfFinish()).getDays();
+            int between = Period.between(card.getEstimation().getDateOfStart().toLocalDate(), card.getEstimation().getDateOfFinish().toLocalDate()).getDays();
             cardResponse.setDuration(" " + between + " days");
         }
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.*;
@@ -32,4 +33,10 @@ public class Role {
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "role")
     private List<UserWorkspaceRole> user_workSpace_roles;
+
+    public void addUser(User user) {
+        if (users == null) users = new ArrayList<>();
+        users.add(user);
+    }
+
 }

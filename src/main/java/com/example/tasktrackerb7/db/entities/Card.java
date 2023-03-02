@@ -34,7 +34,7 @@ public class Card {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH}, fetch = FetchType.EAGER)
     private Column column;
 
-    @OneToOne(cascade = ALL, mappedBy = "card")
+    @OneToOne(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private Estimation estimation;
 
     @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
@@ -54,9 +54,6 @@ public class Card {
             inverseJoinColumns = @JoinColumn(name = "label_id"))
     private List<Label> labels;
 
-    @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
-    private Notification notification;
-
     public Card(String title) {
         this.title = title;
     }
@@ -74,7 +71,7 @@ public class Card {
         }
         users.add(user);
     }
-
+    
     public void addComment(Comment comment) {
         if (comment == null) {
             comments = new ArrayList<>();

@@ -9,6 +9,8 @@ import java.util.List;
 @Getter
 @Setter
 public class FavouriteResponse {
+
     private List<FavouriteBoardResponse> board;
+
     private List<FavouriteWorkspaceResponse> workspace;
 }

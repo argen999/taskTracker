@@ -1,9 +1,6 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
-import com.example.tasktrackerb7.db.entities.Board;
-import com.example.tasktrackerb7.db.entities.Favourite;
-import com.example.tasktrackerb7.db.entities.User;
-import com.example.tasktrackerb7.db.entities.Workspace;
+import com.example.tasktrackerb7.db.entities.*;
 import com.example.tasktrackerb7.db.repository.BoardRepository;
 import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
@@ -179,3 +176,6 @@ public class BoardServiceImpl implements BoardService {
         return new BoardResponse(board.getId(), board.getName(), board.getBackground(), isFavourite);
     }
 }
+
+
+
