@@ -49,43 +49,4 @@ public class AuthApi {
         return userService.registerAndAuthWithGoogle(tokenId);
     }
 
-    @Operation(summary = "Get my profile", description = "Get my profile by authenticate")
-    @GetMapping("/profile")
-    public ProfileInnerPageResponse getMyProfile() {
-        return userService.getMyProfile();
-    }
-
-    @Operation(summary = "Get profile", description = "Get profile by id")
-    @GetMapping("/{id}")
-    public ProfileInnerPageResponse getProfileById(@PathVariable Long id) {
-        return userService.getProfileById(id);
-    }
-
-    @Operation(summary = "Update", description = "Updating user data")
-    @PutMapping("/update")
-    @PreAuthorize("isAuthenticated()")
-    public ProfileResponse updatingUserData(@RequestBody @Valid ProfileRequest profileRequest) {
-        return userService.updatingUserData(profileRequest);
-    }
-
-    @Operation(summary = "Get all", description = "Get all workspace owned by user")
-    @GetMapping()
-    @PreAuthorize("isAuthenticated()")
-    public List<WorkspaceResponse> getAllWorkspaceOwnedByUser() {
-        return userService.getAllWorkspaceOwnedByUser();
-    }
-
-    @Operation(summary = "Forgot password", description = "If the user has forgotten the password")
-    @PostMapping("forgot/password")
-    public SimpleResponse forgotPassword(@RequestParam String email,
-                                         @RequestParam String link)throws MessagingException{
-        return userService.forgotPassword(email,link);
-    }
-
-    @Operation(summary = "Reset password", description = "Allows you to reset the user's password")
-    @PutMapping("reset/password")
-    public ResetPasswordResponse resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
-        return userService.resetPassword(request);
-    }
-
 }
