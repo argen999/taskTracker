@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/auth")
+@RequestMapping("api/profile")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Tag(name = "Profile Api", description = "Update and get by id profile")
 public class ProfileApi {
@@ -24,7 +24,7 @@ public class ProfileApi {
     private final UserService userService;
 
     @Operation(summary = "Get my profile", description = "Get my profile by authenticate")
-    @GetMapping("/profile")
+    @GetMapping("/")
     public ProfileInnerPageResponse getMyProfile() {
         return userService.getMyProfile();
     }
