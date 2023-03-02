@@ -23,7 +23,7 @@ public class ProfileApi {
 
     private final UserService userService;
 
-    @Operation(summary = "Get authenticated profile", description = "Get authenticated profile")
+    @Operation(summary = "Get authenticated user profile", description = "Get authenticated user profile")
     @GetMapping
     public ProfileInnerPageResponse getMyProfile() {
         return userService.getMyProfile();
