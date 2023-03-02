@@ -36,9 +36,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
     private final RoleRepository roleRepository;
 
-    private final FavouriteRepository favouriteRepository;
-
     private final JavaMailSender mailSender;
+
+    private final NotificationRepository notificationRepository;
+
+    private final LabelRepository labelRepository;
 
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,9 +76,11 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("workspace with id " + id + " not found"));
+
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
-            favouriteRepository.delete(favouriteRepository.deleteWorkspace(id));
+            notificationRepository.deleteAll(notificationRepository.getAllByWorkspaceId(id));
+            labelRepository.deletes(id);
             workspaceRepository.delete(workspace);
 
         } else throw new BadRequestException("you are not member in workspace with id: " + id);

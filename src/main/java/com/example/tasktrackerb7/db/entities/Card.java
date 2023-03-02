@@ -49,7 +49,7 @@ public class Card {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private List<Attachment> attachments;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "card")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH})
     private List<Label> labels;
 
     public Card(String title) {
