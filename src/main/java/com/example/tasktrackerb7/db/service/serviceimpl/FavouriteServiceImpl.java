@@ -48,14 +48,14 @@ public class FavouriteServiceImpl implements FavouriteService {
                     throw new NotFoundException("board not found");
                 });
         int count = 0;
-        SimpleResponse favourite = null;
+        SimpleResponse favourite1 = null;
         if (board.getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), board.getWorkspace().getId()))) {
             if (user.getFavourites() != null) {
                 for (Favourite f : board.getFavourites()) {
                     if (Objects.equals(f.getBoard().getId(), id)) {
                         favouriteRepository.delete(f);
                         count++;
-                        favourite = new SimpleResponse("delete favourite board successfully!");
+                        favourite1 = new SimpleResponse("delete favourite board successfully!");
                         break;
 
                     }
@@ -68,13 +68,12 @@ public class FavouriteServiceImpl implements FavouriteService {
                 newFavourite.setUser(user);
                 user.addFavourite(newFavourite);
                 favouriteRepository.save(newFavourite);
-                favourite = new SimpleResponse("make favourite  board  successfully!!");
+                favourite1 = new SimpleResponse("make favourite  board  successfully!!");
             }
-
+            return favourite1;
         } else {
             throw new NotFoundException("user not found this board");
         }
-        return favourite;
     }
 
     @Override
