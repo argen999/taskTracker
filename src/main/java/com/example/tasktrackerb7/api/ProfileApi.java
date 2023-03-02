@@ -23,8 +23,8 @@ public class ProfileApi {
 
     private final UserService userService;
 
-    @Operation(summary = "Get my profile", description = "Get my profile by authenticate")
-    @GetMapping("/")
+    @Operation(summary = "Get authenticated profile", description = "Get authenticated profile")
+    @GetMapping
     public ProfileInnerPageResponse getMyProfile() {
         return userService.getMyProfile();
     }
@@ -35,8 +35,8 @@ public class ProfileApi {
         return userService.getProfileById(id);
     }
 
-    @Operation(summary = "Update", description = "Updating user data")
-    @PutMapping("/update")
+    @Operation(summary = "Update", description = "Update user data")
+    @PutMapping
     @PreAuthorize("isAuthenticated()")
     public ProfileResponse updatingUserData(@RequestBody @Valid ProfileRequest profileRequest) {
         return userService.updatingUserData(profileRequest);
@@ -50,17 +50,15 @@ public class ProfileApi {
     }
 
     @Operation(summary = "Forgot password", description = "If the user has forgotten the password")
-    @PostMapping("forgot/password")
+    @PostMapping("/forgot/password")
     public SimpleResponse forgotPassword(@RequestParam String email,
                                          @RequestParam String link)throws MessagingException {
         return userService.forgotPassword(email,link);
     }
 
     @Operation(summary = "Reset password", description = "Allows you to reset the user's password")
-    @PutMapping("reset/password")
+    @PutMapping("/reset/password")
     public ResetPasswordResponse resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         return userService.resetPassword(request);
     }
-
-
 }
