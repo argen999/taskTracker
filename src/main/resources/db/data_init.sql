@@ -128,7 +128,7 @@ values (4, 1),
        (2, 3),
        (1, 4);
 
-insert into cards_labels(card_id, label_id)
+insert into cards_labels(card_id, labels_id)
 values (1, 1),
        (2, 2),
        (3, 3),

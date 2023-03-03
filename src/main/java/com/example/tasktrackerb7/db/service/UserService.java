@@ -22,7 +22,9 @@ public interface UserService {
 
     AuthWithGoogleResponse registerAndAuthWithGoogle(String tokenFront) throws FirebaseAuthException, ExceptionResponse;
 
-    ProfileInnerPageResponse getProfile();
+    ProfileInnerPageResponse getMyProfile();
+
+    ProfileInnerPageResponse getProfileById(Long id);
 
     ProfileResponse updatingUserData(ProfileRequest profileRequest);
 

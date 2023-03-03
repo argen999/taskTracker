@@ -31,11 +31,4 @@ public class Label {
     @ManyToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "labels")
     private List<Card> cards;
 
-    public void addCard(Card card) {
-        if (cards == null) {
-            cards = new ArrayList<>();
-        }
-        cards.add(card);
-    }
-
 }

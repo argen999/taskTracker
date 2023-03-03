@@ -53,6 +53,8 @@ public class Card {
     @JoinTable(name = "cards_labels",
             joinColumns = @JoinColumn(name = "card_id"),
             inverseJoinColumns = @JoinColumn(name = "label_id"))
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH})
+
     private List<Label> labels;
 
     public Card(String title) {
