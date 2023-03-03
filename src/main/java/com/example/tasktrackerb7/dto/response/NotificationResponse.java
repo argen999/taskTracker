@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 public class NotificationResponse {
 
     private Long id;
+    private Long userId;
+    private Long boardId;
+    private Long cardId;
     private Long notificationId;
     private String fullName;
     private String image;
@@ -22,6 +25,9 @@ public class NotificationResponse {
 
     public NotificationResponse(Notification notification) {
         this.id = notification.getId();
+        this.userId = notification.getUser().getId();
+        this.boardId = notification.getBoard().getId();
+        this.cardId = notification.getCard().getId();
         this.notificationId = notification.getFromUser().getId();
         this.fullName = notification.getFromUser().getName() + " " + notification.getFromUser().getSurname();
         this.image = notification.getFromUser().getPhotoLink();

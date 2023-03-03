@@ -49,6 +49,9 @@ public class NotificationServiceImpl implements NotificationService {
        notificationRepository.save(notification);
         return new NotificationResponse(
                 notification.getId(),
+                notification.getUser().getId(),
+                notification.getBoard().getId(),
+                notification.getCard().getId(),
                 notification.getFromUser().getId(),
                 notification.getFromUser().getName() + " " + notification.getFromUser().getSurname(),
                 notification.getFromUser().getPhotoLink(),

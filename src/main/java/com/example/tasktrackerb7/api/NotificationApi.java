@@ -22,14 +22,14 @@ public class NotificationApi {
     private final NotificationService notificationService;
 
 
-    @Operation(summary = "Get all notification user", description = "Get all notification")
-    @GetMapping("/getAll")
+    @Operation(summary = "Get all user notifications")
+    @GetMapping()
     List<NotificationResponse> getAllNotification() {
         return notificationService.getAllNotification();
     }
 
-    @Operation(summary = "Get by id notification user", description = "Get by id notification")
-    @GetMapping("/{id}/getById")
+    @Operation(summary = "Receive notifications by notification id")
+    @GetMapping("/{id}")
     NotificationResponse getById(@PathVariable Long id) {
         return notificationService.getById(id);
     }
