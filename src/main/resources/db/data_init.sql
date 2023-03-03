@@ -65,12 +65,12 @@ values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1)
        (4, '2023-01-05', 'I will do it only in a week,after the vocation', 4, 4),
        (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5, 4);
 
-insert into label(id, color, description, card_id)
-values (1, 'Gray', 'TO DO', 1),
-       (2, 'Red', 'IN PROGRESS', 2),
-       (3, 'Orange', 'KICK BACK', 3),
-       (4, 'Blue', 'FINAL REVIEW', 4),
-       (5, 'Green', 'COMPLETE', 5);
+insert into label(id, color, description)
+values (1, 'Gray', 'TO DO'),
+       (2, 'Red', 'IN PROGRESS'),
+       (3, 'Orange', 'KICK BACK'),
+       (4, 'Blue', 'FINAL REVIEW'),
+       (5, 'Green', 'COMPLETE');
 
 insert into checklists(id, percent, title, card_id)
 values (1, 0, 'Auth with GOOGLE', 1),
@@ -116,5 +116,11 @@ values (1, 1),
        (4, 4),
        (5, 5);
 
+insert into cards_labels(card_id, labels_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
 

@@ -9,16 +9,11 @@ import com.example.tasktrackerb7.db.repository.UserRepository;
 import com.example.tasktrackerb7.db.repository.UserWorkspaceRoleRepository;
 import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.UserService;
-import com.example.tasktrackerb7.dto.request.*;
-import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.dto.request.AuthRequest;
 import com.example.tasktrackerb7.dto.request.ProfileRequest;
 import com.example.tasktrackerb7.dto.request.RegisterRequest;
-import com.example.tasktrackerb7.dto.response.AuthResponse;
-import com.example.tasktrackerb7.dto.response.AuthWithGoogleResponse;
-import com.example.tasktrackerb7.dto.response.MemberResponse;
-import com.example.tasktrackerb7.dto.response.ProfileResponse;
-import com.example.tasktrackerb7.dto.response.WorkspaceResponse;
+import com.example.tasktrackerb7.dto.request.ResetPasswordRequest;
+import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.ExceptionResponse;
@@ -31,22 +26,19 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -169,9 +161,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileInnerPageResponse getProfile() {
+    public ProfileInnerPageResponse getMyProfile() {
         User user = getAuthenticateUser();
         return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), getAllWorkspaceOwnedByUser());
+    }
+
+    @Override
+    public ProfileInnerPageResponse getProfileById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found!"));
+
+        List<Workspace> userWorkspaces = user.getWorkspaces();
+
+        for (Workspace w : workspaceRepository.findAll()) {
+            if (w.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(id, w.getId()))
+                    && !w.getCreator().equals(user)) {
+                userWorkspaces.add(w);
+            }
+        }
+
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(),
+                userWorkspaces.stream().map(x -> new WorkspaceResponse(x.getId(),
+                                x.getName(),
+                                x.getCreator().getPhotoLink(),
+                                x.getCreator().getName()))
+                        .toList());
+
     }
 
     @Override
@@ -248,14 +262,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public SimpleResponse forgotPassword(String email, String link) throws MessagingException {
-       User user = userRepository.findByEmail(email).orElseThrow(
-               ()-> new NotFoundException("with email:" + email + "not found!")
-       );
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("with email:" + email + "not found!")
+        );
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         helper.setSubject("Task Tracker");
         helper.setTo(email);
-        helper.setText("To get a new password reset link visit: " + link + " " + "/" +  user.getId());
+        helper.setText("To get a new password reset link visit: " + link + "/" + user.getId());
         mailSender.send(mimeMessage);
         return new SimpleResponse("email has been send");
     }

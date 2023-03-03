@@ -25,7 +25,4 @@ public class Label {
 
     private String color;
 
-    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
-    private Card card;
-
 }
