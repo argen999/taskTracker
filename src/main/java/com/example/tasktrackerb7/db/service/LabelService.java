@@ -5,16 +5,14 @@ import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public interface LabelService {
 
-    LabelResponse createLabel(LabelRequest labelRequest);
+    SimpleResponse createLabel(LabelRequest labelRequest);
 
-    List<LabelResponse> getAllLabelsByCardId(Long cardId);
+    LabelResponse getLabelById(Long id);
 
-    LabelResponse updateLabel(Long id,LabelRequest labelRequest);
+    SimpleResponse updateLabel(Long id,LabelRequest labelRequest);
 
     SimpleResponse deleteLabelById(Long id);
 

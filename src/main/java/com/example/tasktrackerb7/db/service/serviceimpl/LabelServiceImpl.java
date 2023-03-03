@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
-import com.example.tasktrackerb7.converter.requestConverter.LabelRequestConverter;
 import com.example.tasktrackerb7.converter.responseConverter.LabelResponseConverter;
 import com.example.tasktrackerb7.db.entities.Card;
 import com.example.tasktrackerb7.db.entities.Label;
@@ -15,42 +14,40 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class LabelServiceImpl implements LabelService {
     private final LabelRepository labelRepository;
     private final CardRepository cardRepository;
-    private final LabelRequestConverter labelRequestConverter;
     private final LabelResponseConverter labelResponseConverter;
 
     @Override
-    public LabelResponse createLabel(LabelRequest labelRequest) {
-        Label label = labelRequestConverter.createLabel(labelRequest);
+    public SimpleResponse createLabel(LabelRequest labelRequest) {
+        Label label = new Label();
+        label.setDescription(labelRequest.getDescription());
+        label.setColor(labelRequest.getColor());
         labelRepository.save(label);
-        return labelResponseConverter.viewLabel(label);
+        return new SimpleResponse("Label successfully created!");
     }
 
     @Override
-    public List<LabelResponse> getAllLabelsByCardId(Long cardId) {
-        Card card = cardRepository.findById(cardId).orElseThrow(
-                () -> new NotFoundException("Card with ID " + cardId + " not found!")
-        );
-        List<LabelResponse> labelResponses = card.getLabels().stream().map(l -> new LabelResponse(l.getId(), l.getDescription(), l.getColor())).toList();
-        return labelResponses;
-
-    }
-
-    @Override
-    public LabelResponse updateLabel(Long id, LabelRequest labelRequest) {
+    public LabelResponse getLabelById(Long id) {
         Label label = labelRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Label with ID " + id + " not found!")
         );
-        labelRequestConverter.updateLabel(label, labelRequest);
-        labelRepository.save(label);
         return labelResponseConverter.viewLabel(label);
+    }
+
+    @Override
+    public SimpleResponse updateLabel(Long id, LabelRequest labelRequest) {
+        Label label = labelRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Label with ID " + id + " not found!")
+        );
+        label.setDescription(labelRequest.getDescription());
+        label.setColor(labelRequest.getColor());
+        labelRepository.save(label);
+        return new SimpleResponse("Label updated successfully!");
     }
 
     @Override
