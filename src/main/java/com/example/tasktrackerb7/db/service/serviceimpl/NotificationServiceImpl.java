@@ -1,9 +1,7 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
-import com.example.tasktrackerb7.db.entities.Notification;
-import com.example.tasktrackerb7.db.entities.User;
-import com.example.tasktrackerb7.db.repository.NotificationRepository;
-import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.db.entities.*;
+import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.NotificationService;
 import com.example.tasktrackerb7.dto.response.NotificationResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -22,6 +20,7 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
 
     private final UserRepository userRepository;
+
 
 
 
@@ -49,10 +48,10 @@ public class NotificationServiceImpl implements NotificationService {
        notificationRepository.save(notification);
         return new NotificationResponse(
                 notification.getId(),
+                notification.getFromUser().getId(),
                 notification.getUser().getId(),
                 notification.getBoard().getId(),
                 notification.getCard().getId(),
-                notification.getFromUser().getId(),
                 notification.getFromUser().getName() + " " + notification.getFromUser().getSurname(),
                 notification.getFromUser().getPhotoLink(),
                 notification.getDateOfWrite(),

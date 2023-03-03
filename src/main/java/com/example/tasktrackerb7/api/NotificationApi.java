@@ -34,7 +34,7 @@ public class NotificationApi {
         return notificationService.getById(id);
     }
 
-    @Operation(summary = "Mark as read", description = "Mark as read")
+    @Operation(summary = "Mark as read", description = "Mark as read all notification")
     @PutMapping()
     SimpleResponse markAsRead() {
         return notificationService.markAsRead();
