@@ -49,7 +49,12 @@ public class Card {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "card")
     private List<Attachment> attachments;
 
+    @ManyToMany(cascade = {DETACH, MERGE, REFRESH})
+    @JoinTable(name = "cards_labels",
+            joinColumns = @JoinColumn(name = "card_id"),
+            inverseJoinColumns = @JoinColumn(name = "label_id"))
     @OneToMany(cascade = {DETACH, MERGE, REFRESH})
+
     private List<Label> labels;
 
     public Card(String title) {
@@ -69,7 +74,7 @@ public class Card {
         }
         users.add(user);
     }
-    
+
     public void addComment(Comment comment) {
         if (comment == null) {
             comments = new ArrayList<>();
@@ -77,4 +82,13 @@ public class Card {
         comments.add(comment);
     }
 
+    public void assignLabel(Label label) {
+        if (labels == null) {
+            labels = new ArrayList<>();
+        }
+        labels.add(label);
+    }
+    public void deleteLabel(Label label){
+        labels.remove(label);
+    }
 }

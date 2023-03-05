@@ -15,5 +15,5 @@ public class LabelResponse {
 
     private String description;
 
-    private String colorLink;
+    private String color;
 }
