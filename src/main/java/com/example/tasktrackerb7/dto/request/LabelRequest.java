@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LabelRequest {
-
-    private Long id;
+    private String description;
+    private String color;
 }

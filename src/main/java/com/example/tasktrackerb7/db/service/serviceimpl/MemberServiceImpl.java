@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
-import com.example.tasktrackerb7.converter.ParticipantResponseConverter;
+import com.example.tasktrackerb7.converter.responseConverter.ParticipantResponseConverter;
 import com.example.tasktrackerb7.db.entities.Role;
 import com.example.tasktrackerb7.db.entities.User;
 import com.example.tasktrackerb7.db.entities.UserWorkspaceRole;

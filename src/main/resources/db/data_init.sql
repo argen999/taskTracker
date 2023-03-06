@@ -1,9 +1,15 @@
 insert into users(id, name, surname, email, password, photo_link)
-values (1, 'Kerezbek', 'Aibekov', 'kerezbek@gmail.com', '$2a$12$Kzwf20Tt.RqrbCjvljxSKeS0ajkjHmswyZPB0jJ1GDkcS3I4jhj1i', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (2, 'Aruuke', 'Sartbaeva', 'aruuke@gmail.com', '$2a$12$axNSZ2ekesrc4cNDzxxlUuiElncsMs91KJd325HBREw5SNl0.Clxe', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (3, 'Mahamatjan', 'Islamidinov', 'mahamatjan@gmail.com', '$2a$12$634QZhZUKhhIkaPexme/wOeRDnvZBLbqV.EAAh0Jy8RCPlDiWrX2K', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (4, 'Argen', 'Abdymomunov', 'argen@gmail.com', '$2a$12$cVTaN/z9ZWlkhm3d.7Xemea11Og6MeooUWm8//PNuKQKJc6XxQ24y', 'https://ru.pinterest.com/pin/907686499876044855/'),
-       (5, 'Nurislam', 'Bakytov' , 'nurislam@gmail.com', '$2a$12$xINOT3UG0ubHqO9RsSk5hOsc4ywAjJynkBWByhoWPIbbJ5T2Hxexu', 'https://ru.pinterest.com/pin/907686499876044855/');
+values (1, 'Kerezbek', 'Aibekov', 'kerezbek@gmail.com', '$2a$12$Kzwf20Tt.RqrbCjvljxSKeS0ajkjHmswyZPB0jJ1GDkcS3I4jhj1i',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (2, 'Aruuke', 'Sartbaeva', 'aruuke@gmail.com', '$2a$12$axNSZ2ekesrc4cNDzxxlUuiElncsMs91KJd325HBREw5SNl0.Clxe',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (3, 'Mahamatjan', 'Islamidinov', 'mahamatjan@gmail.com',
+        '$2a$12$634QZhZUKhhIkaPexme/wOeRDnvZBLbqV.EAAh0Jy8RCPlDiWrX2K',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (4, 'Argen', 'Abdymomunov', 'argen@gmail.com', '$2a$12$cVTaN/z9ZWlkhm3d.7Xemea11Og6MeooUWm8//PNuKQKJc6XxQ24y',
+        'https://ru.pinterest.com/pin/907686499876044855/'),
+       (5, 'Nurislam', 'Bakytov', 'nurislam@gmail.com', '$2a$12$xINOT3UG0ubHqO9RsSk5hOsc4ywAjJynkBWByhoWPIbbJ5T2Hxexu',
+        'https://ru.pinterest.com/pin/907686499876044855/');
 
 insert into roles(id, name)
 values (1, 'ADMIN'),
@@ -65,12 +71,12 @@ values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1)
        (4, '2023-01-05', 'I will do it only in a week,after the vocation', 4, 4),
        (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5, 4);
 
-insert into label(id, color, description, card_id)
-values (1, 'Gray', 'TO DO', 1),
-       (2, 'Red', 'IN PROGRESS', 2),
-       (3, 'Orange', 'KICK BACK', 3),
-       (4, 'Blue', 'FINAL REVIEW', 4),
-       (5, 'Green', 'COMPLETE', 5);
+insert into label(id, color, description)
+values (1, 'Gray', 'TO DO'),
+       (2, 'Red', 'IN PROGRESS'),
+       (3, 'Orange', 'KICK BACK'),
+       (4, 'Blue', 'FINAL REVIEW'),
+       (5, 'Green', 'COMPLETE');
 
 insert into checklists(id, percent, title, card_id)
 values (1, 0, 'Auth with GOOGLE', 1),
@@ -116,5 +122,17 @@ values (1, 1),
        (4, 4),
        (5, 5);
 
+insert into users_notifications(user_id, notification_id)
+values (4, 1),
+       (3, 2),
+       (2, 3),
+       (1, 4);
+
+insert into cards_labels(card_id, labels_id)
+values (1, 1),
+       (2, 2),
+       (3, 3),
+       (4, 4),
+       (5, 5);
 
 
