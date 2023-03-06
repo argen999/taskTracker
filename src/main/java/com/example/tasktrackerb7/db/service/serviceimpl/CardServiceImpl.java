@@ -12,6 +12,7 @@ import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -59,6 +60,7 @@ public class CardServiceImpl implements CardService {
             card.setColumn(column);
             column.addCard(card);
             card.setCreated(LocalDate.now());
+            card.setArchive(false);
             card.setCreator(user);
             card.addUser(user);
             user.addCard(card);

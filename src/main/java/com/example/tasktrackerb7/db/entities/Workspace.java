@@ -25,7 +25,7 @@ public class Workspace {
 
     private String name;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "workspace")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
     private List<UserWorkspaceRole> members;
 
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
@@ -36,7 +36,7 @@ public class Workspace {
     @ManyToOne(cascade = {DETACH, MERGE, REFRESH})
     private User creator;
 
-    @OneToMany(cascade = {DETACH, MERGE, REFRESH}, mappedBy = "workspace")
+    @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
     private List<Favourite> favourites;
 
     @OneToMany(cascade = {ALL}, mappedBy = "workspace")

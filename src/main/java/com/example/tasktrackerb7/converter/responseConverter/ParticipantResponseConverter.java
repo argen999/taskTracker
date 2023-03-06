@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.converter;
+package com.example.tasktrackerb7.converter.responseConverter;
 
 import com.example.tasktrackerb7.db.entities.UserWorkspaceRole;
 import com.example.tasktrackerb7.dto.response.ParticipantResponse;
