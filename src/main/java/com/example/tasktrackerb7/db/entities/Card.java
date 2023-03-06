@@ -81,7 +81,7 @@ public class Card {
         }
         users.add(user);
     }
-    
+
     public void addComment(Comment comment) {
         if (comment == null) {
             comments = new ArrayList<>();
@@ -95,6 +95,7 @@ public class Card {
         }
         labels.add(label);
     }
+
     public void deleteLabel(Label label){
         labels.remove(label);
     }
