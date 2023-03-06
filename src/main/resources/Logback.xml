@@ -1,0 +1,58 @@
+
+<configuration>
+    <property name="accounting" value="Logs"/>
+
+    <!--    <appender name="LogzioLogbackAppender" class="io.logz.logback.LogzioLogbackAppender">-->
+    <!--        <logzioToken>GrNOdPBdDEZIsyrgmrfvlumpSoERxTLK</logzioToken>-->
+    <!--        <logzioUrl>https://listener.logz.io:8071</logzioUrl>-->
+    <!--        <logzioType>java-application</logzioType>-->
+    <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+    <!--            <level>INFO</level>-->
+    <!--        </filter>-->
+    <!--    </appender>-->
+
+    <!-- Closes gracefully and finishes the log drain -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <appender name="LogzioLogbackAppender" class="io.logz.logback.LogzioLogbackAppender">
+        <!-- Replace these parameters with your configuration -->
+        <token>PkbZSbaqhTFVSoIaJFmjJeleuFAPXLib</token>
+        <logzioUrl>https://listener.logz.io:8071</logzioUrl>
+        <logzioType>myType</logzioType>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">-->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %green(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable
+            </Pattern>
+        </layout>
+    </appender>
+
+    <root level="debug">
+        <!-- IMPORTANT: This line is required -->
+        <appender-ref ref="LogzioLogbackAppender"/>
+    </root>
+
+    <root level="info">
+        <appender-ref ref="LogzioLogbackAppender"/>
+        <appender-ref ref="Console"/>
+    </root>
+
+    <logger name="peaksoftLms" level="debug" additivity="false">
+        <appender-ref ref="LogzioLogbackAppender"/>
+        <appender-ref ref="Console"/>
+    </logger>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <!-- Use shutdownHook so that we can close gracefully and finish the log drain -->
+    <!--    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>-->
+
+</configuration>

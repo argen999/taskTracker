@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -45,6 +46,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -64,13 +66,19 @@ public class UserServiceImpl implements UserService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found"));
+        return userRepository.findByEmail(login).orElseThrow(
+                () -> {
+                    log.error("user not found");
+                    throw new NotFoundException("user not found");
+                }
+        );
     }
 
     @Override
     public AuthResponse register(RegisterRequest request) {
         User user = new User();
         if (userRepository.existsByEmail(request.getEmail())) {
+            log.error("a user with this email %s already exists", request.getEmail());
             throw new BadCredentialsException(String.format("a user with this email %s already exists", request.getEmail()));
         } else {
 
@@ -85,6 +93,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
 
             String jwt = jwtTokenUtil.generateToken(user.getEmail());
+            log.info("User successfully registered");
             return new AuthResponse(user.getId(),
                     user.getName(),
                     user.getSurname(),
@@ -101,9 +110,12 @@ public class UserServiceImpl implements UserService {
         }
         User user = userRepository.findByEmail(authRequest.getEmail()).orElseThrow(
                 () -> {
+                    log.error("the user with this email %s was not found", authRequest.getEmail());
                     throw new NotFoundException(String.format("the user with this email %s was not found", authRequest.getEmail()));
-                });
+                }
+        );
         if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
+            log.error("invalid password");
             throw new BadCredentialsException("invalid password");
         }
         String jwt = jwtTokenUtil.generateToken(user.getEmail());
@@ -151,7 +163,11 @@ public class UserServiceImpl implements UserService {
             roleRepository.save(role);
         }
 
-        user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> new NotFoundException(String.format("User %s not found!", firebaseToken.getEmail())));
+        user = userRepository.findByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
+                    log.error("User %s not found!", firebaseToken.getEmail());
+                    throw new NotFoundException(String.format("User %s not found!", firebaseToken.getEmail()));
+                }
+        );
         String token = jwtTokenUtil.generateToken(user.getEmail());
         return new AuthWithGoogleResponse(
                 user.getId(),
@@ -249,8 +265,12 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository
                 .findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String
-                        .format("!%s not found!", username)));
+                .orElseThrow(() -> {
+                    log.error("!%s not found!", username);
+                            throw new UsernameNotFoundException(String
+                                    .format("!%s not found!", username));
+                        }
+                );
     }
 
     @Override
@@ -263,7 +283,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public SimpleResponse forgotPassword(String email, String link) throws MessagingException {
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException("with email:" + email + "not found!")
+                () -> {
+                    log.error("with email:" + email + "not found!");
+                    throw new NotFoundException("with email:" + email + "not found!");
+                }
         );
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -277,7 +300,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResetPasswordResponse resetPassword(ResetPasswordRequest request) {
         User user = userRepository.findById(request.getUserId()).orElseThrow(
-                () -> new NotFoundException("user with id: " + request.getUserId() + " not found")
+                () -> {
+                    log.error("user with id: " + request.getUserId() + " not found");
+                    throw new NotFoundException("user with id: " + request.getUserId() + " not found");
+                }
         );
         String oldPassword = user.getPassword();
         String newPassword = passwordEncoder.encode(request.getNewPassword());

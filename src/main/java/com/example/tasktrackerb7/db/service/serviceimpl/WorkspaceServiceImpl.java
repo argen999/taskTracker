@@ -11,6 +11,7 @@ import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,7 @@ import java.util.Objects;
 
 @Service
 @Transactional
+@Slf4j
 @RequiredArgsConstructor
 public class WorkspaceServiceImpl implements WorkspaceService {
 
@@ -45,19 +47,28 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() ->
-                new NotFoundException("user not found"));
+        return userRepository.findByEmail(login).orElseThrow(
+                () -> {
+                    log.error("user not found");
+                    throw new NotFoundException("user not found");
+
+                }
+        );
     }
+
 
     @Override
     public WorkspaceResponse create(WorkspaceRequest workspaceRequest) throws MessagingException {
         User user = getAuthenticateUser();
         Workspace workspace = new Workspace();
         if (workspaceRequest.getEmails() != null && !workspaceRequest.getLink().equals("") && workspaceRequest.getLink() != null) {
-             inviteToWorkspace(workspaceRequest);
+            inviteToWorkspace(workspaceRequest);
         }
-        Role role = roleRepository.findById(1L).orElseThrow(() ->
-                new NotFoundException("role is not found"));
+        Role role = roleRepository.findById(1L).orElseThrow(() -> {
+                    log.error("role is not found");
+                    throw new NotFoundException("role is not found");
+                }
+        );
         UserWorkspaceRole userWorkspaceRole = new UserWorkspaceRole();
         userWorkspaceRole.setUser(user);
         userWorkspaceRole.setWorkspace(workspace);
@@ -68,22 +79,28 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         workspace.addUserWorkspaceRole(userWorkspaceRole);
         workspaceRepository.save(workspace);
         userWorkspaceRoleRepository.save(userWorkspaceRole);
+        log.info("Workspace successfully created");
         return convertToResponse(workspace);
     }
 
     @Override
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("workspace with id " + id + " not found"));
-
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> {
+                    log.error("Workspace with id: {} not found!", id);
+                    throw new NotFoundException("workspace with id " + id + " not found");
+                }
+        );
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
             notificationRepository.deleteAll(notificationRepository.getAllByWorkspaceId(id));
             labelRepository.deletes(id);
             workspaceRepository.delete(workspace);
 
+            log.info("workspace with id: " + id + " deleted successfully");
         } else throw new BadRequestException("you are not member in workspace with id: " + id);
+
+        log.info("workspace with id: " + id + " deleted successfully");
         return new SimpleResponse("workspace with id: " + id + " deleted successfully");
     }
 
@@ -99,7 +116,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
         } else
             throw new BadCredentialsException("you can't do update, because you are not member in workspace with id: " + id);
-
         return convertToResponse(workspace);
     }
 
@@ -133,6 +149,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         for (Workspace workspace : workspaces) {
             workspaceResponses.add(convertToResponse(workspace));
         }
+        log.info("Get all user workspaces");
         return workspaceResponses;
     }
 
@@ -140,7 +157,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     public WorkspaceInnerPageResponse getWorkspaceInnerPageById(Long id) {
         User user = getAuthenticateUser();
 
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Not found this workspace!"));
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> {
+                    log.error("Not found this workspace!");
+                    throw new NotFoundException("Not found this workspace!");
+                }
+        );
+
 
         WorkspaceInnerPageResponse workspaceInnerPageResponse = new WorkspaceInnerPageResponse();
 
@@ -166,7 +188,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
             return workspaceInnerPageResponse;
 
-        } else throw new BadRequestException("You can't do get, because you are not member in workspace with id: " + id);
+        } else
+            log.error("You can't do get, because you are not member in workspace with id: " + id);
+        throw new BadRequestException("You can't do get, because you are not member in workspace with id: " + id);
     }
 
     private WorkspaceResponse convertToResponse(Workspace workspace) {

@@ -10,6 +10,7 @@ import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class CardServiceImpl implements CardService {
 
     private final ColumnRepository columnRepository;
@@ -42,18 +44,27 @@ public class CardServiceImpl implements CardService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found"));
+        return userRepository.findByEmail(login).orElseThrow(() ->{
+            log.error("User not found");
+           throw  new NotFoundException("User not found");
+        });
     }
 
     @Override
     public CardInnerPageResponse create(CardRequest cardRequest) {
         User user = getAuthenticateUser();
-        Column column = columnRepository.findById(cardRequest.getColumnId()).orElseThrow(() ->
-                new NotFoundException("Column with id: " + cardRequest.getColumnId() + " not found"));
-        Board board = boardRepository.findById(column.getBoard().getId()).orElseThrow(() ->
-                new NotFoundException("Board with id: " + column.getBoard().getId() + " not found"));
-        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
+        Column column = columnRepository.findById(cardRequest.getColumnId()).orElseThrow(() ->{
+            log.error("Column with id: " + cardRequest.getColumnId() + " not found");
+            throw new NotFoundException("Column with id: " + cardRequest.getColumnId() + " not found");
+        });
+        Board board = boardRepository.findById(column.getBoard().getId()).orElseThrow(() ->{
+            log.error("Board with id: " + column.getBoard().getId() + " not found");
+          throw   new NotFoundException("Board with id: " + column.getBoard().getId() + " not found");
+        });
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->{
+            log.error("Workspace with id: " + board.getWorkspace().getId() + " not found");
+            throw new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             Card card = new Card(cardRequest.getName());
             card.setColumn(column);
@@ -61,6 +72,7 @@ public class CardServiceImpl implements CardService {
             card.setCreated(LocalDate.now());
             card.addUser(user);
             user.addCard(card);
+            log.info("Card successfully created");
             return converter.convertToCardInnerPageResponse(cardRepository.save(card));
         } else {
             throw new BadRequestException("you are not member in workspace with id: " + workspace.getId());
@@ -70,15 +82,20 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardInnerPageResponse update(UpdateCardRequest request) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(request.getId()).orElseThrow(() ->
-                new NotFoundException("Card with id: " + request.getId()  + " not found"));
-        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
+        Card card = cardRepository.findById(request.getId()).orElseThrow(() ->{
+            log.error("Card with id: " + request.getId()  + " not found");
+            throw new NotFoundException("Card with id: " + request.getId()  + " not found");
+        });
+        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->{
+            log.error("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
+            throw new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             if (!request.getIsName()) {
                 card.setTitle(request.getValue());
             } else {
                 card.setDescription(request.getValue());
+                log.info("Card  successfully updated!");
             }
             return converter.convertToCardInnerPageResponse(card);
         } else {
@@ -88,8 +105,10 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardInnerPageResponse getById(Long id) {
-        return converter.convertToCardInnerPageResponse(cardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Card with id " + id + " not found")));
+        return converter.convertToCardInnerPageResponse(cardRepository.findById(id).orElseThrow(() ->{
+            log.error("Card with id " + id + " not found");
+            throw new NotFoundException("Card with id " + id + " not found");
+        }));
     }
 
     @Override
@@ -124,30 +143,43 @@ public class CardServiceImpl implements CardService {
     @Override
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Card with id: " + id + " not found"));
-        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
+        Card card = cardRepository.findById(id).orElseThrow(() ->{
+            log.error("Card with id: " + id + " not found");
+            throw new NotFoundException("Card with id: " + id + " not found");
+        });
+        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->{
+            log.error("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
+            throw new NotFoundException("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             cardRepository.delete(card);
+
         } else {
             throw new BadCredentialsException("You are not member in this workspace");
         }
+        log.info("Card with id: " + id + " deleted successfully");
         return new SimpleResponse("Card with id: " + id + " deleted successfully");
     }
 
     @Override
     public SimpleResponse archive(Long id) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Card with id: " + id + " not found"));
-        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() ->
-                new NotFoundException("Column with id: " + card.getColumn().getId() + " not found"));
-        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found"));
+        Card card = cardRepository.findById(id).orElseThrow(() ->{
+            log.error("Card with id: " + id + " not found");
+            throw new NotFoundException("Card with id: " + id + " not found");
+        });
+        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() ->{
+            log.error("Column with id: " + card.getColumn().getId() + " not found");
+            throw new NotFoundException("Column with id: " + card.getColumn().getId() + " not found");
+        });
+        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() ->{
+            log.error("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found");
+            throw new NotFoundException("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             card.setArchive(!card.getArchive());
             cardRepository.save(card);
+            log.info("Card  successfully archived");
         } else {
             throw new BadCredentialsException("You are not member in this workspace");
         }
@@ -156,8 +188,10 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public List<CardResponse> getAllArchivedCards(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Board with id: " + id + " not found"));
+        Board board = boardRepository.findById(id).orElseThrow(() ->{
+            log.error("Board with id: " + id + " not found");
+            throw new NotFoundException("Board with id: " + id + " not found");
+        });
         List<CardResponse> cardResponses = new ArrayList<>();
         for (Column column : board.getColumns()) {
             for (Card card : column.getCards()) {
