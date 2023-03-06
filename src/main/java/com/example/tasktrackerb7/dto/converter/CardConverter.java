@@ -49,13 +49,14 @@ public class CardConverter {
         response.setDescription(card.getDescription());
         response.setIsArchive(card.getArchive());
         List<LabelResponse> list = new ArrayList<>();
+        List<Label> labels = card.getLabels();
         if (card.getLabels() != null) {
-            for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+            for (Label l : labels) {
                 LabelResponse labelResponse = new LabelResponse();
                 labelResponse.setId(l.getId());
                 labelResponse.setId(l.getId());
                 labelResponse.setDescription(l.getDescription());
-                labelResponse.setColorLink(l.getColor());
+                labelResponse.setColor(l.getColor());
                 list.add(labelResponse);
             }
             response.setLabelResponses(list);
@@ -87,7 +88,6 @@ public class CardConverter {
     }
 
     private CommentResponse convertCommentToResponse(Comment comment) {
-        User user = getAuthenticateUser();
         return new CommentResponse(comment.getId(), comment.getText(),comment.getLocalDateTime(),true,new UserResponse(getAuthenticateUser().getId(),getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(),getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
@@ -118,13 +118,13 @@ public class CardConverter {
                 CardResponse cardResponse = new CardResponse();
                 List<LabelResponse> list = new ArrayList<>();
                 cardResponse.setId(card.getId());
-                cardResponse.setName(card.getTitle());
-                for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+                List<Label> labels = card.getLabels();
+                for (Label l : labels) {
                     LabelResponse labelResponse = new LabelResponse();
                     labelResponse.setId(l.getId());
                     labelResponse.setId(l.getId());
                     labelResponse.setDescription(l.getDescription());
-                    labelResponse.setColorLink(l.getColor());
+                    labelResponse.setColor(l.getColor());
                     list.add(labelResponse);
                 }
                 cardResponse.setLabelResponses(list);
@@ -164,12 +164,13 @@ public class CardConverter {
         cardResponse.setId(card.getId());
         cardResponse.setName(card.getTitle());
         List<LabelResponse> list = new ArrayList<>();
-        for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+        List<Label> labels = card.getLabels();
+        for (Label l : labels) {
             LabelResponse labelResponse = new LabelResponse();
             labelResponse.setId(l.getId());
             labelResponse.setId(l.getId());
             labelResponse.setDescription(l.getDescription());
-            labelResponse.setColorLink(l.getColor());
+            labelResponse.setColor(l.getColor());
             list.add(labelResponse);
         }
         cardResponse.setLabelResponses(list);
