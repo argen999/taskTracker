@@ -1,5 +1,6 @@
 package com.example.tasktrackerb7.db.entities;
 
+import com.example.tasktrackerb7.db.entities.enums.NotificationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,9 @@ public class Notification {
     private String text;
 
     private boolean status;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
 
     private LocalDateTime dateOfWrite;
 
