@@ -38,4 +38,10 @@ public class AllIssuesApi {
     public AllIssuesResponseForGetAll filterByMembers(@PathVariable Long id, @PathVariable Long memberId) {
         return allIssuesService.filterByMembers(id, memberId);
     }
+
+    @Operation(summary = "Filter by label", description = "Filter cards by label")
+    @GetMapping("/label/{id}/{labelId}")
+    public AllIssuesResponseForGetAll filterByLabel(@PathVariable Long id, @PathVariable Long  labelId) {
+        return allIssuesService.filterByLabel(id, labelId);
+    }
 }

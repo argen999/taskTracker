@@ -13,4 +13,6 @@ public interface AllIssuesService {
     AllIssuesResponseForGetAll filterByDateOfStart(Long id, LocalDate from, LocalDate to);
 
     AllIssuesResponseForGetAll filterByMembers(Long id, Long memberId);
+
+    AllIssuesResponseForGetAll filterByLabel(Long id, Long  labelId);
 }

@@ -103,6 +103,29 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         return allIssuesResponseForGetAll;
     }
 
+    public AllIssuesResponseForGetAll filterByLabel(Long id, Long  labelId) {
+        User user = getAuthenticateUser();
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + id + " not found"));
+        Label label = labelRepository.findById(labelId).orElseThrow(() ->
+                new NotFoundException("Label with id: " + labelId + " not found"));
+        AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
+        List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
+        Boolean isAdmin = false;
+        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
+            isAdmin = true;
+        }
+        List<Card> cards = workspace.getAllIssues();
+        for (Card card : cards) {
+            if (card.getLabels().contains(label)) {
+                allIssuesResponses.add(convertToResponse(card));
+            }
+        }
+        allIssuesResponseForGetAll.setIsAdmin(isAdmin);
+        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+        return allIssuesResponseForGetAll;
+    }
+
     private List<AllIssuesResponse> allIssuesResponses(List<Card> cards) {
         List<AllIssuesResponse> responses = new ArrayList<>();
         for (Card card : cards) {
