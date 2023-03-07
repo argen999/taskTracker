@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.repository;
 
 import com.example.tasktrackerb7.db.entities.Label;
+import com.example.tasktrackerb7.dto.response.LabelResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

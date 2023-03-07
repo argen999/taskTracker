@@ -43,7 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationResponse getById(Long id) {
-       Notification notification = notificationRepository.getById(id);
+       Notification notification = notificationRepository.findById(id).orElseThrow(()-> new NotFoundException("Notification not found!"));
        notification.setStatus(true);
        notificationRepository.save(notification);
         return new NotificationResponse(
@@ -56,6 +56,7 @@ public class NotificationServiceImpl implements NotificationService {
                 notification.getFromUser().getPhotoLink(),
                 notification.getDateOfWrite(),
                 notification.isStatus(),
+                notification.getNotificationType(),
                 notification.getText()
         );
     }

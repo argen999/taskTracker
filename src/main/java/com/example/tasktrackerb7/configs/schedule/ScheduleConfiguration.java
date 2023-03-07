@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.configs.schedule;
 
 import com.example.tasktrackerb7.db.entities.*;
+import com.example.tasktrackerb7.db.entities.enums.NotificationType;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -104,8 +105,11 @@ public class ScheduleConfiguration {
                                         notification.setText(": timeout expires in 5 minutes!");
                                         user.addNotification(notification);
                                         notification.setUser(user);
+                                        notification.setStatus(false);
+                                        notification.setNotificationType(NotificationType.REMINDER);
                                         notificationRepository.save(notification);
                                     }
+
                                     break label;
                                 }
                             }
@@ -126,6 +130,8 @@ public class ScheduleConfiguration {
                                         notification.setText(": timeout expires in 15 minutes!");
                                         user.addNotification(notification);
                                         notification.setUser(user);
+                                        notification.setStatus(false);
+                                        notification.setNotificationType(NotificationType.REMINDER);
                                         notificationRepository.save(notification);
                                     }
                                     break label;
@@ -148,6 +154,8 @@ public class ScheduleConfiguration {
                                         notification.setText(": timeout expires in 30 minutes!");
                                         user.addNotification(notification);
                                         notification.setUser(user);
+                                        notification.setStatus(false);
+                                        notification.setNotificationType(NotificationType.REMINDER);
                                         notificationRepository.save(notification);
                                     }
                                     break label;
@@ -170,6 +178,8 @@ public class ScheduleConfiguration {
                                         notification.setText(": timeout expires in 1 hour!");
                                         user.addNotification(notification);
                                         notification.setUser(user);
+                                        notification.setStatus(false);
+                                        notification.setNotificationType(NotificationType.REMINDER);
                                         notificationRepository.save(notification);
                                     }
                                     break label;

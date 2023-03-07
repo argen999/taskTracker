@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
+import com.example.tasktrackerb7.db.entities.enums.NotificationType;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.CommentService;
 import com.example.tasktrackerb7.dto.request.CommentRequest;
@@ -76,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
                 notification.setText(commentRequest.getText());
                 notification.setFromUser(user);
                 notification.setStatus(false);
+                notification.setNotificationType(NotificationType.COMMENT);
 
                 u.addComment(comment);
                 if (!u.equals(user)) {

@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.dto.response;
 
 import com.example.tasktrackerb7.db.entities.Notification;
+import com.example.tasktrackerb7.db.entities.enums.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class NotificationResponse {
     private String image;
     private LocalDateTime dateOfWrite;
     private boolean status;
+    private NotificationType notificationType;
     private String text;
 
     public NotificationResponse(Notification notification) {
@@ -33,6 +35,7 @@ public class NotificationResponse {
         this.image = notification.getFromUser().getPhotoLink();
         this.dateOfWrite  = notification.getDateOfWrite() ;
         this.status = notification.isStatus();
+        this.notificationType = notification.getNotificationType();
         this.text = notification.getText();
     }
 

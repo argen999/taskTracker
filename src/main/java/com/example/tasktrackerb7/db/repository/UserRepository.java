@@ -28,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from users where id in (select users_id from cards_users where cards_id = :id)", nativeQuery = true)
     List<User> getAll(Long id);
+
+
 }
