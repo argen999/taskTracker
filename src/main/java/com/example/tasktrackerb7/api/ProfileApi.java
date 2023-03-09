@@ -43,7 +43,7 @@ public class ProfileApi {
     }
 
     @Operation(summary = "Get all", description = "Get all workspace owned by user")
-    @GetMapping("/workspaces")
+    @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public List<WorkspaceResponse> getAllWorkspaceOwnedByUser() {
         return userService.getAllWorkspaceOwnedByUser();
