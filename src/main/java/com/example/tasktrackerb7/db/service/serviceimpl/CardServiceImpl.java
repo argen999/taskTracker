@@ -1,10 +1,12 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
+import com.example.tasktrackerb7.db.entities.enums.NotificationType;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.CardService;
 import com.example.tasktrackerb7.dto.converter.CardConverter;
-import com.example.tasktrackerb7.dto.request.*;
+import com.example.tasktrackerb7.dto.request.CardRequest;
+import com.example.tasktrackerb7.dto.request.UpdateCardRequest;
 import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
@@ -12,13 +14,14 @@ import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -38,6 +41,8 @@ public class CardServiceImpl implements CardService {
     private final CardConverter converter;
 
     private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
+
+    private final NotificationRepository notificationRepository;
 
 
     private User getAuthenticateUser() {
@@ -73,14 +78,36 @@ public class CardServiceImpl implements CardService {
     public CardInnerPageResponse update(UpdateCardRequest request) {
         User user = getAuthenticateUser();
         Card card = cardRepository.findById(request.getId()).orElseThrow(() ->
-                new NotFoundException("Card with id: " + request.getId()  + " not found"));
+                new NotFoundException("Card with id: " + request.getId() + " not found"));
         Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
                 new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+
             if (!request.getIsName()) {
                 card.setTitle(request.getValue());
             } else {
                 card.setDescription(request.getValue());
+            }
+
+            if (!userRepository.getAll(card.getId()).isEmpty()) {
+                for (User u : userRepository.getAll(card.getId())) {
+                    Notification notification = new Notification();
+                    notification.setCard(card);
+                    notification.setColumn(card.getColumn());
+                    notification.setBoard(card.getColumn().getBoard());
+                    notification.setDateOfWrite(LocalDateTime.now());
+                    notification.setStatus(false);
+                    notification.setFromUser(user);
+                    notification.setText("Card updated!");
+                    notification.setNotificationType(NotificationType.CARD);
+                    u.addCard(card);
+                    card.addUser(u);
+                    if (!u.equals(user)) {
+                        u.addNotification(notification);
+                        notification.setUser(u);
+                        notificationRepository.save(notification);
+                    }
+                }
             }
             return converter.convertToCardInnerPageResponse(card);
         } else {
@@ -131,9 +158,37 @@ public class CardServiceImpl implements CardService {
         Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
-            cardRepository.delete(card);
+            if (user.getCards() != null) {
+                for (Notification notification1 : user.getNotifications()) {
+                    if (Objects.equals(notification1.getCard().getId(), id)) {
+                        cardRepository.delete(card);
+                    }
+                }
+
+            }
+
         } else {
             throw new BadCredentialsException("You are not member in this workspace");
+        }
+        if (!userRepository.getAll(card.getId()).isEmpty()) {
+            for (User u : userRepository.getAll(card.getId())) {
+                Notification n = new Notification();
+                n.setCard(card);
+                n.setColumn(card.getColumn());
+                n.setBoard(card.getColumn().getBoard());
+                n.setDateOfWrite(LocalDateTime.now());
+                n.setStatus(false);
+                n.setFromUser(user);
+                n.setText("Card deleted!");
+                n.setNotificationType(NotificationType.CARD);
+                u.addCard(card);
+                card.addUser(u);
+                if (!u.equals(user)) {
+                    u.addNotification(n);
+                    n.setUser(u);
+                    notificationRepository.save(n);
+                }
+            }
         }
         return new SimpleResponse("Card with id: " + id + " deleted successfully");
     }

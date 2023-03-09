@@ -50,12 +50,12 @@ public class CardConverter {
         response.setIsArchive(card.getArchive());
         List<LabelResponse> list = new ArrayList<>();
         if (card.getLabels() != null) {
-            for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+            for (LabelResponse l: labelRepository.getAllLabelResponse(card.getId())) {
                 LabelResponse labelResponse = new LabelResponse();
                 labelResponse.setId(l.getId());
                 labelResponse.setId(l.getId());
                 labelResponse.setDescription(l.getDescription());
-                labelResponse.setColorLink(l.getColor());
+                labelResponse.setColor(l.getColor());
                 list.add(labelResponse);
             }
             response.setLabelResponses(list);
@@ -119,12 +119,12 @@ public class CardConverter {
                 List<LabelResponse> list = new ArrayList<>();
                 cardResponse.setId(card.getId());
                 cardResponse.setName(card.getTitle());
-                for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+                for (LabelResponse l: labelRepository.getAllLabelResponse(card.getId())) {
                     LabelResponse labelResponse = new LabelResponse();
                     labelResponse.setId(l.getId());
                     labelResponse.setId(l.getId());
                     labelResponse.setDescription(l.getDescription());
-                    labelResponse.setColorLink(l.getColor());
+                    labelResponse.setColor(l.getColor());
                     list.add(labelResponse);
                 }
                 cardResponse.setLabelResponses(list);
@@ -164,12 +164,12 @@ public class CardConverter {
         cardResponse.setId(card.getId());
         cardResponse.setName(card.getTitle());
         List<LabelResponse> list = new ArrayList<>();
-        for (Label l: labelRepository.getAllLabelResponse(card.getId())) {
+        for (LabelResponse l: labelRepository.getAllLabelResponse(card.getId())) {
             LabelResponse labelResponse = new LabelResponse();
             labelResponse.setId(l.getId());
             labelResponse.setId(l.getId());
             labelResponse.setDescription(l.getDescription());
-            labelResponse.setColorLink(l.getColor());
+            labelResponse.setColor(l.getColor());
             list.add(labelResponse);
         }
         cardResponse.setLabelResponses(list);
