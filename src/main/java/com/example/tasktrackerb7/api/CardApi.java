@@ -42,7 +42,7 @@ public class CardApi {
         return cardService.getById(id);
     }
 
-    @Operation(summary = "Get all cards", description = "Get all cards by board id")
+    @Operation(summary = "Get all cards, columns from board", description = "Get all cards, columns by board id")
     @GetMapping("/all/{id}")
     public BoardInnerPageResponse getAll(@PathVariable Long id) {
         return cardService.getAll(id);
