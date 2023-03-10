@@ -98,12 +98,6 @@ public class CardServiceImpl implements CardService {
             log.error("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
             throw new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
         });
-
-        Card card = cardRepository.findById(request.getId()).orElseThrow(() ->
-                new NotFoundException("Card with id: " + request.getId() + " not found"));
-        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found"));
-
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
             if (!request.getIsName()) {
