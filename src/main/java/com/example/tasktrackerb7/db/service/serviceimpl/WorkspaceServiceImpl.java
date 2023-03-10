@@ -94,7 +94,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
 
             notificationRepository.deleteAll(notificationRepository.getAllByWorkspaceId(id));
-            labelRepository.deletes(id);
+            labelRepository.deleteLabelById(id);
             workspaceRepository.delete(workspace);
 
             log.info("workspace with id: " + id + " deleted successfully");
