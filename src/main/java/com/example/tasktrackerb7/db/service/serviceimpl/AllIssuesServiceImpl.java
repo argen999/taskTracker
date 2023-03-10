@@ -3,6 +3,7 @@ package com.example.tasktrackerb7.db.service.serviceimpl;
 import com.example.tasktrackerb7.db.entities.*;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.AllIssuesService;
+import com.example.tasktrackerb7.dto.request.AllIssuesRequest;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponse;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponseForGetAll;
 import com.example.tasktrackerb7.dto.response.CardMemberResponse;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +43,24 @@ public class AllIssuesServiceImpl implements AllIssuesService {
     }
 
     @Override
-    public AllIssuesResponseForGetAll getAll(Long id) { //workspaceId
+    public AllIssuesResponseForGetAll getAll(Long id, AllIssuesRequest allIssuesRequest) { //workspaceId
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + id + " not found"));
         AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
         List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
+
+        if (allIssuesRequest.getId() == null && allIssuesRequest.getFrom() != null && !allIssuesRequest.getFrom().equals("") && allIssuesRequest.getTo() != null && !allIssuesRequest.getTo().equals("")) {
+            filterByDateOfStart(allIssuesRequest.getFrom(), allIssuesRequest.getTo());
+        }
+
+        if (allIssuesRequest.getId() != null && allIssuesRequest.getMemberOrLabel().equals(true)) {
+            filterByMembers(id, allIssuesRequest.getId());
+        }
+
+        if (allIssuesRequest.getId() != null && allIssuesRequest.getMemberOrLabel().equals(false)) {
+            filterByLabel(id, allIssuesRequest.getId());
+        }
 
         for (Card card : workspace.getAllIssues()) {
             allIssuesResponses.add(convertToResponse(card));
@@ -59,26 +71,26 @@ public class AllIssuesServiceImpl implements AllIssuesService {
             isAdmin = true;
         }
 
+
+
         allIssuesResponseForGetAll.setIsAdmin(isAdmin);
         allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
 
         return allIssuesResponseForGetAll;
     }
 
-    @Override
-    public AllIssuesResponseForGetAll filterByDateOfStart(Long id, LocalDate from, LocalDate to) {
+    private AllIssuesResponseForGetAll filterByDateOfStart(LocalDate from, LocalDate to) {
         AllIssuesResponseForGetAll response = new AllIssuesResponseForGetAll();
         if (from != null && to != null) {
             if (from.isAfter(to)) {
                 throw new BadCredentialsException("date of start need to be after date of finish");
             }
-            response.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
+            response.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(from, to)));
         }
         return response;
     }
 
-    @Override
-    public AllIssuesResponseForGetAll filterByMembers(Long id, Long memberId) {
+    private AllIssuesResponseForGetAll filterByMembers(Long id, Long memberId) {
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + id + " not  found"));
         User user = userRepository.findById(memberId).get();
@@ -103,7 +115,7 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         return allIssuesResponseForGetAll;
     }
 
-    public AllIssuesResponseForGetAll filterByLabel(Long id, Long  labelId) {
+    private AllIssuesResponseForGetAll filterByLabel(Long id, Long labelId) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + id + " not found"));
