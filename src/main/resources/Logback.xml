@@ -1,16 +1,6 @@
 
 <configuration>
     <property name="accounting" value="Logs"/>
-
-    <!--    <appender name="LogzioLogbackAppender" class="io.logz.logback.LogzioLogbackAppender">-->
-    <!--        <logzioToken>GrNOdPBdDEZIsyrgmrfvlumpSoERxTLK</logzioToken>-->
-    <!--        <logzioUrl>https://listener.logz.io:8071</logzioUrl>-->
-    <!--        <logzioType>java-application</logzioType>-->
-    <!--        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
-    <!--            <level>INFO</level>-->
-    <!--        </filter>-->
-    <!--    </appender>-->
-
     <!-- Closes gracefully and finishes the log drain -->
     <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
@@ -51,8 +41,5 @@
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
     </contextListener>
-
-    <!-- Use shutdownHook so that we can close gracefully and finish the log drain -->
-    <!--    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>-->
 
 </configuration>
