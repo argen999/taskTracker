@@ -1,18 +1,12 @@
 package com.example.tasktrackerb7.db.entities;
 
-import javax.persistence.*;
-
-
+import com.example.tasktrackerb7.db.entities.enums.NotificationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-import java.time.LocalDate;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 
 import static javax.persistence.CascadeType.*;
 
@@ -32,7 +26,10 @@ public class Notification {
 
     private boolean status;
 
-    private LocalDate dateOfWrite;
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
+
+    private LocalDateTime dateOfWrite;
 
     @OneToOne(cascade = {DETACH, MERGE, REFRESH, PERSIST})
     private User fromUser;

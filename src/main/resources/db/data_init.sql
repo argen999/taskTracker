@@ -99,12 +99,12 @@ values (1, false, 'Finish before deadline', 1),
        (4, false, 'Finish before deadline', 4),
        (5, false, 'Finish before deadline', 5);
 
-insert into notifications(id, date_of_write, status, text, board_id, card_id, column_id, from_user_id, user_id)
-values (1, '2023-01-09', false, 'Appointed you  as an admin to workspace Peaksoft House', 1, 1, 1, 1, 5),
-       (2, '2023-01-12', false, 'Moved to list done', 2, 2, 2, 2, 4),
-       (3, '2023-01-09', false, 'My God,let me not burn out on this task', 3, 3, 3, 3, 2),
-       (4, '2023-01-09', false, 'Added you to the board C', 4, 4, 4, 4, 3),
-       (5, '2023-02-25', false, 'Create card', 5, 5, 5, 5, 1);
+insert into notifications(id, date_of_write,notification_type, status, text, board_id, card_id, column_id, from_user_id, user_id)
+values (1, '2023-01-09','COMMENT', false, 'Appointed you  as an admin to workspace Peaksoft House', 1, 1, 1, 1, 5),
+       (2, '2023-01-12','COMMENT', false, 'Moved to list done', 2, 2, 2, 2, 4),
+       (3, '2023-01-09','COMMENT', false, 'My God,let me not burn out on this task', 3, 3, 3, 3, 2),
+       (4, '2023-01-09','COMMENT', false, 'Added you to the board C', 4, 4, 4, 4, 3),
+       (5, '2023-02-25','COMMENT', false, 'Create card', 5, 5, 5, 5, 1);
 
 insert into favourites(id, user_id, board_id, workspace_id,is_board)
 values (1, 1, 1, null,false),
@@ -122,13 +122,9 @@ values (1, 1),
        (4, 4),
        (5, 5);
 
-insert into users_notifications(user_id, notification_id)
-values (4, 1),
-       (3, 2),
-       (2, 3),
-       (1, 4);
 
-insert into cards_labels(card_id, labels_id)
+
+insert into cards_labels(card_id, label_id)
 values (1, 1),
        (2, 2),
        (3, 3),

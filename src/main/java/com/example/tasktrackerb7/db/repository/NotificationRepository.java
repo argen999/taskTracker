@@ -24,4 +24,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             """, nativeQuery = true)
     List<Notification> getAllByBoardId(Long id);
 
+
+    @Query("select n from Notification n where n.user.id=:id ")
+    List<Notification> getAllNotification(Long id);
 }
