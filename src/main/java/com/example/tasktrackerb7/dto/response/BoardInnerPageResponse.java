@@ -11,5 +11,7 @@ public class BoardInnerPageResponse {
 
     private String boardName;
 
+    private long counter;
+
     private List<ColumnResponse> columnResponses;
 }

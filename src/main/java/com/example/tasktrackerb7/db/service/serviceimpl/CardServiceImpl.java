@@ -162,6 +162,7 @@ public class CardServiceImpl implements CardService {
                     }
                 }
             }
+            boardInnerPageResponse.setCounter(board.getColumns().stream().count());
             boardInnerPageResponse.setBoardName(board.getName());
             boardInnerPageResponse.setColumnResponses(columnResponses);
         } else {
