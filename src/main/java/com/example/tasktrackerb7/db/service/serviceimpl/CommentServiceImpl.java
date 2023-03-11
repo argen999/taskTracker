@@ -12,6 +12,7 @@ import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
@@ -42,7 +44,10 @@ public class CommentServiceImpl implements CommentService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found!"));
+        return userRepository.findByEmail(login).orElseThrow(() -> {
+            log.error("User not found!");
+            throw new NotFoundException("User not found!");
+        });
     }
 
     @Override
@@ -50,11 +55,22 @@ public class CommentServiceImpl implements CommentService {
         User user = getAuthenticateUser();
 
         Card card = cardRepository.findById(commentRequest.getId()).orElseThrow(
-                () -> new NotFoundException("card not found")
+                () -> {
+                    log.error("card not found");
+                    throw new NotFoundException("card not found");
+                }
         );
 
-        Board board = boardRepository.findById(card.getColumn().getBoard().getId()).orElseThrow(() -> new NotFoundException("board not found!"));
-        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() -> new NotFoundException("column bot found!"));
+        Board board = boardRepository.findById(card.getColumn().getBoard().getId()).orElseThrow(() -> {
+                    log.error("board not found!");
+                    throw new NotFoundException("board not found!");
+                }
+        );
+        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() -> {
+                    log.error("column bot found!");
+                    throw new NotFoundException("column bot found!");
+                }
+        );
         Comment comment = new Comment();
 
         comment.setUser(user);
@@ -65,7 +81,7 @@ public class CommentServiceImpl implements CommentService {
         card.addComment(comment);
 
         commentRepository.save(comment);
-
+        log.info("Comment successfully created");
         if (!userRepository.getAll(commentRequest.getId()).isEmpty()) {
             for (User u : userRepository.getAll(commentRequest.getId())) {
 
@@ -96,16 +112,20 @@ public class CommentServiceImpl implements CommentService {
     public CommentResponse editComment(CommentRequest commentRequest) {
         User user = getAuthenticateUser();
         Comment comment = commentRepository.findById(commentRequest.getId()).orElseThrow(
-                () -> new NotFoundException("comment not found!!")
+                () -> {
+                    log.error("comment not found!!");
+                    throw new NotFoundException("comment not found!!");
+                }
 
         );
         if (!user.equals(comment.getUser())) {
+            log.error("You can not edit this comment!");
             throw new BadCredentialsException("You cannot edit this comments!!");
         }
         comment.setText(commentRequest.getText());
         comment.setLocalDateTime(LocalDateTime.now());
         commentRepository.save(comment);
-
+        log.info("Comment  successfully edited");
 
         return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), true, new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
@@ -114,13 +134,17 @@ public class CommentServiceImpl implements CommentService {
     public SimpleResponse deleteComment(Long id) {
         User user = getAuthenticateUser();
         Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("comment not found")
+                () -> {
+                    log.error("comment not found");
+                    throw new NotFoundException("comment not found");
+                }
         );
         if (!user.equals(comment.getUser())) {
+            log.error("You can't delete this comment");
             throw new BadCredentialsException("You can't delete this comment");
         } else {
             commentRepository.delete(comment);
-
+            log.info("Comment successfully deleted!");
         }
         return new SimpleResponse("Comment delete successfully!!!");
     }

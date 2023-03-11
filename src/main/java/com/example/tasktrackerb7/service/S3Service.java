@@ -1,6 +1,7 @@
 package com.example.tasktrackerb7.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class S3Service {
     @Autowired
     private final S3Client s3;
@@ -26,6 +28,7 @@ public class S3Service {
 
 
     public Map<String, String> upload(MultipartFile file) throws IOException {
+        log.info("Uploading file...");
         String key = System.currentTimeMillis() + file.getOriginalFilename();
         PutObjectRequest por = PutObjectRequest
                 .builder()
@@ -42,6 +45,7 @@ public class S3Service {
                 .build();
 
         s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        log.info("Upload complete");
         return Map.of(
                 "link", BUCKET_PATH + key
         );
@@ -52,6 +56,8 @@ public class S3Service {
         try {
 
             String key = fileLink.substring(BUCKET_PATH.length());
+
+            log.warn("deleting object:  {}" + key);
 
             s3.deleteObject(dor -> dor.bucket(bucketName).key(key).build());
 

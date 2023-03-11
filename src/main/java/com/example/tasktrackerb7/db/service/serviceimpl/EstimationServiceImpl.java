@@ -14,12 +14,14 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EstimationServiceImpl implements EstimationService {
 
     private final EstimationRepository estimationRepository;
@@ -33,19 +35,27 @@ public class EstimationServiceImpl implements EstimationService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found!"));
+        return userRepository.findByEmail(login).orElseThrow(() -> {
+                    log.error("User not found!");
+                    throw new NotFoundException("User not found!");
+                }
+        );
     }
 
     @Override
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         User user = getAuthenticateUser();
 
-        Card card = cardRepository.findById(estimationRequest.getId()).orElseThrow(() -> new NotFoundException("Card not found!"));
-
+        Card card = cardRepository.findById(estimationRequest.getId()).orElseThrow(() -> {
+                    log.error("Card not found!");
+                    throw new NotFoundException("Card not found!");
+                }
+        );
         Estimation estimation;
 
         if (estimationRequest.getDateOfStart().isBefore(estimationRequest.getDateOfFinish())) {
             estimation = new Estimation(estimationRequest);
+            log.info("The start date must not be before date finish!");
         } else throw new BadRequestException("The start date must not be before date finish!");
 
         if (card.getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), card.getColumn().getBoard().getWorkspace().getId()))) {
@@ -57,7 +67,7 @@ public class EstimationServiceImpl implements EstimationService {
                 estimation.setCreator(user);
                 estimationRepository.save(estimation);
                 cardRepository.save(card);
-
+                log.info("Estimation successfully created");
             } else throw new BadRequestException("This card already has estimation!");
 
         } else throw new BadRequestException("You are not a member of this workspace");
@@ -90,14 +100,24 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     public SimpleResponse deleteEstimation(Long id) {
         User user = getAuthenticateUser();
-        Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> new NotFoundException("Estimation not found!"));
-        Card card = cardRepository.findById(estimation.getCard().getId()).orElseThrow(() -> new NotFoundException("Card not found!"));
+        Estimation estimation = estimationRepository.findById(id).orElseThrow(() -> {
+                    log.error("Estimation not found!");
+                    throw new NotFoundException("Estimation not found!");
+                }
+        );
+        Card card = cardRepository.findById(estimation.getCard().getId()).orElseThrow(() -> {
+
+                    log.error("Card not found!");
+                    throw new NotFoundException("Card not found!");
+                }
+        );
         if (estimation.getCard().getColumn().getBoard().getWorkspace().getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), estimation.getCard().getColumn().getBoard().getWorkspace().getId()))) {
 
             SimpleResponse simpleResponse;
             if (card.getUsers().contains(user)) {
 
                 estimationRepository.delete(estimation);
+                log.info("Deleted successfully!");
                 simpleResponse = new SimpleResponse("Deleted successfully!");
 
             } else throw new BadRequestException("You are not a member in this card!");

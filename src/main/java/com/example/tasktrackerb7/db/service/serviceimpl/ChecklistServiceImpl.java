@@ -11,6 +11,7 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ChecklistServiceImpl implements ChecklistService {
 
     private final ChecklistRepository checklistRepository;
@@ -39,23 +41,33 @@ public class ChecklistServiceImpl implements ChecklistService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found"));
+        return userRepository.findByEmail(login).orElseThrow(() ->{
+            log.error("User not found!");
+           throw  new NotFoundException("User not found");
+        });
     }
 
     @Override
     public ChecklistResponse create(Long id, ChecklistRequest checklistRequest) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Card with id:" + id + " not found"));
-        Board board = boardRepository.findById(card.getColumn().getBoard().getId()).orElseThrow(() ->
-                new NotFoundException("Board with id: " + card.getColumn().getBoard().getId() + " not found"));
-        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
+        Card card = cardRepository.findById(id).orElseThrow(() ->{
+            log.error("Card with id:" + id + " not found");
+            throw new NotFoundException("Card with id:" + id + " not found");
+        });
+        Board board = boardRepository.findById(card.getColumn().getBoard().getId()).orElseThrow(() ->{
+            log.error("Board with id: " + card.getColumn().getBoard().getId() + " not found");
+            throw new NotFoundException("Board with id: " + card.getColumn().getBoard().getId() + " not found");
+        });
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() -> {
+            log.error("Workspace with id: " + board.getWorkspace().getId() + " not found");
+           throw  new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             Checklist checklist = new Checklist();
             checklist.setTitle(checklistRequest.getName());
             checklist.setCard(card);
             card.addChecklist(checklist);
+            log.info("Checklist successfully created");
             return convertToResponse(checklistRepository.save(checklist));
         } else {
             throw new BadRequestException("You are not member in this workspace");
@@ -65,12 +77,17 @@ public class ChecklistServiceImpl implements ChecklistService {
     @Override
     public ChecklistResponse update(UpdateChecklistRequest updateChecklistRequest) {
         User user = getAuthenticateUser();
-        Checklist checklist = checklistRepository.findById(updateChecklistRequest.getId()).orElseThrow(() ->
-                new NotFoundException("Checklist with id:" + updateChecklistRequest.getId() + " not found"));
-        Workspace workspace = workspaceRepository.findById(checklist.getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + checklist.getCard().getColumn().getBoard().getWorkspace().getId() + " not found"));
+        Checklist checklist = checklistRepository.findById(updateChecklistRequest.getId()).orElseThrow(() ->{
+            log.error("Checklist with id:" + updateChecklistRequest.getId() + " not found");
+            throw new NotFoundException("Checklist with id:" + updateChecklistRequest.getId() + " not found");
+        });
+        Workspace workspace = workspaceRepository.findById(checklist.getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->{
+            log.error("Workspace with id: " + checklist.getCard().getColumn().getBoard().getWorkspace().getId() + " not found");
+            throw new NotFoundException("Workspace with id: " + checklist.getCard().getColumn().getBoard().getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             checklist.setTitle(updateChecklistRequest.getName());
+            log.info("Checklist successfully updated");
             return convertToResponse(checklistRepository.save(checklist));
         } else {
             throw new BadRequestException("You are not member in this workspace");
@@ -80,15 +97,20 @@ public class ChecklistServiceImpl implements ChecklistService {
     @Override
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
-        Checklist checklist = checklistRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Checklist with id: " + id + " not found!"));
-        Workspace workspace = workspaceRepository.findById(checklist.getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + checklist.getCard().getColumn().getBoard().getWorkspace().getId() + " not found"));
+        Checklist checklist = checklistRepository.findById(id).orElseThrow(() ->{
+            log.error("Checklist with id: " + id + " not found!");
+            throw new NotFoundException("Checklist with id: " + id + " not found!");
+        });
+        Workspace workspace = workspaceRepository.findById(checklist.getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() -> {
+            log.error("Workspace with id: " + checklist.getCard().getColumn().getBoard().getWorkspace().getId() + " not found");
+            throw new NotFoundException("Workspace with id: " + checklist.getCard().getColumn().getBoard().getWorkspace().getId() + " not found");
+        });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             for (Item item : checklist.getItems()) {
                 item.setChecklist(null);
             }
             checklistRepository.delete(checklist);
+            log.info("Checklist with id " + id + " successfully deleted");
             return new SimpleResponse("Checklist with id " + id + " successfully deleted");
         } else {
             throw new BadRequestException("You are not member in this workspace");
@@ -101,11 +123,14 @@ public class ChecklistServiceImpl implements ChecklistService {
         List<Checklist> checklists = checklistRepository.getAllChecklists(id);
         List<ChecklistResponse> checklistResponses = new ArrayList<>();
         for (Checklist c : checklists) {
-            Workspace workspace = workspaceRepository.findById(c.getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->
-                    new NotFoundException("Workspace with id: " + c.getCard().getColumn().getBoard().getWorkspace().getId() + " not found"));
+            Workspace workspace = workspaceRepository.findById(c.getCard().getColumn().getBoard().getWorkspace().getId()).orElseThrow(() -> {
+                log.error("Workspace with id: " + c.getCard().getColumn().getBoard().getWorkspace().getId() + " not found");
+                throw new NotFoundException("Workspace with id: " + c.getCard().getColumn().getBoard().getWorkspace().getId() + " not found");
+            });
             if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
                 for (Checklist checklist : checklists) {
                     checklistResponses.add(convertToResponse(checklist));
+                    log.info("Get all checklists by card's id");
                 }
             } else {
                 throw new BadRequestException("You are not member in this workspace");

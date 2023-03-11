@@ -17,6 +17,7 @@
         <java.version>17</java.version>
     </properties>
     <dependencyManagement>
+
         <dependencies>
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
@@ -154,8 +155,12 @@
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.6.9</version>
         </dependency>
+        <dependency>
+            <groupId>io.logz.logback</groupId>
+            <artifactId>logzio-logback-appender</artifactId>
+            <version>v1.0.25</version>
+        </dependency>
     </dependencies>
-
 
     <build>
         <plugins>
