@@ -32,7 +32,7 @@ values (1, false, 'Peaksoft House', 1),
 insert into boards(id, archive, background, name, workspace_id)
 values (1, false,'https://i.pinimg.com/236x/e5/9a/52/e59a522e5010613ae986ede14b8916a3.jpg','Java',1),
        (2, false,'https://i.pinimg.com/564x/68/d9/1a/68d91a4a0c40857674fbd3a22b9f0b03.jpg','JavaScript', 2),
-       (3, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Python', 3),
+       (3, false,'https://kliper.hr/wp-content/uploads/2017/09/zelva_glavata_kornjaca_morska.jpg','Python', 3),
        (4, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','C++', 4),
        (5, false,'https://i.pinimg.com/564x/90/07/3c/90073c3c05426d4e3576b7b147ca6ee1.jpg','Kotlin', 5);
 
