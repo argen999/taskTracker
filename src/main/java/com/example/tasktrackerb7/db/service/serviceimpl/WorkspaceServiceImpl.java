@@ -29,6 +29,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class WorkspaceServiceImpl implements WorkspaceService {
+    private final FavouriteRepository favouriteRepository;
 
     private final WorkspaceRepository workspaceRepository;
 
@@ -95,6 +96,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
             notificationRepository.deleteAll(notificationRepository.getAllByWorkspaceId(id));
             labelRepository.deleteLabelById(id);
+            favouriteRepository.deleteAll(favouriteRepository.deleteWorkspace(id));
             workspaceRepository.delete(workspace);
 
             log.info("workspace with id: " + id + " deleted successfully");
