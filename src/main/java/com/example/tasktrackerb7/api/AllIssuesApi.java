@@ -20,7 +20,7 @@ public class AllIssuesApi {
 
     @Operation(summary = "Get all issues", description = "Get all issues by workspace id")
     @GetMapping("/{id}")
-    public AllIssuesResponseForGetAll getAll(@PathVariable Long id, @RequestBody AllIssuesRequest allIssuesRequest) {
+    public AllIssuesResponseForGetAll getAll(@PathVariable Long id, @RequestParam AllIssuesRequest allIssuesRequest) {
         return allIssuesService.getAll(id, allIssuesRequest);
     }
 }
