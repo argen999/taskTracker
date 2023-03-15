@@ -11,12 +11,14 @@ import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class LabelServiceImpl implements LabelService {
     private final LabelRepository labelRepository;
     private final CardRepository cardRepository;
@@ -28,13 +30,17 @@ public class LabelServiceImpl implements LabelService {
         label.setDescription(labelRequest.getDescription());
         label.setColor(labelRequest.getColor());
         labelRepository.save(label);
+        log.info("Label successfully created!");
         return new SimpleResponse("Label successfully created!");
     }
 
     @Override
     public LabelResponse getLabelById(Long id) {
         Label label = labelRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Label with ID " + id + " not found!")
+                () ->{
+                    log.error("Label with ID " + id + " not found!");
+                    throw new NotFoundException("Label with ID " + id + " not found!");
+                }
         );
         return labelResponseConverter.viewLabel(label);
     }
@@ -42,11 +48,15 @@ public class LabelServiceImpl implements LabelService {
     @Override
     public SimpleResponse updateLabel(Long id, LabelRequest labelRequest) {
         Label label = labelRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Label with ID " + id + " not found!")
+                () ->{
+                    log.error("Label with ID " + id + " not found!");
+                    throw new NotFoundException("Label with ID " + id + " not found!");
+                }
         );
         label.setDescription(labelRequest.getDescription());
         label.setColor(labelRequest.getColor());
         labelRepository.save(label);
+        log.info("Label updated successfully!");
         return new SimpleResponse("Label updated successfully!");
     }
 

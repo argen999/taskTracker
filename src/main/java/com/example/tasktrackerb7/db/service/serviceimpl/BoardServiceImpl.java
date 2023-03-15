@@ -10,6 +10,7 @@ import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import com.example.tasktrackerb7.exceptions.BadRequestException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
@@ -35,13 +37,17 @@ public class BoardServiceImpl implements BoardService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found!"));
+        return userRepository.findByEmail(login).orElseThrow(() ->{
+            log.error("User not found!");
+            throw new NotFoundException("User not found!");
+        });
     }
 
     @Override
     public BoardResponse create(BoardRequest boardRequest) {
         User user = getAuthenticateUser();
         Workspace workspace = workspaceRepository.findById(boardRequest.getWorkspaceId()).orElseThrow(() -> {
+            log.error("workspace not found");
             throw new NotFoundException("workspace not found");
         });
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
@@ -50,6 +56,7 @@ public class BoardServiceImpl implements BoardService {
             workspace.addBoard(board);
             board.setWorkspace(workspace);
             boardRepository.save(board);
+            log.info("Board successfully created");
             boolean isFavourite = false;
             if (board.getFavourites() != null) {
                 for (Favourite favorite : user.getFavourites()) {
@@ -106,6 +113,7 @@ public class BoardServiceImpl implements BoardService {
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
         Board board = boardRepository.findById(id).orElseThrow(() -> {
+            log.error("board not found");
             throw new NotFoundException("board not found");
         });
         Workspace workspace = board.getWorkspace();
@@ -122,6 +130,7 @@ public class BoardServiceImpl implements BoardService {
                 board.setFavourites(null);
                 notificationRepository.deleteAll(notificationRepository.getAllByBoardId(id));
                 boardRepository.delete(board);
+                log.info("board deleted with id: " + id + " successfully");
                 return new SimpleResponse("board deleted with id: " + id + " successfully");
 
             } else throw new BadRequestException("you are not member in this workspace");

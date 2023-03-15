@@ -20,10 +20,10 @@ public interface FavouriteRepository extends JpaRepository<com.example.tasktrack
     List<FavouriteWorkspaceResponse> getWorkspaceByIsFavourite(Long id);
 
     @Query(value = """
-            select * from favourites where workspace_id = :id or board_id =
+            select * from favourites where workspace_id = :id or board_id in
             (select b.id from boards b where b.workspace_id = :id);
             """, nativeQuery = true)
-    Favourite deleteWorkspace(Long id);
+    List<Favourite> deleteWorkspace(Long id);
 
 
 }
