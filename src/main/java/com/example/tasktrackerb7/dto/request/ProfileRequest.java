@@ -30,7 +30,6 @@ public class ProfileRequest {
     private String email;
 
     @NotNull
-    @NotBlank
 //    @Password
     private String password;
 
