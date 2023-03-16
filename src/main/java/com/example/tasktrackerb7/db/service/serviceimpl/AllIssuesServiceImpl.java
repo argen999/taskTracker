@@ -46,16 +46,16 @@ public class AllIssuesServiceImpl implements AllIssuesService {
             allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
         }
 
-        if (memberId != null && !isFilter.equals(true)) {
+        if (memberId != null && isFilter.equals(true)) {
             User user = userRepository.findById(memberId).get();
             List<Card> cards = workspace.getAllIssues();
             for (Card card : cards) {
                 for (User member : card.getUsers()) {
                     if (member.equals(user)) {
                         allIssuesResponses.add(convertToResponse(card));
-                        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
                     }
                 }
+                allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
             }
         }
 
@@ -66,9 +66,9 @@ public class AllIssuesServiceImpl implements AllIssuesService {
             for (Card card : cards) {
                 if (card.getLabels().contains(label)) {
                     allIssuesResponses.add(convertToResponse(card));
-                    allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
                 }
             }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
         }
 
         if (isFilter.equals(false)) {
@@ -77,8 +77,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
             }
             allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
         }
-
-
 
         return allIssuesResponseForGetAll;
     }
@@ -105,10 +103,16 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         for (User user : card.getUsers()) {
             cardMemberResponses.add(new CardMemberResponse(user));
         }
-
         response.setCardMemberResponses(cardMemberResponses);
 
-        List<LabelResponse> labelResponses = labelRepository.getAllLabelResponse(card.getId());
+        List<LabelResponse> labelResponses = new ArrayList<>();
+        LabelResponse labelResponse = new LabelResponse();
+        for (Label label : card.getLabels()) {
+            labelResponse.setId(label.getId());
+            labelResponse.setDescription(label.getDescription());
+            labelResponse.setColor(label.getColor());
+        }
+        labelResponses.add(labelResponse);
         response.setLabelResponses(labelResponses);
 
         for (Checklist checklist : card.getChecklists()) {
@@ -118,7 +122,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
                     isDoneItems++;
                 }
             }
-
             String checklist1 = isDoneItems + "/" + allItems;
             response.setChecklist(checklist1);
         }
