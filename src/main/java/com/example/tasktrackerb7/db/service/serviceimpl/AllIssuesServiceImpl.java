@@ -1,7 +1,10 @@
 package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import com.example.tasktrackerb7.db.entities.*;
-import com.example.tasktrackerb7.db.repository.*;
+import com.example.tasktrackerb7.db.repository.CardRepository;
+import com.example.tasktrackerb7.db.repository.LabelRepository;
+import com.example.tasktrackerb7.db.repository.UserRepository;
+import com.example.tasktrackerb7.db.repository.WorkspaceRepository;
 import com.example.tasktrackerb7.db.service.AllIssuesService;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponse;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponseForGetAll;
@@ -10,7 +13,6 @@ import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -100,6 +102,7 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int period = dateOfFinish - dateOfStart;
         response.setPeriod(period);
 
+
         for (User user : card.getUsers()) {
             cardMemberResponses.add(new CardMemberResponse(user));
         }
@@ -125,7 +128,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
             String checklist1 = isDoneItems + "/" + allItems;
             response.setChecklist(checklist1);
         }
-
         return response;
     }
 }
