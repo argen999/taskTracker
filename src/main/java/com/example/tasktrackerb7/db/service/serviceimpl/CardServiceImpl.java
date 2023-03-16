@@ -80,6 +80,7 @@ public class CardServiceImpl implements CardService {
             card.setArchive(false);
             card.addUser(user);
             user.addCard(card);
+            card.setWorkspace(workspace);
             log.info("Card successfully created");
             return converter.convertToCardInnerPageResponse(cardRepository.save(card));
         } else {

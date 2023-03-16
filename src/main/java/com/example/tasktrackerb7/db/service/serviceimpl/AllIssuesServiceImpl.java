@@ -3,7 +3,6 @@ package com.example.tasktrackerb7.db.service.serviceimpl;
 import com.example.tasktrackerb7.db.entities.*;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.AllIssuesService;
-import com.example.tasktrackerb7.dto.request.AllIssuesRequest;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponse;
 import com.example.tasktrackerb7.dto.response.AllIssuesResponseForGetAll;
 import com.example.tasktrackerb7.dto.response.CardMemberResponse;
@@ -11,8 +10,7 @@ import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.exceptions.BadCredentialsException;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,108 +31,55 @@ public class AllIssuesServiceImpl implements AllIssuesService {
 
     private final UserRepository userRepository;
 
-    private final UserWorkspaceRoleRepository userWorkspaceRoleRepository;
-
-
-    private User getAuthenticateUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
-    @Override
-    public AllIssuesResponseForGetAll getAll(Long id, AllIssuesRequest allIssuesRequest) { //workspaceId
-        User user = getAuthenticateUser();
+    public AllIssuesResponseForGetAll getAll(Long id, LocalDate from, LocalDate to, Long memberId, Long labelId, Boolean isFilter) { //workspaceId
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Workspace with id: " + id + " not found"));
         AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
         List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
 
-        if (allIssuesRequest.getId() == null && allIssuesRequest.getFrom() != null && !allIssuesRequest.getFrom().equals("") && allIssuesRequest.getTo() != null && !allIssuesRequest.getTo().equals("")) {
-            filterByDateOfStart(allIssuesRequest.getFrom(), allIssuesRequest.getTo());
-        }
-
-        if (allIssuesRequest.getId() != null && allIssuesRequest.getMemberOrLabel().equals(true)) {
-            filterByMembers(id, allIssuesRequest.getId());
-        }
-
-        if (allIssuesRequest.getId() != null && allIssuesRequest.getMemberOrLabel().equals(false)) {
-            filterByLabel(id, allIssuesRequest.getId());
-        }
-
-        for (Card card : workspace.getAllIssues()) {
-            allIssuesResponses.add(convertToResponse(card));
-        }
-
-        Boolean isAdmin = false;
-        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            isAdmin = true;
-        }
-
-
-
-        allIssuesResponseForGetAll.setIsAdmin(isAdmin);
-        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
-
-        return allIssuesResponseForGetAll;
-    }
-
-    private AllIssuesResponseForGetAll filterByDateOfStart(LocalDate from, LocalDate to) {
-        AllIssuesResponseForGetAll response = new AllIssuesResponseForGetAll();
-        if (from != null && to != null) {
-            if (from.isAfter(to)) {
-                throw new BadCredentialsException("date of start need to be after date of finish");
+        if (from != null || to != null && isFilter.equals(true)) {
+            if (from != null && to != null) {
+                if (from.isAfter(to)) {
+                    throw new BadCredentialsException("date of start need to be after date of finish");
+                }
             }
-            response.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(from, to)));
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
         }
-        return response;
-    }
 
-    private AllIssuesResponseForGetAll filterByMembers(Long id, Long memberId) {
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + id + " not  found"));
-        User user = userRepository.findById(memberId).get();
-        List<Card> cards = workspace.getAllIssues();
-        AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
-        List<AllIssuesResponse> memberAssignedCards = new ArrayList<>();
-        for (Card card : cards) {
-            for (User member : card.getUsers()) {
-                if (member.equals(user)) {
-                    memberAssignedCards.add(convertToResponse(card));
+        if (memberId != null && !isFilter.equals(true)) {
+            User user = userRepository.findById(memberId).get();
+            List<Card> cards = workspace.getAllIssues();
+            for (Card card : cards) {
+                for (User member : card.getUsers()) {
+                    if (member.equals(user)) {
+                        allIssuesResponses.add(convertToResponse(card));
+                        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+                    }
                 }
             }
         }
 
-        Boolean isAdmin = false;
-        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            isAdmin = true;
-        }
-
-        allIssuesResponseForGetAll.setIsAdmin(isAdmin);
-        allIssuesResponseForGetAll.setAllIssuesResponses(memberAssignedCards);
-        return allIssuesResponseForGetAll;
-    }
-
-    private AllIssuesResponseForGetAll filterByLabel(Long id, Long labelId) {
-        User user = getAuthenticateUser();
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + id + " not found"));
-        Label label = labelRepository.findById(labelId).orElseThrow(() ->
-                new NotFoundException("Label with id: " + labelId + " not found"));
-        AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
-        List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
-        Boolean isAdmin = false;
-        if (userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()).getRole().getName().equals("ADMIN")) {
-            isAdmin = true;
-        }
-        List<Card> cards = workspace.getAllIssues();
-        for (Card card : cards) {
-            if (card.getLabels().contains(label)) {
-                allIssuesResponses.add(convertToResponse(card));
+        if (labelId != null && isFilter.equals(true)) {
+            Label label = labelRepository.findById(labelId).orElseThrow(() ->
+                    new NotFoundException("Label with id: " + labelId + " not found"));
+            List<Card> cards = workspace.getAllIssues();
+            for (Card card : cards) {
+                if (card.getLabels().contains(label)) {
+                    allIssuesResponses.add(convertToResponse(card));
+                    allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+                }
             }
         }
-        allIssuesResponseForGetAll.setIsAdmin(isAdmin);
-        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+
+        if (isFilter.equals(false)) {
+            for (Card card : workspace.getAllIssues()) {
+                allIssuesResponses.add(convertToResponse(card));
+            }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+        }
+
+
+
         return allIssuesResponseForGetAll;
     }
 
@@ -155,7 +100,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int dateOfStart = card.getEstimation().getDateOfStart().getDayOfMonth();
         int dateOfFinish = card.getEstimation().getDateOfFinish().getDayOfMonth();
         int period = dateOfFinish - dateOfStart;
-
         response.setPeriod(period);
 
         for (User user : card.getUsers()) {

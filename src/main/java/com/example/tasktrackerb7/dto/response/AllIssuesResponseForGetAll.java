@@ -9,7 +9,5 @@ import java.util.List;
 @Setter
 public class AllIssuesResponseForGetAll {
 
-    private Boolean isAdmin;
-
     private List<AllIssuesResponse> allIssuesResponses;
 }
