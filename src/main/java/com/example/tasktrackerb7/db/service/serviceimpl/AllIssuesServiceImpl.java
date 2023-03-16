@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,11 +98,15 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int isDoneItems = 0;
         int allItems = 0;
 
-        int dateOfStart = card.getEstimation().getDateOfStart().getDayOfMonth();
-        int dateOfFinish = card.getEstimation().getDateOfFinish().getDayOfMonth();
-        int period = dateOfFinish - dateOfStart;
-        response.setPeriod(period);
+//        int dateOfStart = card.getEstimation().getDateOfStart().getDayOfMonth();
+//        int dateOfFinish = card.getEstimation().getDateOfFinish().getDayOfMonth();
+//        int period = dateOfFinish - dateOfStart;
+//        response.setPeriod(period);
 
+        if (card.getEstimation() != null) {
+            int between = Period.between(LocalDate.from(card.getEstimation().getDateOfStart()), LocalDate.from(card.getEstimation().getDateOfFinish())).getDays();
+            response.setPeriod(between);
+        }
 
         for (User user : card.getUsers()) {
             cardMemberResponses.add(new CardMemberResponse(user));
