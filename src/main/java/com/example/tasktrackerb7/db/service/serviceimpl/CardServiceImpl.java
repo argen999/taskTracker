@@ -152,11 +152,12 @@ public class CardServiceImpl implements CardService {
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             List<ColumnResponse> columnResponses = new ArrayList<>();
             for (Column column : board.getColumns()) {
+                ColumnResponse columnResponse = new ColumnResponse();
+                columnResponse.setId(column.getId());
+                columnResponse.setName(column.getName());
+                columnResponses.add(columnResponse);
                 for (Card card : column.getCards()) {
                     if (card.getArchive().equals(false)) {
-                        ColumnResponse columnResponse = new ColumnResponse();
-                        columnResponse.setId(column.getId());
-                        columnResponse.setName(column.getName());
                         columnResponse.setCardResponses(converter.convertToResponseForGetAll(column.getCards()));
                         columnResponses.add(columnResponse);
                     }
