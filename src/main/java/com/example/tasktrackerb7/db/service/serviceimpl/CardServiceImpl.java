@@ -50,24 +50,24 @@ public class CardServiceImpl implements CardService {
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
-        return userRepository.findByEmail(login).orElseThrow(() ->{
+        return userRepository.findByEmail(login).orElseThrow(() -> {
             log.error("User not found");
-           throw  new NotFoundException("User not found");
+            throw new NotFoundException("User not found");
         });
     }
 
     @Override
     public CardInnerPageResponse create(CardRequest cardRequest) {
         User user = getAuthenticateUser();
-        Column column = columnRepository.findById(cardRequest.getColumnId()).orElseThrow(() ->{
+        Column column = columnRepository.findById(cardRequest.getColumnId()).orElseThrow(() -> {
             log.error("Column with id: " + cardRequest.getColumnId() + " not found");
             throw new NotFoundException("Column with id: " + cardRequest.getColumnId() + " not found");
         });
-        Board board = boardRepository.findById(column.getBoard().getId()).orElseThrow(() ->{
+        Board board = boardRepository.findById(column.getBoard().getId()).orElseThrow(() -> {
             log.error("Board with id: " + column.getBoard().getId() + " not found");
-          throw   new NotFoundException("Board with id: " + column.getBoard().getId() + " not found");
+            throw new NotFoundException("Board with id: " + column.getBoard().getId() + " not found");
         });
-        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->{
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() -> {
             log.error("Workspace with id: " + board.getWorkspace().getId() + " not found");
             throw new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found");
         });
@@ -92,11 +92,11 @@ public class CardServiceImpl implements CardService {
     public CardInnerPageResponse update(UpdateCardRequest request) {
         User user = getAuthenticateUser();
 
-        Card card = cardRepository.findById(request.getId()).orElseThrow(() ->{
-            log.error("Card with id: " + request.getId()  + " not found");
-            throw new NotFoundException("Card with id: " + request.getId()  + " not found");
+        Card card = cardRepository.findById(request.getId()).orElseThrow(() -> {
+            log.error("Card with id: " + request.getId() + " not found");
+            throw new NotFoundException("Card with id: " + request.getId() + " not found");
         });
-        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->{
+        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() -> {
             log.error("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
             throw new NotFoundException("workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
         });
@@ -137,7 +137,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardInnerPageResponse getById(Long id) {
-        return converter.convertToCardInnerPageResponse(cardRepository.findById(id).orElseThrow(() ->{
+        return converter.convertToCardInnerPageResponse(cardRepository.findById(id).orElseThrow(() -> {
             log.error("Card with id " + id + " not found");
             throw new NotFoundException("Card with id " + id + " not found");
         }));
@@ -146,10 +146,8 @@ public class CardServiceImpl implements CardService {
     @Override
     public BoardInnerPageResponse getAll(Long id) {
         User user = getAuthenticateUser();
-        Board board = boardRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Board with id: " + id + " not found"));
-        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
+        Board board = boardRepository.findById(id).orElseThrow(() -> new NotFoundException("Board with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(board.getWorkspace().getId()).orElseThrow(() -> new NotFoundException("Workspace with id: " + board.getWorkspace().getId() + " not found"));
         BoardInnerPageResponse boardInnerPageResponse = new BoardInnerPageResponse();
         if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
             List<ColumnResponse> columnResponses = new ArrayList<>();
@@ -158,12 +156,7 @@ public class CardServiceImpl implements CardService {
                 columnResponse.setId(column.getId());
                 columnResponse.setName(column.getName());
                 columnResponses.add(columnResponse);
-                for (Card card : column.getCards()) {
-                    if (card.getArchive().equals(false)) {
-                        columnResponse.setCardResponses(converter.convertToResponseForGetAll(column.getCards()));
-                        columnResponses.add(columnResponse);
-                    }
-                }
+                columnResponse.setCardResponses(converter.convertToResponseForGetAll(column.getCards()));
             }
             boardInnerPageResponse.setCounter(board.getColumns().stream().count());
             boardInnerPageResponse.setBoardName(board.getName());
@@ -177,11 +170,11 @@ public class CardServiceImpl implements CardService {
     @Override
     public SimpleResponse delete(Long id) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(id).orElseThrow(() ->{
+        Card card = cardRepository.findById(id).orElseThrow(() -> {
             log.error("Card with id: " + id + " not found");
             throw new NotFoundException("Card with id: " + id + " not found");
         });
-        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() ->{
+        Workspace workspace = workspaceRepository.findById(card.getColumn().getBoard().getWorkspace().getId()).orElseThrow(() -> {
             log.error("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
             throw new NotFoundException("Workspace with id: " + card.getColumn().getBoard().getWorkspace().getId() + " not found");
         });
@@ -232,15 +225,15 @@ public class CardServiceImpl implements CardService {
     @Override
     public SimpleResponse archive(Long id) {
         User user = getAuthenticateUser();
-        Card card = cardRepository.findById(id).orElseThrow(() ->{
+        Card card = cardRepository.findById(id).orElseThrow(() -> {
             log.error("Card with id: " + id + " not found");
             throw new NotFoundException("Card with id: " + id + " not found");
         });
-        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() ->{
+        Column column = columnRepository.findById(card.getColumn().getId()).orElseThrow(() -> {
             log.error("Column with id: " + card.getColumn().getId() + " not found");
             throw new NotFoundException("Column with id: " + card.getColumn().getId() + " not found");
         });
-        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() ->{
+        Workspace workspace = workspaceRepository.findById(column.getBoard().getWorkspace().getId()).orElseThrow(() -> {
             log.error("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found");
             throw new NotFoundException("Workspace with id: " + column.getBoard().getWorkspace().getId() + " not found");
         });
@@ -256,7 +249,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public List<CardResponse> getAllArchivedCards(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(() ->{
+        Board board = boardRepository.findById(id).orElseThrow(() -> {
             log.error("Board with id: " + id + " not found");
             throw new NotFoundException("Board with id: " + id + " not found");
         });
