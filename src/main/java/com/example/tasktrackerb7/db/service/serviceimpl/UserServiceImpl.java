@@ -219,7 +219,9 @@ public class UserServiceImpl implements UserService {
         user.setName(profileRequest.getName());
         user.setSurname(profileRequest.getSurname());
         user.setEmail(profileRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(profileRequest.getPassword()));
+        if (!profileRequest.getPassword().equals("")) {
+            user.setPassword(passwordEncoder.encode(profileRequest.getPassword()));
+        }
         user.setPhotoLink(profileRequest.getPhotoLink());
 
         userRepository.save(user);
