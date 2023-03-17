@@ -98,11 +98,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int isDoneItems = 0;
         int allItems = 0;
 
-//        int dateOfStart = card.getEstimation().getDateOfStart().getDayOfMonth();
-//        int dateOfFinish = card.getEstimation().getDateOfFinish().getDayOfMonth();
-//        int period = dateOfFinish - dateOfStart;
-//        response.setPeriod(period);
-
         if (card.getEstimation() != null) {
             int between = Period.between(LocalDate.from(card.getEstimation().getDateOfStart()), LocalDate.from(card.getEstimation().getDateOfFinish())).getDays();
             response.setPeriod(between);
