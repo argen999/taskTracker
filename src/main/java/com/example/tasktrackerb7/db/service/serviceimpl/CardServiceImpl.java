@@ -76,9 +76,11 @@ public class CardServiceImpl implements CardService {
             card.setColumn(column);
             column.addCard(card);
             card.setCreated(LocalDate.now());
+            card.setCreator(user);
             card.setArchive(false);
             card.addUser(user);
             user.addCard(card);
+            card.setWorkspace(workspace);
             log.info("Card successfully created");
             return converter.convertToCardInnerPageResponse(cardRepository.save(card));
         } else {

@@ -276,7 +276,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<MemberResponse> search(Long id, String email_name) {
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Workspace with id: " + id + " nont found"));
+                () -> new NotFoundException("Workspace with id: " + id + " not found"));
         return userRepository.searchByEmailOrName(email_name, workspace.getId());
     }
 

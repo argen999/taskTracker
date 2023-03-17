@@ -39,6 +39,9 @@ public class Workspace {
     @OneToMany(cascade = {DETACH, MERGE, REFRESH, REMOVE}, mappedBy = "workspace")
     private List<Favourite> favourites;
 
+    @OneToMany(cascade = {ALL}, mappedBy = "workspace")
+    private List<Card> allIssues;
+
     public void addBoard(Board board) {
         if(board == null) {
             boards = new ArrayList<>();

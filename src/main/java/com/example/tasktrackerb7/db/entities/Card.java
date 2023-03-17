@@ -55,6 +55,15 @@ public class Card {
             inverseJoinColumns = @JoinColumn(name = "label_id"))
     private List<Label> labels;
 
+    @OneToOne(cascade = {DETACH, REFRESH, REMOVE, MERGE}, mappedBy = "card")
+    private Notification notification;
+
+    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    private User creator;
+
+    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    private Workspace workspace;
+
     public Card(String title) {
         this.title = title;
     }
@@ -86,6 +95,7 @@ public class Card {
         }
         labels.add(label);
     }
+
     public void deleteLabel(Label label){
         labels.remove(label);
     }

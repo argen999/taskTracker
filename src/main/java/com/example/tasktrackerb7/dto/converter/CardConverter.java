@@ -87,7 +87,6 @@ public class CardConverter {
     }
 
     private CommentResponse convertCommentToResponse(Comment comment) {
-        User user = getAuthenticateUser();
         return new CommentResponse(comment.getId(), comment.getText(),comment.getLocalDateTime(),true,new UserResponse(getAuthenticateUser().getId(),getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(),getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
