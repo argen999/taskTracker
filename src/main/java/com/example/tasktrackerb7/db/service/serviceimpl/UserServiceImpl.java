@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProfileInnerPageResponse getMyProfile() {
         User user = getAuthenticateUser();
-        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), getAllWorkspaceOwnedByUser());
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), user.getPhotoLink(), getAllWorkspaceOwnedByUser());
     }
 
     @Override
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(),
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), user.getPhotoLink(),
                 userWorkspaces.stream().map(x -> new WorkspaceResponse(x.getId(),
                                 x.getName(),
                                 x.getCreator().getPhotoLink(),
