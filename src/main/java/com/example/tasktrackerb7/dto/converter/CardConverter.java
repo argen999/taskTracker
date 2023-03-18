@@ -213,8 +213,4 @@ public class CardConverter {
         return new MemberResponse(user.getId(), user.getUsername(), user.getSurname(), user.getEmail(), user.getPhotoLink());
     }
 
-    private User convertMemberToUser(MemberRequest memberRequest) {
-        return userRepository.findByEmail(memberRequest.getEmail()).orElseThrow(() -> new NotFoundException("the user with this email was not found"));
-    }
-
 }
