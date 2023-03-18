@@ -65,4 +65,10 @@ public class CardApi {
     public List<CardResponse> getAllArchiveCards(@PathVariable Long id) {
         return cardService.getAllArchivedCards(id);
     }
+
+    @Operation(summary = "Invite user to card", description = "Invite user to card")
+    @PostMapping("/{id}/{cardId}")
+    public SimpleResponse inviteToCard(@PathVariable Long id,@PathVariable Long cardId) {
+        return cardService.inviteToCard(id, cardId);
+    }
 }

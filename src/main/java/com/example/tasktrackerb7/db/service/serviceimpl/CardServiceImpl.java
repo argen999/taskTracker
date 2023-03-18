@@ -263,4 +263,22 @@ public class CardServiceImpl implements CardService {
         }
         return cardResponses;
     }
+
+    @Override
+    public SimpleResponse inviteToCard(Long id, Long cardId) {
+        Card card = cardRepository.findById(cardId).orElseThrow(() ->
+                new NotFoundException("Card with id: " + cardId + " not found"));
+        User newMember = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("User with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(card.getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + card.getWorkspace().getId() + " not found"));
+        if (workspace)
+        if (!card.getUsers().contains(newMember)) {
+            card.addUser(newMember);
+            newMember.addCard(card);
+        } else {
+            new SimpleResponse("User wih id: " + id + " already added in card with id: " + cardId);
+        }
+        return new SimpleResponse("User with id: " + id + " was successfully added to card with id: " + cardId);
+    }
 }

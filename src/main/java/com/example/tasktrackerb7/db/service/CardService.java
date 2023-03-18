@@ -27,4 +27,6 @@ public interface CardService {
     SimpleResponse archive(Long id);
 
     List<CardResponse> getAllArchivedCards(Long id);
+
+    SimpleResponse inviteToCard(Long id, Long cardId);
 }
