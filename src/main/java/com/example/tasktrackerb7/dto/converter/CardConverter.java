@@ -150,7 +150,9 @@ public class CardConverter {
                         }
                     }
                 }
-
+                if (card.getComments() != null) {
+                    cardResponse.setCommentResponses(getCommentResponse(card.getComments()));
+                }
                 cardResponse.setNumOfCompletedItems(completedItems);
                 cardResponses.add(cardResponse);
             }

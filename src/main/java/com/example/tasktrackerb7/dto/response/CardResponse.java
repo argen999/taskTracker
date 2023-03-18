@@ -25,4 +25,6 @@ public class CardResponse {
 
     private int numOfCompletedItems;
 
+    private List<CommentResponse> commentResponses;
+
 }
