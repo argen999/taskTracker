@@ -3,7 +3,6 @@ package com.example.tasktrackerb7.dto.converter;
 import com.example.tasktrackerb7.db.entities.*;
 import com.example.tasktrackerb7.db.repository.*;
 import com.example.tasktrackerb7.db.service.serviceimpl.ChecklistServiceImpl;
-import com.example.tasktrackerb7.dto.request.*;
 import com.example.tasktrackerb7.dto.response.*;
 import com.example.tasktrackerb7.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-
 import java.time.LocalDate;
-
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,6 @@ public class CardConverter {
     private final ChecklistServiceImpl checklistService;
 
 
-
     private User getAuthenticateUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String login = authentication.getName();
@@ -50,7 +46,7 @@ public class CardConverter {
         response.setIsArchive(card.getArchive());
         List<LabelResponse> list = new ArrayList<>();
         if (card.getLabels() != null) {
-            for (LabelResponse l: labelRepository.getAllLabelResponse(card.getId())) {
+            for (LabelResponse l : labelRepository.getAllLabelResponse(card.getId())) {
                 LabelResponse labelResponse = new LabelResponse();
                 labelResponse.setId(l.getId());
                 labelResponse.setId(l.getId());
@@ -87,7 +83,7 @@ public class CardConverter {
     }
 
     private CommentResponse convertCommentToResponse(Comment comment) {
-        return new CommentResponse(comment.getId(), comment.getText(),comment.getLocalDateTime(),true,new UserResponse(getAuthenticateUser().getId(),getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(),getAuthenticateUser().getPhotoLink()), comment.getUser());
+        return new CommentResponse(comment.getId(), comment.getText(), comment.getLocalDateTime(), true, new UserResponse(getAuthenticateUser().getId(), getAuthenticateUser().getName() + " " + getAuthenticateUser().getSurname(), getAuthenticateUser().getPhotoLink()), comment.getUser());
     }
 
     private List<ChecklistResponse> getChecklistResponses(List<Checklist> checklists) {
@@ -118,7 +114,7 @@ public class CardConverter {
                 List<LabelResponse> list = new ArrayList<>();
                 cardResponse.setId(card.getId());
                 cardResponse.setName(card.getTitle());
-                for (LabelResponse l: labelRepository.getAllLabelResponse(card.getId())) {
+                for (LabelResponse l : labelRepository.getAllLabelResponse(card.getId())) {
                     LabelResponse labelResponse = new LabelResponse();
                     labelResponse.setId(l.getId());
                     labelResponse.setId(l.getId());
@@ -165,7 +161,7 @@ public class CardConverter {
         cardResponse.setId(card.getId());
         cardResponse.setName(card.getTitle());
         List<LabelResponse> list = new ArrayList<>();
-        for (LabelResponse l: labelRepository.getAllLabelResponse(card.getId())) {
+        for (LabelResponse l : labelRepository.getAllLabelResponse(card.getId())) {
             LabelResponse labelResponse = new LabelResponse();
             labelResponse.setId(l.getId());
             labelResponse.setId(l.getId());
