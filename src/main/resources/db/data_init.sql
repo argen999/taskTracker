@@ -72,11 +72,11 @@ values (1, '2023-01-09', 'I will do it only in a week,after the vocation', 1, 1)
        (5, '2023-01-06', 'I will do it only in a week,after the vocation', 5, 4);
 
 insert into label(id, color, description)
-values (1, 'Gray', 'TO DO'),
-       (2, 'Red', 'IN PROGRESS'),
-       (3, 'Orange', 'KICK BACK'),
-       (4, 'Blue', 'FINAL REVIEW'),
-       (5, 'Green', 'COMPLETE');
+values (1, 'https://phonoteka.org/uploads/posts/2022-02/1645125195_22-phonoteka-org-p-kartinka-serii-fon-odnotonnii-22.jpg', 'TO DO'),
+       (2, 'https://top-fon.com/uploads/posts/2021-07/1626884162_1-p-krasnii-fon-odnotonnii-kartinki-1.jpg', 'IN PROGRESS'),
+       (3, 'https://catherineasquithgallery.com/uploads/posts/2021-02/1613025030_96-p-kartinki-fona-oranzhevogo-tsveta-105.jpg', 'KICK BACK'),
+       (4, 'https://plitkasite.ru/upload/iblock/762/762f1f5ba35a4901dc1412c41661198a.jpg', 'FINAL REVIEW'),
+       (5, 'https://top-fon.com/uploads/posts/2023-01/1674959810_top-fon-com-p-zelenii-fon-dlya-prezentatsii-neobichnii-185.jpg', 'COMPLETE');
 
 insert into checklists(id, percent, title, card_id)
 values (1, 0, 'Auth with GOOGLE', 1),
