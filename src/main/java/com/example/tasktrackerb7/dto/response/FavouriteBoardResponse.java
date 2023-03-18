@@ -1,13 +1,12 @@
 package com.example.tasktrackerb7.dto.response;
 
 
-import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class FavouriteBoardResponse {
 
     private Long id;
@@ -18,4 +17,10 @@ public class FavouriteBoardResponse {
 
     private String photoLinkBoard;
 
+    public FavouriteBoardResponse(Long id, Long boardId, String boardName, String photoLinkBoard) {
+        this.id = id;
+        this.boardId = boardId;
+        this.boardName = boardName;
+        this.photoLinkBoard = photoLinkBoard;
+    }
 }
