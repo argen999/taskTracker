@@ -70,5 +70,16 @@ public class CardApi {
     @PostMapping("/{id}/{cardId}")
     public SimpleResponse inviteToCard(@PathVariable Long id,@PathVariable Long cardId) {
         return cardService.inviteToCard(id, cardId);
+
+    @Operation(summary = "Archive all cards", description = "Archive all cards in column")
+    @PutMapping("/all/{id}")
+    public SimpleResponse archiveAllCardsInColumn(@PathVariable Long id) {
+        return cardService.archiveAllCardsInColumn(id);
+    }
+
+    @Operation(summary = "Delete all cards", description = "Delete all card in column")
+    @DeleteMapping("/all/{id}")
+    public SimpleResponse deleteAllCardsInColumn(@PathVariable Long id) {
+        return cardService.deleteAllCardsInColumn(id);
     }
 }

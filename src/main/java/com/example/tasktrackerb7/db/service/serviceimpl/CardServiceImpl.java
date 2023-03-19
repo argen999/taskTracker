@@ -288,5 +288,29 @@ public class CardServiceImpl implements CardService {
             throw new BadRequestException("You are not member in workspace in which the card is located");
         }
         return new SimpleResponse("User with id: " + id + " was successfully added to card with id: " + cardId);
+
+    public SimpleResponse deleteAllCardsInColumn(Long id) {
+        Column column = columnRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Column with id: " + id + " not found"));
+        if (!column.getCards().isEmpty()) {
+            cardRepository.deleteAll(column.getCards());
+        } else {
+            new SimpleResponse("No cards in column");
+        }
+        return new SimpleResponse("All cards in column with id: " + id + " deleted");
+    }
+
+    @Override
+    public SimpleResponse archiveAllCardsInColumn(Long id) {
+        Column column = columnRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("Column with id: " + id + " not found"));
+        if (!column.getCards().isEmpty()) {
+            for (Card c : column.getCards()) {
+                c.setArchive(true);
+            }
+        } else {
+            new SimpleResponse("No card in column");
+        }
+        return new SimpleResponse("All cards in column with id: " + id + " archived");
     }
 }
