@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), user.getPhotoLink(),
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getPhotoLink(), user.getEmail(),
                 userWorkspaces.stream().map(x -> new WorkspaceResponse(x.getId(),
                                 x.getName(),
                                 x.getCreator().getPhotoLink(),
