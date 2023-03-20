@@ -17,9 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,7 +73,7 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(user);
 
         comment.setText(commentRequest.getText());
-        comment.setLocalDateTime(LocalDateTime.now());
+        comment.setLocalDateTime(commentRequest.getLocalDateTime());
         comment.setCard(card);
         card.addComment(comment);
 
@@ -89,7 +86,7 @@ public class CommentServiceImpl implements CommentService {
                 notification.setBoard(board);
                 notification.setColumn(column);
                 notification.setCard(card);
-                notification.setDateOfWrite(LocalDateTime.now());
+                notification.setDateOfWrite(commentRequest.getLocalDateTime());
                 notification.setText(commentRequest.getText());
                 notification.setFromUser(user);
                 notification.setStatus(false);
@@ -123,7 +120,7 @@ public class CommentServiceImpl implements CommentService {
             throw new BadCredentialsException("You cannot edit this comments!!");
         }
         comment.setText(commentRequest.getText());
-        comment.setLocalDateTime(LocalDateTime.now());
+        comment.setLocalDateTime(commentRequest.getLocalDateTime());
         commentRepository.save(comment);
         log.info("Comment  successfully edited");
 
