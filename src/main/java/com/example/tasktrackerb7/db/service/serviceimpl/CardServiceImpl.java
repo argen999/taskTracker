@@ -265,6 +265,30 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public SimpleResponse inviteToCard(Long id, Long cardId) {
+        User user = getAuthenticateUser();
+        Card card = cardRepository.findById(cardId).orElseThrow(() ->
+                new NotFoundException("Card with id: " + cardId + " not found"));
+        User newMember = userRepository.findById(id).orElseThrow(() ->
+                new NotFoundException("User with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(card.getWorkspace().getId()).orElseThrow(() ->
+                new NotFoundException("Workspace with id: " + card.getWorkspace().getId() + " not found"));
+        if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(user.getId(), workspace.getId()))) {
+            if (workspace.getMembers().contains(userWorkspaceRoleRepository.findByUserIdAndWorkspaceId(newMember.getId(), workspace.getId()))) {
+                if (!card.getUsers().contains(newMember)) {
+                    card.addUser(newMember);
+                    newMember.addCard(card);
+                } else {
+                    throw new BadCredentialsException("User wih id: " + id + " already added in card with id: " + cardId);
+                }
+            } else {
+                throw new BadRequestException("User with id: " + id + " is not a member of the workspace in which the card is located");
+            }
+        } else {
+            throw new BadRequestException("You are not member in workspace in which the card is located");
+        }
+        return new SimpleResponse("User with id: " + id + " was successfully added to card with id: " + cardId);
+
     public SimpleResponse deleteAllCardsInColumn(Long id) {
         Column column = columnRepository.findById(id).orElseThrow(() ->
                 new NotFoundException("Column with id: " + id + " not found"));
