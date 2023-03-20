@@ -52,6 +52,8 @@ public class NotificationServiceImpl implements NotificationService {
                 notification.getUser().getId(),
                 notification.getBoard().getId(),
                 notification.getCard().getId(),
+                notification.getBoard().getName(),
+                notification.getColumn().getName(),
                 notification.getFromUser().getName() + " " + notification.getFromUser().getSurname(),
                 notification.getFromUser().getPhotoLink(),
                 notification.getDateOfWrite(),

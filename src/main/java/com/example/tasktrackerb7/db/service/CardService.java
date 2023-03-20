@@ -27,4 +27,8 @@ public interface CardService {
     SimpleResponse archive(Long id);
 
     List<CardResponse> getAllArchivedCards(Long id);
+
+    SimpleResponse deleteAllCardsInColumn(Long id);
+
+    SimpleResponse archiveAllCardsInColumn(Long id);
 }
