@@ -6,6 +6,7 @@ import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,5 +54,11 @@ public class LabelAPI {
     @PostMapping("/{labelId}/{cardId}")
     public void assignLabelToCard(@PathVariable Long labelId, @PathVariable Long cardId) {
         labelService.assignLabelToCard(labelId, cardId);
+    }
+
+    @Operation(summary = "Get all", description = "Get all label")
+    @GetMapping()
+    public List<LabelResponse> getAllLabel() {
+        return labelService.getAllLabel();
     }
 }
