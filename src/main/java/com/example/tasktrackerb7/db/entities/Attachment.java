@@ -17,7 +17,7 @@ import static javax.persistence.CascadeType.*;
 public class Attachment {
 
     @Id
-    @SequenceGenerator(name = "attachment_gen", sequenceName = "attachment_seq", allocationSize = 1)
+    @SequenceGenerator(name = "attachment_gen", sequenceName = "attachment_seq", allocationSize = 1, initialValue = 6)
     @GeneratedValue(generator = "attachment_gen", strategy = GenerationType.SEQUENCE)
     private Long id;
 
