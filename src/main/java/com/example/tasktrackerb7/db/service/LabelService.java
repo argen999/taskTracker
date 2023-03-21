@@ -1,5 +1,5 @@
 package com.example.tasktrackerb7.db.service;
-
+import java.util.List;
 import com.example.tasktrackerb7.dto.request.LabelRequest;
 import com.example.tasktrackerb7.dto.response.LabelResponse;
 import com.example.tasktrackerb7.dto.response.SimpleResponse;
@@ -20,5 +20,5 @@ public interface LabelService {
 
     void assignLabelToCard(Long labelId, Long cardId);
 
-
+     List<LabelResponse> getAllLabel();
 }
