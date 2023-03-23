@@ -20,4 +20,7 @@ public interface LabelRepository extends JpaRepository<Label, Long> {
     @Modifying
     @Query("delete from Label l where l.id = :id")
     void deleteLabelById(Long id);
+
+    @Query("select l from Label l")
+    List<Label> getAllLabel();
 }
