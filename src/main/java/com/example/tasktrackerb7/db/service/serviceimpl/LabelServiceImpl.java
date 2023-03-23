@@ -104,7 +104,7 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public List<LabelResponse> getAllLabel() {
-        List<Label> labels =  labelRepository.getAllLabel();
+        List<LabelResponse> labels =  labelRepository.getAllLabelResponse();
         return labels.stream().map(l -> new LabelResponse(l.getId(),l.getDescription(),l.getColor())).toList();
     }
 
