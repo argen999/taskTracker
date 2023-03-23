@@ -13,15 +13,11 @@ import java.util.List;
 @Repository
 public interface LabelRepository extends JpaRepository<Label, Long> {
 
-    @Query("select new com.example.tasktrackerb7.dto.response.LabelResponse(l.id, l.description, l.color) from Label l where l.id = ?1")
-    List<LabelResponse> getAllLabelResponse(Long id);
+    @Query("select new com.example.tasktrackerb7.dto.response.LabelResponse(l.id, l.description, l.color) from Label l")
+    List<LabelResponse> getAllLabelResponse();
 
     @Transactional
     @Modifying
     @Query("delete from Label l where l.id = :id")
     void deleteLabelById(Long id);
-
-    @Query("select l from Label l")
-    List<Label> getAllLabel();
-    
 }

@@ -46,7 +46,7 @@ public class CardConverter {
         response.setIsArchive(card.getArchive());
         List<LabelResponse> list = new ArrayList<>();
         if (card.getLabels() != null) {
-            for (LabelResponse l : labelRepository.getAllLabelResponse(card.getId())) {
+            for (LabelResponse l: labelRepository.getAllLabelResponse()) {
                 LabelResponse labelResponse = new LabelResponse();
                 labelResponse.setId(l.getId());
                 labelResponse.setId(l.getId());
@@ -114,7 +114,7 @@ public class CardConverter {
                 List<LabelResponse> list = new ArrayList<>();
                 cardResponse.setId(card.getId());
                 cardResponse.setName(card.getTitle());
-                for (LabelResponse l : labelRepository.getAllLabelResponse(card.getId())) {
+                for (LabelResponse l: labelRepository.getAllLabelResponse()) {
                     LabelResponse labelResponse = new LabelResponse();
                     labelResponse.setId(l.getId());
                     labelResponse.setId(l.getId());
@@ -161,7 +161,7 @@ public class CardConverter {
         cardResponse.setId(card.getId());
         cardResponse.setName(card.getTitle());
         List<LabelResponse> list = new ArrayList<>();
-        for (LabelResponse l : labelRepository.getAllLabelResponse(card.getId())) {
+        for (LabelResponse l: labelRepository.getAllLabelResponse()) {
             LabelResponse labelResponse = new LabelResponse();
             labelResponse.setId(l.getId());
             labelResponse.setId(l.getId());
