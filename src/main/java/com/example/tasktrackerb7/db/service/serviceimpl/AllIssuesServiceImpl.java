@@ -19,7 +19,9 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -37,10 +39,10 @@ public class AllIssuesServiceImpl implements AllIssuesService {
     public AllIssuesResponseForGetAll getAll(Long id, LocalDate from, LocalDate to, Long memberId, Long labelId, Boolean isFilter) { //workspaceId
         Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Workspace with id: " + id + " not found"));
         AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
-        List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
-
-        if (memberId != null && isFilter.equals(true)) {
-            User user = userRepository.findById(memberId).get();
+        Set<AllIssuesResponse> allIssuesResponses = new HashSet<>();
+        User user = new User();
+        if (memberId != null && isFilter.equals(true) && labelId == null) {
+            user = userRepository.findById(memberId).get();
             List<Card> cards = workspace.getAllIssues();
             for (Card card : cards) {
                 for (User member : card.getUsers()) {
@@ -48,46 +50,57 @@ public class AllIssuesServiceImpl implements AllIssuesService {
                         allIssuesResponses.add(convertToResponse(card));
                     }
                 }
-                allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
             }
-        } else {
-
-            if (labelId != null && isFilter.equals(true)) {
-                Label label = labelRepository.findById(labelId).orElseThrow(() -> new NotFoundException("Label with id: " + labelId + " not found"));
-                List<Card> cards = workspace.getAllIssues();
-                for (Card card : cards) {
-                    if (card.getLabels().contains(label)) {
-                        allIssuesResponses.add(convertToResponse(card));
-                    }
-                }
-                allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
-            } else {
-
-                if (isFilter.equals(false)) {
-                    for (Card card : workspace.getAllIssues()) {
-                        allIssuesResponses.add(convertToResponse(card));
-                    }
-                    allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
-                } else {
-
-                    if (from != null || to != null && isFilter.equals(true)) {
-                        if (from != null && to != null) {
-                            if (from.isAfter(to)) {
-                                throw new BadCredentialsException("date of start need to be after date of finish");
-                            }
-                        }
-                        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
-                    }
-                }
-            }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
         }
+
+        if (labelId != null && isFilter.equals(true) && memberId == null) {
+            Label label = labelRepository.findById(labelId).orElseThrow(() -> new NotFoundException("Label with id: " + labelId + " not found"));
+            List<Card> cards = workspace.getAllIssues();
+            for (Card card : cards) {
+                if (card.getLabels().contains(label)) {
+                    allIssuesResponses.add(convertToResponse(card));
+                }
+            }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+        }
+
+        if (labelId != null && memberId != null && isFilter.equals(true)) {
+            user = userRepository.findById(memberId).get();
+            List<Card> cards = workspace.getAllIssues();
+            Label label = labelRepository.findById(labelId).orElseThrow(() -> new NotFoundException("Label with id: " + labelId + " not found"));
+            for (Card card : cards) {
+                for (User member : card.getUsers()) {
+                    if (member.equals(user)) {
+                        if (card.getLabels().contains(label)) {
+                            allIssuesResponses.add(convertToResponse(card));
+                        }
+                    }
+                }
+            }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+        }
+
+        if (isFilter.equals(false)) {
+            for (Card card : workspace.getAllIssues()) {
+                allIssuesResponses.add(convertToResponse(card));
+            }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+        }
+
+        if (from != null || to != null && isFilter.equals(true)) {
+            if (from.isAfter(to)) {
+                throw new BadCredentialsException("date of start need to be after date of finish");
+            }
+            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
+        }
+
         return allIssuesResponseForGetAll;
     }
 
 
-
-    private List<AllIssuesResponse> allIssuesResponses(List<Card> cards) {
-        List<AllIssuesResponse> responses = new ArrayList<>();
+    private Set<AllIssuesResponse> allIssuesResponses(Set<Card> cards) {
+        Set<AllIssuesResponse> responses = new HashSet<>();
         for (Card card : cards) {
             responses.add(convertToResponse(card));
         }
@@ -96,7 +109,7 @@ public class AllIssuesServiceImpl implements AllIssuesService {
 
     private AllIssuesResponse convertToResponse(Card card) {
         AllIssuesResponse response = new AllIssuesResponse(card);
-        List<CardMemberResponse> cardMemberResponses = new ArrayList<>();
+        Set<CardMemberResponse> cardMemberResponses = new HashSet<>();
         int isDoneItems = 0;
         int allItems = 0;
 
