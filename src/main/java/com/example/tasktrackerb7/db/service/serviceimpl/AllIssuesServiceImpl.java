@@ -39,15 +39,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
         List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
 
-        if (from != null || to != null && isFilter.equals(true)) {
-            if (from != null && to != null) {
-                if (from.isAfter(to)) {
-                    throw new BadCredentialsException("date of start need to be after date of finish");
-                }
-            }
-            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
-        }
-
         if (memberId != null && isFilter.equals(true)) {
             User user = userRepository.findById(memberId).get();
             List<Card> cards = workspace.getAllIssues();
@@ -59,28 +50,41 @@ public class AllIssuesServiceImpl implements AllIssuesService {
                 }
                 allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
             }
-        }
+        } else {
 
-        if (labelId != null && isFilter.equals(true)) {
-            Label label = labelRepository.findById(labelId).orElseThrow(() -> new NotFoundException("Label with id: " + labelId + " not found"));
-            List<Card> cards = workspace.getAllIssues();
-            for (Card card : cards) {
-                if (card.getLabels().contains(label)) {
-                    allIssuesResponses.add(convertToResponse(card));
+            if (labelId != null && isFilter.equals(true)) {
+                Label label = labelRepository.findById(labelId).orElseThrow(() -> new NotFoundException("Label with id: " + labelId + " not found"));
+                List<Card> cards = workspace.getAllIssues();
+                for (Card card : cards) {
+                    if (card.getLabels().contains(label)) {
+                        allIssuesResponses.add(convertToResponse(card));
+                    }
+                }
+                allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+            } else {
+
+                if (isFilter.equals(false)) {
+                    for (Card card : workspace.getAllIssues()) {
+                        allIssuesResponses.add(convertToResponse(card));
+                    }
+                    allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
+                } else {
+
+                    if (from != null || to != null && isFilter.equals(true)) {
+                        if (from != null && to != null) {
+                            if (from.isAfter(to)) {
+                                throw new BadCredentialsException("date of start need to be after date of finish");
+                            }
+                        }
+                        allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses(cardRepository.searchCardByCreatedAt(id, from, to)));
+                    }
                 }
             }
-            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
         }
-
-        if (isFilter.equals(false)) {
-            for (Card card : workspace.getAllIssues()) {
-                allIssuesResponses.add(convertToResponse(card));
-            }
-            allIssuesResponseForGetAll.setAllIssuesResponses(allIssuesResponses);
-        }
-
         return allIssuesResponseForGetAll;
     }
+
+
 
     private List<AllIssuesResponse> allIssuesResponses(List<Card> cards) {
         List<AllIssuesResponse> responses = new ArrayList<>();
@@ -106,21 +110,7 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         }
         response.setCardMemberResponses(cardMemberResponses);
 
-        List<Label> labels = labelRepository.findAll();
-
         List<LabelResponse> labelResponses = new ArrayList<>();
-
-//        for (Label l : labels) {
-//            if (card.getLabels().contains(l)) {
-//                LabelResponse labelResponse = new LabelResponse();
-//                labelResponse.setId(l.getId());
-//                labelResponse.setDescription(l.getDescription());
-//                labelResponse.setColor(l.getColor());
-//                labelResponses.add(labelResponse);
-//            }
-//            response.setLabelResponses(labelResponses);
-//        }
-
         for (Label l : card.getLabels()) {
             LabelResponse labelResponse = new LabelResponse();
             labelResponse.setId(l.getId());
