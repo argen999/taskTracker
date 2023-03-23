@@ -99,11 +99,4 @@ public class ColumnServiceImpl implements ColumnService {
 
         return new SimpleResponse("This column deleted successfully");
     }
-
-    @Override
-    public List<ColumnResponse> getAll(Long boardId) {
-        List<Column> columns = boardRepository.findById(boardId).orElseThrow(() -> new NotFoundException(String.format("Board with id: %d not found!", boardId))).getColumns();
-
-        return columns.stream().map(x -> new ColumnResponse(x.getId(), x.getName())).toList();
-    }
 }

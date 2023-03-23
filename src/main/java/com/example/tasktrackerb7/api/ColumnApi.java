@@ -43,12 +43,4 @@ public class ColumnApi {
     SimpleResponse delete(@PathVariable Long id) {
         return columnService.delete(id);
     }
-
-    @Operation(summary = "Get all columns", description = "Get all columns by board id")
-    @GetMapping("/{boardId}")
-    @PreAuthorize("isAuthenticated()")
-    List<ColumnResponse> getAll(@PathVariable Long boardId) {
-        return columnService.getAll(boardId);
-    }
-
 }

@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProfileInnerPageResponse getMyProfile() {
         User user = getAuthenticateUser();
-        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(), getAllWorkspaceOwnedByUser());
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getPhotoLink(), user.getEmail(), getAllWorkspaceOwnedByUser());
     }
 
     @Override
@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getEmail(),
+        return new ProfileInnerPageResponse(user.getId(), user.getName(), user.getSurname(), user.getPhotoLink(), user.getEmail(),
                 userWorkspaces.stream().map(x -> new WorkspaceResponse(x.getId(),
                                 x.getName(),
                                 x.getCreator().getPhotoLink(),
@@ -219,7 +219,9 @@ public class UserServiceImpl implements UserService {
         user.setName(profileRequest.getName());
         user.setSurname(profileRequest.getSurname());
         user.setEmail(profileRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(profileRequest.getPassword()));
+        if (!profileRequest.getPassword().equals("")) {
+            user.setPassword(passwordEncoder.encode(profileRequest.getPassword()));
+        }
         user.setPhotoLink(profileRequest.getPhotoLink());
 
         userRepository.save(user);

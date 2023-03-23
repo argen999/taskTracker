@@ -17,6 +17,8 @@ public class ProfileInnerPageResponse {
 
     private String surname;
 
+    private String photoLink;
+
     private String email;
 
     private List<WorkspaceResponse> workspaceResponses;

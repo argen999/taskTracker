@@ -13,11 +13,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NotificationResponse {
 
+
     private Long notificationId;
     private Long fromUserId;
     private Long userId;
     private Long boardId;
     private Long cardId;
+    private String boardName;
+    private String columnName;
     private String fullName;
     private String image;
     private LocalDateTime dateOfWrite;
@@ -31,6 +34,8 @@ public class NotificationResponse {
         this.userId = notification.getUser().getId();
         this.boardId = notification.getBoard().getId();
         this.cardId = notification.getCard().getId();
+        this.boardName = notification.getBoard().getName();
+        this.columnName =  notification.getColumn().getName();
         this.fullName = notification.getFromUser().getName() + " " + notification.getFromUser().getSurname();
         this.image = notification.getFromUser().getPhotoLink();
         this.dateOfWrite  = notification.getDateOfWrite() ;
