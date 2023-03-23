@@ -35,8 +35,7 @@ public class AllIssuesServiceImpl implements AllIssuesService {
     private final UserRepository userRepository;
 
     public AllIssuesResponseForGetAll getAll(Long id, LocalDate from, LocalDate to, Long memberId, Long labelId, Boolean isFilter) { //workspaceId
-        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Workspace with id: " + id + " not found"));
+        Workspace workspace = workspaceRepository.findById(id).orElseThrow(() -> new NotFoundException("Workspace with id: " + id + " not found"));
         AllIssuesResponseForGetAll allIssuesResponseForGetAll = new AllIssuesResponseForGetAll();
         List<AllIssuesResponse> allIssuesResponses = new ArrayList<>();
 
@@ -63,8 +62,7 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         }
 
         if (labelId != null && isFilter.equals(true)) {
-            Label label = labelRepository.findById(labelId).orElseThrow(() ->
-                    new NotFoundException("Label with id: " + labelId + " not found"));
+            Label label = labelRepository.findById(labelId).orElseThrow(() -> new NotFoundException("Label with id: " + labelId + " not found"));
             List<Card> cards = workspace.getAllIssues();
             for (Card card : cards) {
                 if (card.getLabels().contains(label)) {
@@ -98,11 +96,6 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         int isDoneItems = 0;
         int allItems = 0;
 
-//        int dateOfStart = card.getEstimation().getDateOfStart().getDayOfMonth();
-//        int dateOfFinish = card.getEstimation().getDateOfFinish().getDayOfMonth();
-//        int period = dateOfFinish - dateOfStart;
-//        response.setPeriod(period);
-
         if (card.getEstimation() != null) {
             int between = Period.between(LocalDate.from(card.getEstimation().getDateOfStart()), LocalDate.from(card.getEstimation().getDateOfFinish())).getDays();
             response.setPeriod(between);
@@ -113,14 +106,28 @@ public class AllIssuesServiceImpl implements AllIssuesService {
         }
         response.setCardMemberResponses(cardMemberResponses);
 
+        List<Label> labels = labelRepository.findAll();
+
         List<LabelResponse> labelResponses = new ArrayList<>();
-        LabelResponse labelResponse = new LabelResponse();
-        for (Label label : card.getLabels()) {
-            labelResponse.setId(label.getId());
-            labelResponse.setDescription(label.getDescription());
-            labelResponse.setColor(label.getColor());
+
+//        for (Label l : labels) {
+//            if (card.getLabels().contains(l)) {
+//                LabelResponse labelResponse = new LabelResponse();
+//                labelResponse.setId(l.getId());
+//                labelResponse.setDescription(l.getDescription());
+//                labelResponse.setColor(l.getColor());
+//                labelResponses.add(labelResponse);
+//            }
+//            response.setLabelResponses(labelResponses);
+//        }
+
+        for (Label l : card.getLabels()) {
+            LabelResponse labelResponse = new LabelResponse();
+            labelResponse.setId(l.getId());
+            labelResponse.setDescription(l.getDescription());
+            labelResponse.setColor(l.getColor());
+            labelResponses.add(labelResponse);
         }
-        labelResponses.add(labelResponse);
         response.setLabelResponses(labelResponses);
 
         for (Checklist checklist : card.getChecklists()) {
