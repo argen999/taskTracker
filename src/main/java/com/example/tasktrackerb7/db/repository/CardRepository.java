@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
 
     @Query("select c from Card c where c.created between :from and :to and c.workspace.id=:id")
-    List<Card> searchCardByCreatedAt(Long id,
+    Set<Card> searchCardByCreatedAt(Long id,
                                     @Param("from") LocalDate from,
                                     @Param("to") LocalDate to);
 }
