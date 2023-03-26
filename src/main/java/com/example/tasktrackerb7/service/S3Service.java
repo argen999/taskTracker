@@ -1,6 +1,5 @@
 package com.example.tasktrackerb7.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,16 +14,20 @@ import java.io.IOException;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class S3Service {
-    @Autowired
+
     private final S3Client s3;
 
     @Value("${aws.path}")
     private String BUCKET_PATH;
     @Value("${aws.bucket.name}")
     private String bucketName;
+
+    @Autowired
+    public S3Service(S3Client s3) {
+        this.s3 = s3;
+    }
 
 
     public Map<String, String> upload(MultipartFile file) throws IOException {

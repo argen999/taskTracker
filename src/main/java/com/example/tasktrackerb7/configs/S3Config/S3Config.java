@@ -25,12 +25,14 @@ public class S3Config {
 
     @Bean
     S3Client s3Client() {
-        Region region1 = Region.of(REGION);
+
+        Region region = Region.of(REGION);
+
+        final AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
 
         return S3Client.builder()
-                .region(region1)
-                .credentialsProvider(StaticCredentialsProvider
-                        .create(AwsBasicCredentials
-                                .create(accessKey, secretKey))).build();
+                .region(region)
+                .credentialsProvider(StaticCredentialsProvider.create(credentials))
+                .build();
     }
 }
