@@ -1,6 +1,6 @@
 package com.example.tasktrackerb7.api;
 
-import com.example.tasktrackerb7.service.S3Service;
+import com.example.tasktrackerb7.db.service.serviceimpl.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

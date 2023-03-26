@@ -1,4 +1,4 @@
-package com.example.tasktrackerb7.service;
+package com.example.tasktrackerb7.db.service.serviceimpl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class S3Service {
     private final S3Client s3;
 
     @Value("${aws.path}")
-    private String BUCKET_PATH;
+    private String bucketPath;
     @Value("${aws.bucket.name}")
     private String bucketName;
 
@@ -31,34 +31,36 @@ public class S3Service {
 
 
     public Map<String, String> upload(MultipartFile file) throws IOException {
-        log.info("Uploading file...");
-        String key = System.currentTimeMillis() + file.getOriginalFilename();
-        PutObjectRequest por = PutObjectRequest
-                .builder()
-                .bucket(bucketName)
-                .contentType("jpeg")
-                .contentType("png")
-                .contentType("pdf")
-                .contentType("gif")
-                .contentType("tiff")
-                .contentType("psd")
-                .contentType("ai")
-                .contentType("eps")
-                .key(key)
-                .build();
+        try {
+            log.info("Uploading file...");
+            String key = System.currentTimeMillis() + file.getOriginalFilename();
+            PutObjectRequest por = PutObjectRequest
+                    .builder()
+                    .bucket(bucketName)
+                    .contentType("jpeg")
+                    .contentType("png")
+                    .contentType("pdf")
+                    .contentType("jfif")
+                    .contentType("mp4")
+                    .contentLength(file.getSize())
+                    .key(key)
+                    .build();
 
-        s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-        log.info("Upload complete");
-        return Map.of(
-                "link", BUCKET_PATH + key
-        );
+            s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            log.info("Upload complete");
+            return Map.of(
+                    "link", bucketPath + key
+            );
+        }catch (IOException e){
+            log.error("IOException");
+          throw new IOException();
+        }
     }
-
 
     public Map<String, String> delete(String fileLink) {
         try {
 
-            String key = fileLink.substring(BUCKET_PATH.length());
+            String key = fileLink.substring(bucketPath.length());
 
             log.warn("deleting object:  {}" + key);
 
