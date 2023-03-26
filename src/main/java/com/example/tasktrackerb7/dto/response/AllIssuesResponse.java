@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class AllIssuesResponse {
 
     private String columnName;
 
-    private List<CardMemberResponse> cardMemberResponses;
+    private Set<CardMemberResponse> cardMemberResponses;
 
     private List<LabelResponse> labelResponses;
 

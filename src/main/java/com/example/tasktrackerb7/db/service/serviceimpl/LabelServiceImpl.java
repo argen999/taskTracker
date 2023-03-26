@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -99,4 +101,12 @@ public class LabelServiceImpl implements LabelService {
         card.assignLabel(label);
         labelRepository.save(label);
     }
+
+    @Override
+    public List<LabelResponse> getAllLabel() {
+        List<LabelResponse> labels =  labelRepository.getAllLabelResponse();
+        return labels.stream().map(l -> new LabelResponse(l.getId(),l.getDescription(),l.getColor())).toList();
+    }
+
+
 }
