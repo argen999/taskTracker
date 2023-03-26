@@ -16,25 +16,26 @@ import java.util.Map;
 @Service
 @Slf4j
 public class S3Service {
-
     private final S3Client s3;
 
-    @Value("${aws.path}")
-    private String bucketPath;
     @Value("${aws.bucket.name}")
     private String bucketName;
+
+    @Value("${aws.bucket.path}")
+    private String bucketPath;
 
     @Autowired
     public S3Service(S3Client s3) {
         this.s3 = s3;
     }
 
-
     public Map<String, String> upload(MultipartFile file) throws IOException {
         try {
+
             log.info("Uploading file...");
             String key = System.currentTimeMillis() + file.getOriginalFilename();
-            PutObjectRequest por = PutObjectRequest
+
+            PutObjectRequest putObjectRequest = PutObjectRequest
                     .builder()
                     .bucket(bucketName)
                     .contentType("jpeg")
@@ -46,18 +47,23 @@ public class S3Service {
                     .key(key)
                     .build();
 
-            s3.putObject(por, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            s3.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
             log.info("Upload complete");
+
             return Map.of(
                     "link", bucketPath + key
             );
-        }catch (IOException e){
+        } catch (IOException e) {
             log.error("IOException");
-          throw new IOException();
+            throw new IOException();
         }
     }
 
     public Map<String, String> delete(String fileLink) {
+
+        log.info("Deleting file...");
+
         try {
 
             String key = fileLink.substring(bucketPath.length());
@@ -67,13 +73,16 @@ public class S3Service {
             s3.deleteObject(dor -> dor.bucket(bucketName).key(key).build());
 
         } catch (S3Exception e) {
+            log.error(e.awsErrorDetails().errorMessage());
             throw new IllegalStateException(e.awsErrorDetails().errorMessage());
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new IllegalStateException(e.getMessage());
         }
-
+        log.info("the file was deleted");
         return Map.of(
                 "message", fileLink + " has been deleted"
         );
     }
+
 }

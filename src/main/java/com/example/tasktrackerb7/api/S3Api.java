@@ -11,12 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/file")
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Tag(name = "S3 api", description = "Upload files")
+@Tag(name = "AWS S3 API", description = "Upload and delete files")
 public class S3Api {
     private final S3Service s3Service;
 

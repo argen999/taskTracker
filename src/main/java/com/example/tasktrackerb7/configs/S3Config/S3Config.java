@@ -9,19 +9,20 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+
 @Configuration
 @Getter
 @Setter
 public class S3Config {
-
-    @Value("${aws.access.key}")
+    @Value("${cloud.aws.accessKey}")
     private String AWS_ACCESS_KEY;
 
-    @Value("${aws.secret.key}")
+    @Value("${cloud.aws.secretKey}")
     private String AWS_SECRET_KEY;
 
-    @Value("${aws.region}")
+    @Value("${cloud.aws.region}")
     private String REGION;
+
 
     @Bean
     S3Client s3Client() {
@@ -35,4 +36,5 @@ public class S3Config {
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
     }
+
 }
